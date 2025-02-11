@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+data/
+results/
+.pdf
+.tex
+.html
+.kml
+.sty
+.bst
+.txt
+.csv
