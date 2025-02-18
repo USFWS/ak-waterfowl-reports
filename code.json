@@ -16,13 +16,13 @@
       ]
     },
 
-    "homepageURL": "https://github.com/USFWS/r7-repo-template",
-    "downloadURL": "https://github.com/USFWS/r7-repo-template/archive/refs/heads/main.zip",
-    "disclaimerURL": "https://github.com/USFWS/r7-repo-template/blob/main/DISCLAIMER.md",
-    "repositoryURL": "https://github.com/USFWS/r7-repo-template.git",
+    "homepageURL": "https://github.com/USFWS/ak-waterfowl-reports",
+    "downloadURL": "https://github.com/USFWS/ak-waterfowl-reports/archive/refs/heads/main.zip",
+    "disclaimerURL": "https://github.com/USFWS/ak-waterfowl-reports/blob/main/DISCLAIMER.md",
+    "repositoryURL": "https://github.com/USFWS/ak-waterfowl-reports.git",
     "vcs": "git",
 
-    "laborHours": 4,
+    "laborHours": 40,
 
     "tags": [
       "r7",
@@ -36,12 +36,12 @@
     ],
 
     "contact": {
-      "name": "Your first and last name",
-      "email": "firstname_lastname@fws.gov"
+      "name": "Erik Osnas",
+      "email": "erik_osnas@fws.gov"
     },
 
     "date": {
-      "metadataLastUpdated": "2023-05-17"
+      "metadataLastUpdated": "2025-02-18"
     }
   }
 ]
