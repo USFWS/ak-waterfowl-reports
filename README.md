@@ -6,22 +6,24 @@
 
 <!-- badges: end -->
 
-# R7 (Alaska) GitHub Repository Template
+# R7 Alaska MBM Waterfowl Reports
 
 ## Overview
-
+These are Quarto and R file to support reports for the Alaska Region Division of Migratory Bird Management Waterfowl surveys. Currently only the Arctic Coastal Plain Survey (ACP) is supported. 
 
 ## Installation
 
-No installation is necessary. Follow the instructions under [Usage](#usage) below to create a repository using this template.
+Download or clone this repository. RStudio, Quarto, and various R packages documented in the code are needed. Data and survey estimates are sourced from ![AKaerial](https://github.com/USFWS/AKaerial) and at ![https://doi.org/10.7944/dqf4-2z27](https://doi.org/10.7944/dqf4-2z27) for the ACP. 
 
 ## Usage
 
+After downloading the various packages and and data folder, render the report .qmd file using Quarto for the command line or from Rstudio. 
 
+See individual readme file in each survey directory for more information. 
 
 ## Getting help
 
-Contact the [project maintainer](emailto:erik_osnas@fws.gov) for help with this repository. If you have general questions on creating repositories in the USFWS DGEC, reach out to a USFWS DGEC [owner](https://github.com/orgs/USFWS/people?query=role%3Aowner).
+Contact the [project maintainer](emailto:erik_osnas@fws.gov) for help with this repository.
 
 ## Contribute
 
