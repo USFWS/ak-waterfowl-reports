@@ -17,7 +17,6 @@ lot: false
 fig-cap-location: bottom
 tbl-cap-location: top
 format:
-#We used the "arXiv" style for our report formatting
   arxiv-pdf:
     runninghead: "Arctic Coastal Plain Survey Report 2007-2024"
     number_sections: false
@@ -29,15 +28,14 @@ format:
         \setlength{\defaultaddspace}{0pt}
 prefer-html: true
 editor: source
+
 embed-resources: true
-#linenumbers adds linenumbers for easier editing/reviewing. I have it turned off when trying to see final format.
 linenumbers: true
 execute:
   message: false
   warning: false
-#We used this {-} workaround at each of the headers to eliminate the automatic numbering arXiv assigns to headers (e.g., # ABSTRACT {-})
-#We did not include our abstract in this YAML, because we needed to first create data objects that are called upon in the abstract for several species (see below).
 ---
+
 ```{r setup, include=FALSE, echo=FALSE}
 library(tidyverse)
 library(AKaerial)
@@ -54,61 +52,63 @@ dat <- AKaerial::CompositeLong()
 effort = ACPHistoric$expanded.table %>% filter(Year==max(ACPHistoric$expanded.table$Year)) %>% group_by(strata, Observer) %>% summarize (layer = mean(layer.area), sampled = mean(total.area), sf = sampled/layer) %>% group_by(strata) %>% summarize(layer=mean(layer), sf=sum(sf))
 
 
-this.year = max(ACPHistoric$combined$Year)
+ this.year = max(ACPHistoric$combined$Year)
 
-this.layer = MasterFileList$LAYER[MasterFileList$AREA=="ACP" & MasterFileList$YEAR==this.year]
+ this.layer = MasterFileList$LAYER[MasterFileList$AREA=="ACP" & MasterFileList$YEAR==this.year]
 
-# acp_cities <- data.frame(
-#   city = c("Deadhorse", "Nuiqsut", "Kaktovik", "Atqasuk", "Wainwright", "Point Lay", "Utqiagvik"),
-#   lat = c(70.20757, 70.21767, 70.126498, 70.480168, 70.638794, 69.744367, 71.290556),
-#   lon = c(-148.43519, -151.00079, -143.614998, -157.421023, -160.029171, -163.008433, -156.780880))        
-# 
-# 
-# acp_cities = st_as_sf(acp_cities, coords = c("lon","lat"))
-# 
-# st_crs(acp_cities) = 4269
-# 
-# #Data objects created from ACP survey data in the RDR: x-y coordinates associated with species observations, used to make maps 
-# acp.strata = read_sf("data/ACP_DesignStrata.gpkg")
-# acp.strata = acp.strata %>% filter(STRATNAME != "Nonhabitat")
-# acp.transects=read_sf("data/ACP_DesignTrans.gpkg", this.layer)
-# 
-# #Data objects and layers for making Fig. 1 - Study area map of the ACP with strata, most recent year transects, and village names
-# tmap_mode("plot")
-# 
-# new_bbox = st_bbox(acp.strata)
-# new_bbox[3]=-141
-# new_bbox[4]=71.5
-# new_bbox=st_as_sfc(new_bbox)
-# 
-# fig1 = tm_shape(acp.strata, bbox = new_bbox) +
-#    tm_polygons(fill = "STRATNAME",
-#                fill_alpha = 0.5, 
-#                fill.legend = tm_legend(title= "Stratum", position = c("RIGHT", "TOP"), 
-#                       width=5, height=6, title.size=.75, frame = FALSE)) +
-#    tm_shape(acp.transects) +
-#    tm_lines(col_alpha=.5) +
-#    tm_shape(acp_cities) +
-#    tm_symbols(size = 0.5, col = "black") +
-#    tm_graticules(lines=FALSE) +
-#    tm_text("city", fontface="bold", size=.5, ymod=.9, xmod=.4) +
-#    tm_compass(position = c("LEFT", "TOP")) 
-# 
-#    #tm_text("city", fontface="bold", ymod=c(1, -.7, .5, .6, 0, 0.7,0), xmod=c(2.2, -1, -.2, -.5, -2.3, 0.6, -2) , size=.9)
-#  
-# # fig1 <- ggplot(data = acp.strata) + geom_sf(aes(fill = STRATNAME), lwd = 1) + 
-# #   geom_sf(data = acp.transects) + 
-# #   # geom_sf(data = acp_cities) +
-# #   # geom_sf_text(data = acp_cities, aes(label = city), 
-# #   #              nudge_x = c(2.2, -1, -.2, -.5, -2.3, 0.6, -2), 
-# #   #              nudge_y = c(1, -.7, .5, .6, 0, 0.7,0)) + 
-# #   theme(axis.text.x=element_blank(), 
-# #         axis.ticks.x=element_blank(), 
-# #         axis.text.y=element_blank(), 
-# #         axis.ticks.y=element_blank(), 
-# #         legend.position="bottom") +
-# #   coord_sf(crs = st_crs(4269))
-# # #fig1
+ acp_cities <- data.frame(
+   city = c("Deadhorse", "Nuiqsut", "Kaktovik", "Atqasuk", "Wainwright", "Point Lay", "Utqiagvik"),
+   lat = c(70.20757, 70.21767, 70.126498, 70.480168, 70.638794, 69.744367, 71.290556),
+   lon = c(-148.43519, -151.00079, -143.614998, -157.421023, -160.029171, -163.008433, -156.780880))
+
+
+ acp_cities = st_as_sf(acp_cities, coords = c("lon","lat"))
+
+ st_crs(acp_cities) = 4269
+ #Data objects created from ACP survey data in the RDR: x-y coordinates associated with species observations, used to make maps
+ acp.strata = read_sf("data/ACP_DesignStrata.gpkg")
+ acp.strata = acp.strata %>% filter(STRATNAME != "Nonhabitat")
+ acp.transects=read_sf("data/ACP_DesignTrans.gpkg", this.layer)
+
+ #Data objects and layers for making Fig. 1 - Study area map of the ACP with strata, most recent year transects, and village names
+ tmap_mode("plot")
+
+ new_bbox = st_bbox(acp.strata)
+ new_bbox[1]=-164
+ new_bbox[2]=69
+ new_bbox[3]=-141
+ new_bbox[4]=71.75
+ new_bbox=st_as_sfc(new_bbox)
+
+ fig1 = tm_shape(acp.strata, bbox = new_bbox) +
+    tm_polygons(fill = "STRATNAME",
+                fill_alpha = 0.5,
+                fill.legend = tm_legend(title= "Stratum", position = c("RIGHT", "TOP"),
+                       width=5, height=6, title.size=.95, frame = FALSE, text.size = 0.85)) +
+    tm_shape(acp.transects) +
+    tm_lines(col_alpha=.5) +
+    tm_shape(acp_cities) +
+    tm_symbols(size = 0.5, col = "black") +
+    tm_graticules(lines=FALSE) +
+    tm_text("city", fontface="bold", size=1.0, ymod=.9, xmod=.5) +
+    tm_compass(position = c("LEFT", "TOP"))
+ #tmap_save(fig1, "fig1.png")
+   #tm_text("city", fontface="bold", ymod=c(1, -.7, .5, .6, 0, 0.7,0), xmod=c(2.2, -1, -.2, -.5, -2.3, 0.6, -2) , size=.9)
+
+ #fig1 <- ggplot(data = acp.strata) + geom_sf(aes(fill = STRATNAME), lwd = 1) + 
+ #  geom_sf(data = acp.transects) + 
+   # geom_sf(data = acp_cities) +
+   # geom_sf_text(data = acp_cities, aes(label = city), 
+   #              nudge_x = c(2.2, -1, -.2, -.5, -2.3, 0.6, -2), 
+   #              nudge_y = c(1, -.7, .5, .6, 0, 0.7,0)) + 
+  # theme(axis.text.x=element_blank(), 
+   #      axis.ticks.x=element_blank(), 
+   #      axis.text.y=element_blank(), 
+   #      axis.ticks.y=element_blank(), 
+   #     legend.position="bottom") +
+  # coord_sf(crs = st_crs(4269))
+
+ #fig1
 
 #Creating species-specific 3-yr and long-term averages with species-appropriate indices, to feed estimate figures and tables (3-57). Order these chunks of code appear in, does not have to be taxonomic.
 
@@ -797,57 +797,38 @@ for(i in 1:dim(spplist)[1]){
 }
 ```
 
+# ABSTRACT {.unnumbered}
 
-# ABSTRACT {-}
+The Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) provides data on the distribution and relative abundance of 33 bird species (including 29 waterbird species) that nest in northern Alaska. Among those reported are species of conservation concern including threatened spectacled and Steller's eiders, yellow-billed loons, and snow geese. This report focuses on results from the 2018-`r max(ACPHistoric$combined$Year)` ACP surveys and presents population indices for all species from `r min(SPEI$Year)`- `r max(SPEI$Year)`. No surveys were conducted in 2020-2021 due to the COVID pandemic. For surveys flown in 2018, 2019, 2022-2024, the respective indicated total bird indices and their associated 95% confidence intervals (CI) for spectacled eiders were `r formatC(SPEI$itotal[SPEI$Year==2018], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2018]-1.96* SPEI$itotal.se[SPEI$Year==2018], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2018]+1.96* SPEI$itotal.se[SPEI$Year==2018], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2019], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2019]-1.96* SPEI$itotal.se[SPEI$Year==2019], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2019]+1.96* SPEI$itotal.se[SPEI$Year==2019], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2022], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2022]-1.96* SPEI$itotal.se[SPEI$Year==2022], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2022]+1.96* SPEI$itotal.se[SPEI$Year==2022], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2023], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2023]-1.96* SPEI$itotal.se[SPEI$Year==2023], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2023]+1.96* SPEI$itotal.se[SPEI$Year==2023], big.mark=",", format="d")`), and `r formatC(SPEI$itotal[SPEI$Year==2024], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2024]-1.96* SPEI$itotal.se[SPEI$Year==2024], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2024]+1.96* SPEI$itotal.se[SPEI$Year==2024], big.mark=",", format="d")`); and for Steller's eiders were `r formatC(STEI$itotal[STEI$Year==2018], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2018]-1.96* STEI$itotal.se[STEI$Year==2018]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2018]+1.96* STEI$itotal.se[STEI$Year==2018], big.mark=",", format="d")`), `r formatC(STEI$itotal[STEI$Year==2019], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2019]-1.96* STEI$itotal.se[STEI$Year==2019]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2019]+1.96* STEI$itotal.se[STEI$Year==2019], big.mark=",", format="d")`), `r formatC(STEI$itotal[STEI$Year==2022], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2022]-1.96* STEI$itotal.se[STEI$Year==2022]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2022]+1.96* STEI$itotal.se[STEI$Year==2022], big.mark=",", format="d")`), `r formatC(STEI$itotal[STEI$Year==2023], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2023]-1.96* STEI$itotal.se[STEI$Year==2023]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2023]+1.96* STEI$itotal.se[STEI$Year==2023], big.mark=",", format="d")`), `r formatC(STEI$itotal[STEI$Year==2024], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2024]-1.96* STEI$itotal.se[STEI$Year==2024]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2024]+1.96* STEI$itotal.se[STEI$Year==2024], big.mark=",", format="d")`). Long-term (`r min(SPEI$Year)`-`r max(SPEI$Year)`) mean annual population indices and trends (and their associated 95% CIs) for these species and others of conservation concern, were as follows: spectacled eiders (indicated total birds) `r formatC(SPEIh, big.mark=",", format="d")` (`r formatC(SPEIh-1.96*SPEIhse, big.mark=",", format="d")` - `r formatC(SPEIh+1.96*SPEIhse, big.mark=",", format="d")`), growth rate `r sppdf$Trend[sppdf$Species == "SPEI"]`; Steller's eiders (indicated total birds) `r formatC(STEIh, big.mark=",", format="d")` (`r formatC(pmax(0, STEIh-1.96*STEIhse), big.mark=",", format="d")` - `r formatC(STEIh+1.96*STEIhse, big.mark=",", format="d")`), growth rate `r sppdf$Trend[sppdf$Species == "STEI"]`; yellow-billed loons (total birds) `r formatC(YBLOh, big.mark=",", format="d")` (`r formatC(YBLOh-1.96*YBLOhse, big.mark=",", format="d")` - `r formatC(YBLOh+1.96*YBLOhse, big.mark=",", format="d")`), growth rate `r sppdf$Trend[sppdf$Species == "YBLO"]`; and snow geese (total birds) `r formatC(SNGOh, big.mark=",", format="d")` (`r formatC(SNGOh-1.96*SNGOhse, big.mark=",", format="d")` - `r formatC(SNGOh+1.96*SNGOhse, big.mark=",", format="d")`), growth rate `r sppdf$Trend[sppdf$Species == "SNGO"]`. Our population indices do not account for incomplete detection or other sources of bias at this time, although the model we used to estimate growth rate removes average observer effects. Posterior probabilities for a long-term (2007–`r max(ACPHistoric$combined$Year)`) growth rate \< 1.00 were \> 0.975 for scaup, spectacled eiders, king eiders, and jaeger species, indicating high confidence in long-term population declines for these species. By the same metrics, posterior probabilities for population increase were $\geq$ 0.9 for snow geese and sandhill cranes, indicating moderate confidence in long-term population increases for these species, while mallards and common ravens showed moderate confidence for decreasing trends (\> 0.9 posterior probability of decrease). Growth rates for greater white-fronted geese and tundra swans indicated relatively stable populations (95% credible intervals bounds for long-term growth rate were $\pm$ 3% of a long-term growth rate of 1.00), although the posterior probability of a decrease for tundra swans was 0.91, indicating moderate confidence in a slow decrease for that species. Confidence in directional trends for all other species was more limited (\< 0.9 posterior probability for decrease or \< 0.8 for increase). \newline
 
-The Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) provides data on the distribution and relative abundance of 33 bird species (including 29 waterbird species) that nest in northern Alaska. Among those reported are species of conservation concern including threatened spectacled and Steller's eiders, yellow-billed loons, and snow geese. This report focuses on results from the 2018-`r max(ACPHistoric$combined$Year)` ACP surveys and presents population indices for all species from `r min(SPEI$Year)`- `r max(SPEI$Year)`. No surveys were conducted in 2020-2021 due to the COVID pandemic. For surveys flown in 2018, 2019, 2022-2024, the respective indicated total bird indices and their associated 95% confidence intervals (CI) for spectacled eiders were `r formatC(SPEI$itotal[SPEI$Year==2018], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2018]-1.96* SPEI$itotal.se[SPEI$Year==2018], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2018]+1.96* SPEI$itotal.se[SPEI$Year==2018], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2019], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2019]-1.96* SPEI$itotal.se[SPEI$Year==2019], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2019]+1.96* SPEI$itotal.se[SPEI$Year==2019], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2022], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2022]-1.96* SPEI$itotal.se[SPEI$Year==2022], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2022]+1.96* SPEI$itotal.se[SPEI$Year==2022], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2023], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2023]-1.96* SPEI$itotal.se[SPEI$Year==2023], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2023]+1.96* SPEI$itotal.se[SPEI$Year==2023], big.mark=",", format="d")`), and `r formatC(SPEI$itotal[SPEI$Year==2024], big.mark=",", format="d")` (`r formatC(SPEI$itotal[SPEI$Year==2024]-1.96* SPEI$itotal.se[SPEI$Year==2024], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2024]+1.96* SPEI$itotal.se[SPEI$Year==2024], big.mark=",", format="d")`); and for Steller's eiders were `r formatC(STEI$itotal[STEI$Year==2018], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2018]-1.96* STEI$itotal.se[STEI$Year==2018]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2018]+1.96* STEI$itotal.se[STEI$Year==2018], big.mark=",", format="d")`), `r formatC(STEI$itotal[STEI$Year==2019], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2019]-1.96* STEI$itotal.se[STEI$Year==2019]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2019]+1.96* STEI$itotal.se[STEI$Year==2019], big.mark=",", format="d")`), `r formatC(STEI$itotal[STEI$Year==2022], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2022]-1.96* STEI$itotal.se[STEI$Year==2022]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2022]+1.96* STEI$itotal.se[STEI$Year==2022], big.mark=",", format="d")`), `r formatC(STEI$itotal[STEI$Year==2023], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2023]-1.96* STEI$itotal.se[STEI$Year==2023]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2023]+1.96* STEI$itotal.se[STEI$Year==2023], big.mark=",", format="d")`), `r formatC(STEI$itotal[STEI$Year==2024], big.mark=",", format="d")` (`r formatC(pmax(0, STEI$itotal[STEI$Year==2024]-1.96* STEI$itotal.se[STEI$Year==2024]), big.mark=",", format="d")` - `r formatC(STEI$itotal[STEI$Year==2024]+1.96* STEI$itotal.se[STEI$Year==2024], big.mark=",", format="d")`). Long-term (`r min(SPEI$Year)`-`r max(SPEI$Year)`) mean annual population indices and trends (and their associated 95% CIs) for these species and others of conservation concern, were as follows: spectacled eiders (indicated total birds)  `r formatC(SPEIh, big.mark=",", format="d")` (`r formatC(SPEIh-1.96*SPEIhse, big.mark=",", format="d")` - `r formatC(SPEIh+1.96*SPEIhse, big.mark=",", format="d")`), growth rate  `r sppdf$Trend[sppdf$Species == "SPEI"]`; Steller's eiders (indicated total birds) `r formatC(STEIh, big.mark=",", format="d")` (`r formatC(pmax(0, STEIh-1.96*STEIhse), big.mark=",", format="d")` - `r formatC(STEIh+1.96*STEIhse, big.mark=",", format="d")`), growth rate `r sppdf$Trend[sppdf$Species == "STEI"]`; yellow-billed loons (total birds) `r formatC(YBLOh, big.mark=",", format="d")` (`r formatC(YBLOh-1.96*YBLOhse, big.mark=",", format="d")` - `r formatC(YBLOh+1.96*YBLOhse, big.mark=",", format="d")`), growth rate  `r sppdf$Trend[sppdf$Species == "YBLO"]`; and snow geese (total birds) `r formatC(SNGOh, big.mark=",", format="d")` (`r formatC(SNGOh-1.96*SNGOhse, big.mark=",", format="d")` - `r formatC(SNGOh+1.96*SNGOhse, big.mark=",", format="d")`), growth rate `r sppdf$Trend[sppdf$Species == "SNGO"]`.  Our population indices do not account for incomplete detection or other sources of bias at this time, although the model we used to estimate growth rate removes average observer effects. Posterior probabilities for a long-term (2007–`r max(ACPHistoric$combined$Year)`) growth rate < 1.00 were > 0.975 for scaup, spectacled eiders, king eiders, and jaeger species, indicating high confidence in long-term population declines for these species. By the same metrics, posterior probabilities for population increase were $\geq$ 0.9 for snow geese and sandhill cranes, indicating moderate confidence in long-term population increases for these species. Growth rates for greater white-fronted geese and tundra swans indicated relatively stable populations (95% credible intervals bounds for long-term growth rate were $\pm$ 3% of a long-term growth rate of 1.00), although the posterior probability of a decrease for tundra swans was 0.91, indicating moderate evidence of a slow decrease for that species. Confidence in directional trends for all other species was more limited (< 0.9 posterior probability for decrease or < 0.8 for increase).
-\newline
+## *Key Words* {.unnumbered}
 
-
-## *Key Words* {-} 
-Aerial breeding pair survey, Alaska, Arctic Coastal Plain, population index, growth rate, species occurence, spectacled eider *Somateria fischeri*, snow goose *Chen caerulescens*, Steller’s eider *Polysticta stelleri*, trend, waterfowl, waterbird, yellow-billed loon *Gavia adamsii*. 
+Aerial breeding pair survey, Alaska, Arctic Coastal Plain, population index, growth rate, species occurence, spectacled eider *Somateria fischeri*, snow goose *Anser caerulescens*, Steller’s eider *Polysticta stelleri*, trend, waterfowl, waterbird, yellow-billed loon *Gavia adamsii*.
 
 {{< pagebreak >}}
 
-# INTRODUCTION {-}
+# INTRODUCTION {.unnumbered}
 
-The Arctic Coastal Plain (ACP) is a vast area of Arctic lowland tundra in far northern Alaska important for many species of breeding birds [@Johnson2007; @Bart2013; @Amundson2019], especially waterbirds.  Importantly, it is the only regularly used breeding area for the threatened population of Steller’s eiders [*Polysticta stelleri*: @USFWS2002], and one of only three breeding areas for threatened spectacled eiders [*Somateria fischeri*: @USFWS1996].  Additionally, the ACP hosts many other waterbird species of conservation concern, including red-throated (*Gavia stellata*) and yellow-billed loons (*G. adamsii*), snow geese (*Chen caerulescens*), Pacific black brant (*Branta bernicla nigricans*), common eiders (*S. mollissima*), black (*Melanitta nigra*) and white-winged scoters (*Melanitta fusca*), and long-tailed ducks (*Clangula hyemalis*).
+The Arctic Coastal Plain (ACP) is a vast area of Arctic lowland tundra in far northern Alaska important for many species of breeding birds [@Johnson2007; @Bart2013; @Amundson2019], especially waterbirds. Importantly, it is the only regularly used breeding area for the threatened population of Steller’s eiders [*Polysticta stelleri*: @USFWS2002], and one of only three breeding areas for threatened spectacled eiders [*Somateria fischeri*: @USFWS1996]. Additionally, the ACP hosts many other waterbird species of conservation concern, including red-throated (*Gavia stellata*) and yellow-billed loons (*G. adamsii*), snow geese (*Anser caerulescens*), Pacific black brant (*Branta bernicla nigricans*), common eiders (*S. mollissima*), black (*Melanitta americana*) and white-winged scoters (*Melanitta deglandi*), and long-tailed ducks (*Clangula hyemalis*).
 
-Annual aerial surveys of waterbirds on the ACP have been conducted since 1986.  Prior to 2007, two surveys with different timing and coverage [i.e., the Original ACP Survey, 1986–2006: @Brackney1993; @Mallek2007; and the North Slope Eider Survey, 1992–2006: @Larned2006] were used to monitor waterbirds on the ACP.  In 2007, the two historical surveys were merged [@Stehn2013], and the amalgamated survey, called the “Arctic Coastal Plain Aerial Breeding Population Survey", hereafter "ACP Survey” [@Larned2008; @Larned2012; @Stehn2013; @Stehn2014; @Wilson2018] has been flown annually since 2007 (with the exception of 2020 and 2021, due to the COVID pandemic).  The survey provides distribution and abundance information for 33 species of birds, including loons, swans, geese, ducks, gulls, jaegers, terns, and selected landbird species breeding in northern Alaska.  These results provide population status and distribution information to the Pacific Flyway Council, the Alaska Migratory Bird Co-Management Council, spectacled and Steller’s eider Recovery Teams, U.S. Fish and Wildlife Service (USFWS), U.S. Geological Survey, Bureau of Land Management, North Slope Borough, various non-governmental organizations, local communities, consulting firms, and industry.  This report focuses on the previously unreported 2018-2024 survey data and presents updated population information for all 33 bird species monitored from `r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`.
+Annual aerial surveys of waterbirds on the ACP have been conducted since 1986. Prior to 2007, two surveys with different timing and coverage [i.e., the Original ACP Survey, 1986–2006: @Brackney1993; @Mallek2007; and the North Slope Eider Survey, 1992–2006: @Larned2006] were used to monitor waterbirds on the ACP. In 2007, the two historical surveys were merged [@Stehn2013], and the amalgamated survey, called the “Arctic Coastal Plain Aerial Breeding Population Survey", hereafter "ACP Survey” [@Larned2008; @Larned2012; @Stehn2013; @Stehn2014; @Wilson2018] has been flown annually since 2007 (with the exception of 2020 and 2021, due to the COVID pandemic). The survey provides distribution and abundance information for 33 species of birds, including loons, swans, geese, ducks, gulls, jaegers, terns, and selected landbird species breeding in northern Alaska. These results provide population status and distribution information to the Pacific Flyway Council, the Alaska Migratory Bird Co-Management Council, spectacled and Steller’s eider Recovery Teams, U.S. Fish and Wildlife Service (USFWS), U.S. Geological Survey, Bureau of Land Management, North Slope Borough, various non-governmental organizations, local communities, consulting firms, and industry. This report focuses on the previously unreported 2018-2024 survey data and presents updated population information for all 33 bird species monitored from `r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`.
 
-# METHODS {-}
+![Study area and survey design for the Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) in northern Alaska, illustrating the 2024 transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and Teshekpuk high).](data/fig1.png){#fig-Fig1}
 
+# METHODS {.unnumbered}
 
-## Survey Design {-}
+## Survey Design {.unnumbered}
 
-The ACP Survey study area encompasses 57,339 km^2^,  of tundra wetlands, extending from the Chukchi Sea coast in the west to the Canadian border in the east, and from the foothills of the Brooks Range to the Beaufort Sea.  As flown since 2007, the ACP Survey is broken into four physiographic-based strata, with a 4-year rotating panel of systematic strip-transects within each stratum (@fig-Fig1).  Herein, the within-strata sampling effort is proportional to bird densities, such that fewer transects are surveyed in strata where bird densities are lower.  The four-year rotating panel design results in the panel (i.e., group) of transects being shifted by 25% of the inter-transect distance each year.  The annual inter-transect distances for each of the four ACP Survey strata are 4.8 km (Teshekpuk High), 9.6 km (High), 19.2  km (Medium), and 28.8 km [Low; @Larned2012, @fig-Fig1]. Given the 400 m transect width, this results in average annual sampling fractions of ~7.3%, 3.7%, 1.8%, and 1.1%, in the respective strata.  Thus, within a 4-year panel of transects the inter-transect distances for each of the four ACP Survey strata become 1.2 km (Teshekpuk High), 2.4 km (High), 4.8 km (Medium), and 7.2 km (Low), resulting in sampling fractions of ~29.1%, 14.7%, 7.2%, and 4.2%, in the respective strata over a four-year period. Total areas of each stratum are Teshekpuk High: 5,654 km^2^, High: 20,351 km^2^, Medium: 13,065 km^2^, and Low: 18,266 km^2^.
-
-![Study area and survey design for the Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) in northern Alaska, illustrating the 2024 transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and Teshekpuk high).](fig1.png){#fig-Fig1}
-
-<!-- ```{r Fig1cap, echo=FALSE, warning=FALSE} -->
-<!--  cap = paste0("Study area and survey design for the Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) in northern Alaska, illustrating the ",max(ACPHistoric$combined$Year)," transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and Teshekpuk high).") -->
-<!-- ``` -->
-
-<!-- ```{r Fig1fig, echo=FALSE, warning=FALSE} -->
-<!-- #| label: fig-Fig1 -->
-<!-- #| fig-cap: !expr cap -->
-<!-- fig1 -->
-<!-- ``` -->
+The ACP Survey study area encompasses 57,339 km^2^, of tundra wetlands, extending from the Chukchi Sea coast in the west to the Canadian border in the east, and from the foothills of the Brooks Range to the Beaufort Sea. As flown since 2007, the ACP Survey is broken into four physiographic-based strata, with a 4-year rotating panel of systematic strip-transects within each stratum (@fig-Fig1). Herein, the within-strata sampling effort is proportional to bird densities, such that fewer transects are surveyed in strata where bird densities are lower. The four-year rotating panel design results in the panel (i.e., group) of transects being shifted by 25% of the inter-transect distance each year. The annual inter-transect distances for each of the four ACP Survey strata are 4.8 km (Teshekpuk High), 9.6 km (High), 19.2 km (Medium), and 28.8 km [Low; @Larned2012, @fig-Fig1]. Given the 400 m transect width, this results in average annual sampling fractions of \~7.3%, 3.7%, 1.8%, and 1.1%, in the respective strata. Thus, within a 4-year panel of transects the inter-transect distances for each of the four ACP Survey strata become 1.2 km (Teshekpuk High), 2.4 km (High), 4.8 km (Medium), and 7.2 km (Low), resulting in sampling fractions of \~29.1%, 14.7%, 7.2%, and 4.2%, in the respective strata over a four-year period. Total areas of each stratum are Teshekpuk High: 5,654 km^2^, High: 20,351 km^2^, Medium: 13,065 km^2^, and Low: 18,266 km^2^.
 
 
-## Survey Methods {-}
+## Survey Methods {.unnumbered}
 
-The ACP Survey methodology is based on standard operating procedures for the North American Waterfowl Breeding Population and Habitat Survey (USFWS and CWS 1987), with both the left-front seat biologist-pilot and right-front seat observer recording all waterfowl, loons, gulls, jaegers, terns, eagles, owls, and ravens seen within a strip transect encompassing 200 m on either side of the flight path.  To estimate the outer transect boundary, crews determine the required viewing angle trigonometrically and mark a reference point on the wing strut and side window for each observer, using a clinometer and marking tape/pens. Surveys are flown at an approximate ground speed of 161 km/hr (~87 kts; though actual ground speeds vary due to winds), and an altitude of 38 m (125 ft) above ground level (AGL), as referenced by a radar altimeter installed in the aircraft.  Georeferenced observations made from both sides of the aircraft are voice-recorded into panel-mounted devices for later transcription using the custom software packages RECORD and TRANSCRIBE [2018-2022: @Hodges2015Record] and H2 and SCRIBE [2023-present: @H2].  Since 2014, we used a Cessna 206 amphibious-equipped aircraft (Cessna Aircraft Company, Wichita, KS) and the same survey crew in all of the years for which we are presenting new data (2018-2019, 2022-2024; @tbl-crew and @tbl-results). The survey required 65, 52, 52, 47, and 47 flight-hours to complete, respectively, in 2018-2019 and 2022-2024, not including ferry time to and from the study area.
-
-## Survey Timing and Weather Conditions {-}
-
-Timing of survey initiation is intended to coincide with the egg laying/early incubation period of nesting geese and eiders on the ACP, and the peak presence of male ducks and pairs of other waterfowl species.  This is a period when nesting habitat is just becoming available (i.e., ice-free water is visible in most shallow vegetated wetlands, and tundra vegetation is mostly snow-free around pond margins), typically within the first three weeks of June.  According to @Troy1997, median nest initiation dates for spectacled eiders at Prudhoe Bay averaged 15 June from 1982 to 1996, with males departing within 3–5 days of median initiation. More recent data from Utqiagvik, estimated average spectacled eider nest initiation to be 14 June [@Safine2013], consistent with indicated average (5-year; 2019-2019, 2021,2022) nest initiation for cackling Canada geese on the Canning River Delta (14 June; C. Latty, personal communication, Feb. 11, 2025).  Within the first two weeks of June each year (@tbl-crew), we refined our survey start dates based on close monitoring of weather and temperature data, examining snow and ice-cover changes via satellite ([NASA Worldview](https://worldview.earthdata.nasa.gov/)) and web-camera imagery (<https://weathercams.faa.gov//>), and by receiving updates on current landscape conditions from biologists and other local residents on the ACP.  From 2018–2024, weather conditions varied considerably within and among survey years. Reduced visibility and ceilings due to coastal fog were the most consistent weather impediments to surveying in all years of the survey.  Fog was particularly troublesome along the northern coastal fringe of the study area, where on-shore winds (blowing over the ice), small temperature-dew point spreads, and daily temperature cycles often created instantaneous, low-visibility conditions.
-
-{{< pagebreak >}}
+The ACP Survey methodology is based on standard operating procedures for the North American Waterfowl Breeding Population and Habitat Survey (USFWS and CWS 1987), with both the left-front seat biologist-pilot and right-front seat observer recording all waterfowl, loons, gulls, jaegers, terns, eagles, owls, and ravens seen within a strip transect encompassing 200 m on either side of the flight path. To estimate the outer transect boundary, crews determine the required viewing angle trigonometrically and mark a reference point on the wing strut and side window for each observer, using a clinometer and marking tape/pens. Surveys are flown at an approximate ground speed of 161 km/hr (\~87 kts; though actual ground speeds vary due to winds), and an altitude of 38 m (125 ft) above ground level (AGL), as referenced by a radar altimeter installed in the aircraft. Georeferenced observations made from both sides of the aircraft are voice-recorded into panel-mounted devices for later transcription using the custom software packages RECORD and TRANSCRIBE [2018-2022: @Hodges2015Record] and H2 and SCRIBE [2023-present: @H2]. Since 2014, we used a Cessna 206 amphibious-equipped aircraft (Cessna Aircraft Company, Wichita, KS) and the same survey crew in all of the years for which we are presenting new data (2018-2019, 2022-2024; @tbl-crew and @tbl-results). The survey required 65, 52, 52, 47, and 47 flight-hours to complete, respectively, in 2018-2019 and 2022-2024, not including ferry time from Anchorage to and from the study area.
 
 ```{r table1, include=TRUE, echo=FALSE}
 #| label: tbl-crew
-cap <- paste0 ("Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) dates and crews (",min(ACPHistoric$combined$Year),"-",max(ACPHistoric$combined$Year),"). The current ACP Survey combines the timing of the historic North Slope Eider Survey (1992-2006) with the geographic coverage of the Original ACP Survey (1986-2006), and has been flown since 2007. No surveys were flown in 2020 or 2021 due to the COVID pandemic. Aircraft used were either amphibious-equipped Cessna 206 (C206) or Kodiak 100.")
+cap <- paste0 ("Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) dates and crews (",min(ACPHistoric$combined$Year),"-",max(ACPHistoric$combined$Year),"). The current ACP Survey combines the timing of the historical North Slope Eider Survey (1992-2006) with the geographic coverage of the Original ACP Survey (1986-2006), and has been flown since 2007. No surveys were flown in 2020 or 2021 due to the COVID pandemic. Aircraft used were either amphibious-equipped Cessna 206 (C206) or Kodiak 100.")
 
 kable(table1, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, caption=cap, align = "ccccc", col.names = c("Year", "Data Collection", "Left-front observer", "Right-front observer", "Aircraft")) %>%
   kable_styling(font_size=10, position="center") %>%
@@ -856,12 +837,15 @@ kable(table1, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, caption
 
 ```
 
+## Survey Timing and Weather Conditions {.unnumbered}
 
-## Population Indices {-}
+Timing of survey initiation is intended to coincide with the egg laying/early incubation period of nesting geese and eiders on the ACP, and the peak presence of male ducks and pairs of other waterfowl species. This is a period when nesting habitat is just becoming available (i.e., ice-free water is visible in most shallow vegetated wetlands, and tundra vegetation is mostly snow-free around pond margins), typically within the first three weeks of June. According to @Troy1997, median nest initiation dates for spectacled eiders at Prudhoe Bay averaged 15 June from 1982 to 1996, with males departing within 3–5 days of median initiation. More recent data from Utqiagvik, estimated average spectacled eider nest initiation to be 14 June [@Safine2013], consistent with indicated average (5-year; 2017-2019, 2021,2022) nest initiation for cackling geese on the Canning River Delta (14 June; C. Latty, personal communication, Feb. 11, 2025). Within the first two weeks of June each year (@tbl-crew), we refined our survey start dates based on close monitoring of weather and temperature data, examining snow and ice-cover changes via satellite ([NASA Worldview](https://worldview.earthdata.nasa.gov/)) and web-camera imagery (<https://weathercams.faa.gov//>), and by receiving updates on current landscape conditions from biologists and other local residents on the ACP. From 2018–2024, weather conditions varied considerably within and among survey years. Reduced visibility and ceilings due to coastal fog were the most consistent weather impediments to surveying in all years of the survey. Fog was particularly troublesome along the northern coastal fringe of the study area, where on-shore winds (blowing over the ice), small temperature-dew point spreads, and daily temperature cycles often created instantaneous, low-visibility conditions.
 
-We calculated population indices to be consistent with their use in other USFWS surveys. Duck indices followed the guidance of @USFWSandCWS1987, and goose, swan, and crane indices followed @Eldridge2003.   Pairs were defined as the total number of male-female pairs (or two monomorphic birds [e.g., geese] in close association), not the total number of birds in pairs [@USFWSandCWS1987].   Flocked drakes were defined as the total number of males observed with one or more other males and no female present [@USFWSandCWS1987], and were only recorded for ducks.  Flocked drakes in groups of less than 5 birds were doubled (except for scaup; see below), and flocked drakes in groups of 5 or more were treated as a flock and not doubled [@USFWSandCWS1987]. Flocks were defined as a closely associated single-sex or mixed-sex grouping of 5 or more birds (or 2 or more birds of different species) that could not be separated into singles and pairs. For scaup, single drakes and flocked drakes in groups of less than 5 birds were not doubled as they were for other ducks.  This is because sex ratios in scaup lean heavily towards males, such that not all males can be assumed to have a female mate [@USFWSandCWS1987].  From 2007 to 2023, our breeding birds index for scaup did not include flocked drakes in groups of less than 5 birds, leading to an average bias in the breeding birds index for scaup of -10%.  Starting in 2024, the breeding birds index for scaup began to include flocked drakes. Formulas for the calculation of the four population indices presented in this report are shown below.  
+## Population Indices {.unnumbered}
 
-For dimorphic species (e.g., ducks [except scaup]) and some monomorphic species (cranes and dark geese [e.g., greater white-fronted geese, cackling/Canada geese, and brant]):
+We calculated population indices to be consistent with their use in other USFWS surveys. Duck indices followed the guidance of @USFWSandCWS1987, and goose, swan, and crane indices followed @Eldridge2003. Pairs were defined as the total number of male-female pairs (or two monomorphic birds \[e.g., geese\] in close association), not the total number of birds in pairs [@USFWSandCWS1987]. Flocked drakes were defined as the total number of males observed with one or more other males and no female present [@USFWSandCWS1987], and were only recorded for ducks. Flocked drakes in groups of less than 5 birds were doubled (except for scaup; see below), and flocked drakes in groups of 5 or more were treated as a flock and not doubled [@USFWSandCWS1987]. Flocks were defined as a closely associated single-sex or mixed-sex grouping of 5 or more birds (or 2 or more birds of different species) that could not be separated into singles and pairs. For scaup, single drakes and flocked drakes in groups of less than 5 birds were not doubled as they were for other ducks. This is because sex ratios in scaup lean heavily towards males, such that not all males can be assumed to have a female mate [@USFWSandCWS1987]. From 2007 to 2023, our breeding birds index for scaup did not include flocked drakes in groups of less than 5 birds, leading to an average bias in the breeding birds index for scaup of -10%. Starting in 2024, the breeding birds index for scaup began to include flocked drakes. Formulas for the calculation of the four population indices presented in this report are shown below.
+
+For dimorphic species (e.g., ducks \[except scaup\]) and some monomorphic species (cranes and dark geese \[e.g., greater white-fronted geese, cackling/Canada geese, and brant\]):
 
 ```{=tex}
 \begin{center}
@@ -882,40 +866,34 @@ For the remainder of the monomorphic species (e.g., swans, snow geese, grebes, l
 
 \end{center}
 ```
+## The Ratio Estimator {.unnumbered}
 
-## The Ratio Estimator {-}
+Population totals for each index were calculated using a ratio estimator [@Cochran1977] with transects as the sample units. The classical ratio estimator [@Cochran1977] is a straightforward approach that can be used to estimate the population total of observed birds in a survey area given a systematic or random sampling design with large sample size (i.e., number of transects). The ratio estimator is especially good when the response (i.e., number of birds on a transect) is linearly related to the length or area of the transect. We employed a stratified strip-transect design for the majority of our surveys of breeding waterfowl. Study areas are separated into spatial strata based on physiographic features and historical bird densities. Strata were sampled by low-level flights along a series of strip transects, with one or two observers searching 200 meters out from the transect center. Observations and sampled areas are then summed across transects within each stratum to produce strata-specific density estimates. These densities are then multiplied by associated strata areas to produce stratum-specific population indices that are summed to produce the overall population indices, $$E[\hat Y] = \displaystyle\sum_{i}^{S} \frac{\bar y_i}{\bar a_i} A_i = \displaystyle\sum_{i}^{S} \hat D_i A_i$$ where $y_i$ are observations and $a_i$ are sampled areas in strata $i$, and $$A_i = \displaystyle\sum_{j}^{M_i} a_{ij}$$ with estimated variance from Williams et al. (2002), where standard error (SE) is calculated based on inter-transect variance,  $$Var(\hat Y) = \displaystyle\sum_{i}^{S} M_i^2 \frac{(1-m_i / M_i)}{m_i} ( s^2_{iy} + \hat {D^2}_i s^2_{ia} - 2 \hat {D_i} s_{iay} ),$$ where $m_i$ and $M_i$ are the number of sampled and total transects in strata $i$, respectively, and there are $S$ total strata;  $$S^2_{ix} = \displaystyle\sum_{j}^{m_i} (x_{ij} - \bar x )/(m_i -1), $$ and  $$S^2_{ixy} = \displaystyle\sum_{j}^{m_i} (x_{ij} - \bar x )(y_{ij} - \bar y )/(m_i -1).$$ The equations above are observer-specific (i.e., calculated for each observer independently). However, the estimates presented in this report are the arithmetic mean of observer-specific estimates (n=2, in most years). Design transects (@fig-Fig1) were used to calculate survey effort, but flight lines sometimes deviated slightly from the these due to weather avoidance or other factors. Data manuplulation was completed using the R [@R] package `AKaerial` [@r-akaerial].
 
-Population totals for each index were calculated using a ratio estimator [@Cochran1977] with transects as the sample units. The classical ratio estimator [@Cochran1977] is a straightforward approach that can be used to estimate the population total of observed birds in a survey area given a systematic or random sampling design with large sample size (i.e., number of transects). The ratio estimator is especially good when the response (i.e., number of birds on a transect) is linearly related to the length or area of the transect. We employed a stratified strip-transect design for the majority of our surveys of breeding waterfowl. Study areas are separated into spatial strata based on physiographic features and historical bird densities. Strata were sampled by low-level flights along a series of strip transects, with one or two observers searching 200 meters out from the transect center. Observations and sampled areas are then summed across transects within each stratum to produce strata-specific density estimates. These densities are then multiplied by associated strata areas to produce stratum-specific population indices that are summed to produce the overall population indices, 
-$$E[\hat Y] = \displaystyle\sum_{i}^{S} \frac{\bar y_i}{\bar a_i} A_i = \displaystyle\sum_{i}^{S} \hat D_i A_i$$
-where $y_i$ are observations and $a_i$ are sampled areas in strata $i$, and
-$$A_i = \displaystyle\sum_{j}^{M_i} a_{ij}$$
-with estimated variance from Williams et al. (2002), where standard error (SE) is calculated based on inter-transect variance, 
-$$Var(\hat Y) = \displaystyle\sum_{i}^{S} M_i^2 \frac{(1-m_i / M_i)}{m_i} ( s^2_{iy} + \hat {D^2}_i s^2_{ia} - 2 \hat {D_i} s_{iay} ),$$
-where $m_i$ and $M_i$ are the number of sampled and total transects in strata $i$, respectively, and there are $S$ total strata; 
-$$S^2_{ix} = \displaystyle\sum_{j}^{m_i} (x_{ij} - \bar x )/(m_i -1), $$
-and 
-$$S^2_{ixy} = \displaystyle\sum_{j}^{m_i} (x_{ij} - \bar x )(y_{ij} - \bar y )/(m_i -1).$$
-The equations above are observer-specific (i.e., calculated for each observer independently). However, the estimates presented in this report are the arithmetic mean of observer-specific estimates (n=2, in most years). Design transects (@fig-Fig1) were used to calculate survey effort, but flight lines sometimes deviated slightly from the these due to weather avoidance or other factors. Data manuplulation was completed using the R [@R] package `AKaerial` [@r-akaerial].
+Population indices presented here do not account for incomplete detection, though there are efforts to incorporate detection data into annual population estimates for some species [@Wilson2017; @Osnas2024]. Summary statistics were calculated for the indicated total bird (or total bird) index for each bird species, including the long-term (`r min(SPEI$Year)`- `r max(SPEI$Year)`) and most recent 3-year averages and their standard errors (@tbl-results). Indicated breeding bird (or breeding bird) indices and indicated total bird (or total bird) indices for each bird species are presented in the Appendices (Tables 3-34, and Figures 3-57). Throughout, we report point estimates $\pm$ (1.96 x SE) as a 95% confidence interval, except in the simulations for trends (see next section).
 
-Population indices presented here do not account for incomplete detection, though there are efforts to incorporate detection data into annual population estimates for some species [@Wilson2017; @Osnas2024]. Summary statistics were calculated for the indicated total bird (or total bird) index for each bird species, including the long-term (`r min(SPEI$Year)`- `r max(SPEI$Year)`) and most recent 3-year averages and their standard errors (@tbl-results). Indicated breeding bird (or breeding bird) indices and indicated total bird (or total bird) indices for each bird species are presented in the Appendices (Tables 3-34, and Figures 3-57). Throughout, we report point estimates $\pm$ 1.96 SE as a 95% confidence interval, except in the simulations for trends (see next section). 
+## Index Trends {.unnumbered}
 
-
-## Index Trends {-}
-
-Trajectories in population indices were estimated using generalized additive models [GAM, @wood2017] in the R package `mgcv` [@r-mgcv] fit to observer-specific index estimates.  The GAM model used a scaled-t likelihood, a continuous smooth term for year, and a random effect for observer in the linear predictor. The observer effect allowed us to remove observer-specific effects from any estimated average trajectory, and the scaled-t likelihood allowed for extra residual variance from the trend line over a normal likelihood that might be due to additional year-specific variance from the trend line.  To account for uncertainty in the index estimate, we used a parametric bootstrap of the estimated index as the modeled response in the GAM. Thus, for each year, a response was sampled from a normal distribution (with the mean and standard deviation of the point estimate), truncated to a small value (1e-10) for samples $\leq$ 0, and log-transformed. Then a GAM was fit, and a sample of the parameters was obtained from a multivariate normal distribution using the estimated parameter vector and covariance matrix. Annual predictions over the full time series were made from this parameter sample after removing the effect of observer, and the results were saved.  This procedure was repeated 300 times. As such, this procedure is an empricial Bayesian method to approximate the posterior distribution of the trajectory [@miller2025bayesian]. For rarer species, some of which were not observed in all years (e.g., red-necked grebes and Steller's eiders), we excluded years when no birds were observed.  We did this because observed zeros in these design-based estimates are more likely due to non-detection or random sampling, rather than complete absence of the species in the survey area, and model fit to data that included zeros did not produce stable estimates. However, we acknowledge that this may have resulted in some over-smoothing and bias of estimated trends for species with zero-count years. For improved methods that better account for zero observations in rare species see [@Amundson2019, @Osnas2024]. 
-
-We summarized the simulated yearly GAM predictions (i.e., the posterior distribution of trajectories) by calculating the mean and standard deviation for each year. An example of simulated results and observer-specific estimates for one species (Pacific loon) is shown in @fig-loon. For plots and tables presented in the Results and Appendices, we do not report the observer-specific index estimates or individual samples of the smooths to reduce clutter. Instead, we show only the average index between observers in any year, the mean posterior trajectory, and $\pm$ 2 standard errors from this mean. 
-
-![An example of the modeled index estimates and trend results for Pacific loon, accounting for observer effects. Colored points and bars are observer-specific index estimates, which were sampled 300 times and used as the response in a generalized additive model. Individal modeled predictions for each sample are shown by the thin gray lines. These make up the posterior distribution of modeled trajectories and are summarized by the orange band (approximate 95% crediable interval) and the thick gray line (posterior mean). End points of the modeled predictions (thin gray lines) are used to calculate the posterior distribution of the long-term growth rate. ](data/plot_trends/figures/PALO_index_2.png){#fig-loon width=50% height=50%}
-
-We estimated the long-term average growth rate from year $a$ to $b$ for each simulated replicate as  
-
-$$T_{b-a} = (\hat N_{b}/\hat N_{a})^{1/(b-a)},$$ 
+Trajectories in population indices were estimated using generalized additive models [GAM, @wood2017] in the R package `mgcv` [@r-mgcv] fit to observer-specific index estimates. The GAM model used a scaled-t likelihood, a continuous smooth term for year, and a random effect for observer in the linear predictor. The observer effect allowed us to remove observer-specific effects from any estimated average trajectory, and the scaled-t likelihood allowed for extra residual variance from the trend line over a normal likelihood that might be due to additional year-specific variance from the trend line. To account for uncertainty in the index estimate, we used a parametric bootstrap of the estimated index as the modeled response in the GAM. Thus, for each year, a response was sampled from a normal distribution (with the mean and standard deviation of the point estimate), truncated to a small value (1e-10) for samples $\leq$ 0, and log-transformed. Then a GAM was fit, and a sample of the parameters was obtained from a multivariate normal distribution using the estimated parameter vector and covariance matrix. Annual predictions over the full time series were made from this parameter sample after removing the effect of observer, and the results were saved. This procedure was repeated 300 times. As such, this procedure is an empricial Bayesian method to approximate the posterior distribution of the trajectory [@miller2025bayesian]. For rarer species, some of which were not observed in all years (e.g., red-necked grebes and Steller's eiders), we excluded years when no birds were observed. We did this because observed zeros in these design-based estimates are more likely due to non-detection or random sampling, rather than complete absence of the species in the survey area, and model fit to data that included zeros did not produce stable estimates. However, we acknowledge that this may have resulted in some over-smoothing and bias of estimated trends for species with zero-count years. For improved methods that better account for zero observations in rare species see [@Amundson2019, @Osnas2024].
 
 {{< pagebreak >}}
 
+We summarized the simulated yearly GAM predictions (i.e., the posterior distribution of trajectories) by calculating the mean and standard deviation for each year. An example of simulated results and observer-specific estimates for one species (Pacific loon) is shown in @fig-loon. For plots and tables presented in the Results and Appendices, we do not report the observer-specific index estimates or individual samples of the smooths to reduce clutter. Instead, we show only the average index between observers in any year, the mean posterior trajectory, and $\pm$ 2 standard errors from this mean.
 
-where $\hat N_t$ is the predicted index value at year $t$ from the bootstrap replicate GAM model, $t = a$ is the first year of a non-zero estimate, and $t = b$ is the last year. Thus, the growth rate was calculated as the geometric mean annual change in the model-predicted index. We summarized growth rate by the mean and 95% credible interval across the sampled replicates. We also calculated the posterior probability of a negative growth rate by summarizing the proportion of posterior samples that were < 1 (Pr[Trend < 1], @tbl-results). We only calculated growth rate for total or indicated total bird indices shown in @tbl-results. Code is available in the file `plot_trends_design.R` at [@osnasgithub]. 
+![An example of the modeled index estimates and trend results for Pacific loon, accounting for observer effects. Colored points and bars are observer-specific index estimates, which were sampled 300 times and used as the response in a generalized additive model. Individal modeled predictions for each sample are shown by the thin gray lines. These make up the posterior distribution of modeled trajectories and are summarized by the orange band (approximate 95% credible interval) and the thick gray line (posterior mean). End points of the modeled predictions (thin gray lines) are used to calculate the posterior distribution of the long-term growth rate.](data/plot_trends/figures/PALO_index_2.png){#fig-loon width="50%" height="50%"}
+
+We estimated the long-term average growth rate from year $a$ to $b$ for each simulated replicate as
+
+$$T_{b-a} = (\hat N_{b}/\hat N_{a})^{1/(b-a)},$$
+
+
+where $\hat N_t$ is the predicted index value at year $t$ from the bootstrap replicate GAM model, $t = a$ is the first year of a non-zero estimate, and $t = b$ is the last year. Thus, the growth rate was calculated as the geometric mean annual change in the model-predicted index. We summarized growth rate by the mean and 95% credible interval across the sampled replicates. We also calculated the posterior probability of a negative growth rate by summarizing the proportion of posterior samples that were \< 1 (Pr\[Trend \< 1\], @tbl-results). We only calculated growth rate for total or indicated total bird indices shown in @tbl-results. Code is available in the file `plot_trends_design.R` at [@osnasgithub].
+
+# RESULTS {.unnumbered}
+
+## Survey Timing and Weather Conditions {.unnumbered}
+
+Dates of data collection for 2018-2019, and 2022-24 were: 15-25, 8-16, 14-21, 11-18, and 14-21 June, respectively (@tbl-crew). Survey timing was the latest on record for the survey in 2018 (15-25 June; @tbl-crew). First day of data collection on the ACP in 2018 was 5 days later than the long-term (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) average start date of 10 June. In 2018, in particular, sustained cold temperatures, strong east winds, and significant snow and ice covered much of the northern ACP landscape well into June. While 2018, 2022, and 2024 were on the later end of the range of start dates (@tbl-crew), 2019 was a relatively early year on the ACP. Breakup chronology on the ACP varies greatly annually, but in general, we have observed later breakups in the years we have surveyed since 2017.
 
 
 ```{r table2, include=TRUE, echo=FALSE}
@@ -923,7 +901,7 @@ where $\hat N_t$ is the predicted index value at year $t$ from the bootstrap rep
 
 #TABLE 2 - Creates a summary table with a row of estimates for each species
 
-cap <- paste0 ("The most recent 3-year (2022-2024) and long-term (",min(ACPHistoric$combined$Year),"-",max(ACPHistoric$combined$Year),") average population indices and associated standard errors (SE), as well as long-term annual growth rates (long-term trend), associated 95% credible intervals (CI), and posterior probability that a trend is decreasing (Pr(Trend < 1)) for bird species on the annual Arctic Coastal Plain Aerial Breeding Population Survey (ACP Suvey) of Alaska.  Index formulas used are species-specific, with indicated total birds (ITB) used for dimorphic species, such as dark geese, and sandhill cranes, and total birds (TB) used for monomorphic species other than dark geese and sandhill cranes and scaup. See the Methods section for detailed index definitions and trend calculations. Estimates are not corrected for incomplete detection, but trends do account for observer effects.")
+cap <- paste0 ("The most recent 3-year (2022-2024) and long-term (",min(ACPHistoric$combined$Year),"-",max(ACPHistoric$combined$Year),") average population indices and associated standard errors (SE), as well as long-term annual growth rates (long-term trend), associated 95% credible intervals (CI), and posterior probability that a trend is decreasing (Pr[Trend < 1]) for bird species on the Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) in Alaska.  Index formulas used are species-specific, with indicated total birds (ITB) used for dimorphic species, dark geese, and sandhill cranes, and total birds (TB) used for the remaining monomorphic species other than dark geese, sandhill cranes, and scaup. See the Methods section for detailed index definitions and trend calculations. Estimates are not corrected for incomplete detection, but trends do account for observer effects.")
 
 kable(table2, digits = 0, booktabs = TRUE, longtable=TRUE, format.args = list(big.mark = ","), caption=cap, align = "llrrrrcc", col.names = c("Species", "Index", "Average", "SE", "Average", "SE", "Trend (CI)", "Pr(Trend < 1)"), linesep = "") %>%
   kable_styling(font_size=10, position="center") %>%
@@ -933,61 +911,51 @@ kable(table2, digits = 0, booktabs = TRUE, longtable=TRUE, format.args = list(bi
 
 ```
 
-# RESULTS {-}
 
+## Population Indices {.unnumbered}
 
-## Survey Timing and Weather Conditions {-}
+We summarize the most recent 3-year average (2022-2024) and long-term average (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) population indices, as well as long-term (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) posterior mean trajectories (trends) and associated 95% credible intervals (CI), as well as posterior probabilities that trends are decreasing (Pr[Trend \< 1]) for 33 bird species observed on the ACP Survey (@tbl-results). Herein, we follow the taxonomic ordering of @Chesser2024. For each species, we also present individual annual population indices (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) and trajectories in graphical and tabular formats, and maps of individual species-observations for 2024 (Appendices: @tbl-SNGO - @tbl-CORA and @fig-SNGO - @fig-CORA). Though our maps provide accurate observation locations for each species, we caution that our location data should not be interpreted as densities due to differences in sampling effort across strata boundaries. Historical density models have been published for our previous data [@Amundson2019], but more current density-modelling efforts [see @Osnas2024] for all species in this report have not yet been completed.
 
-Dates of data collection for 2018-2019, and 2022-24 were: 15-25, 8-16, 14-21, 11-18, and 14-21 June, respectively (@tbl-crew). Survey timing was the latest on record for the survey in 2018 (15-25 June; @tbl-crew).  Phenology on the ACP in 2018 was 5 days later than the long-term (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) average start date of 10 June.  In 2018, in particular, sustained cold temperatures, strong east winds, and significant snow and ice covered much of the northern ACP landscape well into June. While 2018, 2022, and 2024 were on the later end of the range of start dates (@tbl-crew), 2019 was a relatively early year on the ACP.  Breakup chronology on the ACP varies greatly annually, but in general, we have observed later breakups in the years we have surveyed since 2017.
+# DISCUSSION {.unnumbered}
 
+This report describes trends in relative abundance for all common waterbirds (excluding shorebirds; due to their small size and inconsistent data collection), owls, eagles, and ravens on the ACP of Alaska, collected by USFWS from `r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`; including 2018–2024 survey data not previously reported. Upper 95% credible intervals for long-term (2007–`r max(ACPHistoric$combined$Year)`) growth rates of scaup, spectacled eiders, king eiders, and jaeger species were all \< 1.00 and the posterior probability that the trend was decreasing was \>0.975, indicating high confidence in population decreases for those species. Other species showed less evidence (lower posterior probability) for a population decrease (@tbl-results). With less, but still relatively high confidence, tundra swan (0.91), mallard (0.93), American green-winged teal (0.84), Arctic tern (0.89), Pacific loon (0.81), and common raven (0.93) all showed some evidence for a decreasing trend (@tbl-results). Snow geese showed a high probability (\>0.975) of a population increase, with a large magnitude, of up to 25% per year. Greater white-fronted geese were relatively stable with a mean growth rate centered on 1.0 and a 95% credible interval bound to less than a 3% increase or decrease. Growth rate posterior estimates for northern pintail, long-tailed duck, Sabine's gull, glaucous gull, and yellow-billed loon showed no strong evidence for a long-term directional trend but were instead bound to within 5% annual changes from 1.00 and show large year-specific variation or increasing and decreasing trends over shorter periods. Posterior estimates for other species showed less evidence for the sign or magnitude of long-term trends (@tbl-results).
 
-## Population Indices {-}
+Though observer bias is a factor in all aerial surveys, the experience-level and stability of the ACP Survey crew, particularly the left-seat pilot-observers, has been remarkably high. From 2007–2024, there were only two pilot-observers who collected left-seat data (Larned [2007-2011] and Wilson [2012-2024]) and viewed together, seats occupied by Larned and Wilson represented one third of all data collected over the duration of the survey (2007-2024; @tbl-crew). Given this stability in observer-personnel, the estimated trends will be unbiased if there is little variation in detection or other observation processes within observers across years. We did, however, use a model to statistically remove average observer effects from the estimated average trajectory. This represents an improvement over past long-term trend estimates, and lacking any trend in detection or other observation biases, the trends reported here are the best currently available for this area without directly estimating these observer biases. Nevertheless, detection and availability biases are still largely unaccounted for, affecting our population indices. Thus, these estimate are not measures of absolute abundance. Though we do not provide detection-adjusted population estimates for 2007-2024, we did initiate a study examining observer detection of eiders and other waterbirds on the ACP in 2015 [@Wilson2017] and hope to incorporate detection and observer-adjusted estimates into future reports using methods similar to @Osnas2024.
 
-We summarize the most recent 3-year average (2022-2024) and long-term average (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) population indices, as well as long-term (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) posterior mean trajectories (trends) and associated 95% credible intervals (CI), as well as posterior probabilities that trends are decreasing (Pr(Trend < 1)) for 33 bird species observed on the ACP Survey (@tbl-results). Herein, we follow the taxonomic ordering of @Chesser2024. For each species, we also present individual annual population indices (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) and trajectories in graphical and tabular formats, and maps of individual species-observations for 2024 (Appendices: @tbl-SNGO - @tbl-CORA  and @fig-SNGO - @fig-CORA). Though our maps provide accurate observation locations for each species, we caution that our location data should not be interpreted as densities due to differences in sampling effort across strata boundaries. Historical density models have been published for our previous data [@Amundson2019], but more current density-modelling efforts [see @Osnas2024] for all species in this report have not yet been completed.
+The trajectories estimated here represent continuous smooth functions after removing average observer effects. We did not fit other models that allowed for more complex or discontinuous trends, such as year-specific random effects or spatially explicit predictions [e.g. @smith2021north; @Osnas2024]. Because many species do show large year-specific deviations from an average trend, a model with such effects is likely a better description for these species. Such models are not well-estimated when fit to the design-based estimates used here. The model we have used, however, can be viewed as a flexible way to estimate the average trajectory through time, smoothing over year-specific variations. Compared to a simple log-linear regression on point estimates, the current approach provides for more flexible functional forms of the trajectory, allowing for the identification of cycles or periods of change. One should keep these points in mind when interpreting results, as for many species, the year-specific variations are much larger than the average change over time (e.g., northern pintail) or show cyclical patterns over a shorter time (e.g, long-tail duck, yellow-billed loon).
 
+Trajectories for rare species (those with observed zero estimates) should be interpreted with care. We attempted to fit our model by including zero estimates (after adding a small number and log transforming) but the GAM often failed to find stable estimates, so we used only positive estimates. This will have two important consequences. First, trajectories may be biased if there is a trend in the frequency of zero observations in the time series. Second, the GAM will tend to produce smoother trajectories than if the zeros were included. For example, the Steller's eider trajectory is essential a flat line (@fig-STEI); whereas @Osnas2024 found clear cyclical patterns in the trajectory when a different GAM model was fit to smaller-scale, spatially-explicit counts that included zero-counts. Interestingly, @Amundson2019 also excluded zero-counts in a spatially-explicit GAM, and found a flat trajectory for Steller's eider over a much longer time period; suggesting that the smooth GAM is due to a reduction in data when most observations are excluded. We expect similar patterns for other rare species. However, for more common species that do not include zero estimates, we believe the current model should approximate temporal trajectories in relative abundance. In the future, we also hope to fit a spatial model to the full set of species.
 
-# DISCUSSION {-}
+Although the long-standing, continental-scale aerial Waterfowl Breeding Population and Habitat Survey (WBPHS) samples most of Alaska’s primary waterfowl production areas, it has never included the rich wetlands of the Arctic Coastal Plain of Alaska or the high-Arctic of Canada in its annual efforts. Further, while several targeted monitoring programs for specific species or limited areas of the ACP have been conducted; to our knowledge the ACP Survey represents the most comprehensive aerial survey of Arctic-breeding waterbirds in existence. The analysis and implementation of a multi-species, aerial monitoring program such as the ACP Survey is challenging due to the inherent variability of the natural ecosystem, the varied natural histories of 30+ species, and the logistical difficulties of conducting aerial surveys in the Arctic. Moreover, it is difficult to achieve adequate within-year sampling of such a large spatial area within a short annual phenological window. Surveys of this type are further complicated by several waterfowl species that exist in extremely low densities and/or breed irregularly (such as Steller’s eiders), making precise estimates and trends difficult to achieve [though see @Osnas2024]. Collection of such a long-term data set has been made possible by integrating improvements in sample design along the way. The sample design used in this survey was originally developed in 1986 to target breeding ducks [Original ACP Survey 1986-2006: @Mallek2007], and later augmented to better include coastal areas and earlier-nesting species, such as eiders [North Slope Eider Survey 1992–2006: @Larned2008]. The current redesigned survey [2007–present: @Stehn2013; @Wilson2018] amalgamated these two designs and provides good temporal, spatial, and inferential compromise. However, the changing distributions and abundances of many waterfowl species, as well as the rapid and wide-spread landscape changes in the Arctic, may warrant reevaluation of the current stratification and overall survey design. Nonetheless, this survey represents one of few broad-scale, long-term, systematic monitoring efforts for waterbirds in the Arctic of North America, and perhaps, the world.
 
-This report describes trends in relative abundance for all common waterbirds (excluding shorebirds; due to their small size and inconsistent data collection), owls, eagles, and ravens on the ACP of Alaska, collected by USFWS from `r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`; including 2018–2024 survey data not previously reported. Upper 95% credible intervals for long-term (2007–`r max(ACPHistoric$combined$Year)`) growth rates of scaup, spectacled eiders, king eiders, and jaeger species were all < 1.00, indicating high confidence in population decreases for those species.  Other species showed less evidence (lower posterior probability) for a population decrease (@tbl-results). With less, but still relatively high confidence, tundra swan (0.91), mallard (0.93), American green-winged teal (0.84), Arctic tern (0.89), Pacific loon (0.81), and common raven (0.93) all showed some evidence for a decreasing trend (@tbl-results). Snow geese showed a high probability (>0.975) of a population increase, with a large magnitude, of up to 25% per year. Greater white-fronted goose were relatively stable with a mean growth rate centered on 1.0 and a 95% credible interval bound to less than a 3% increase or decrease. Growth rate posterior estimates for northern pintail, long-tailed duck, Sabine's gull, glaucous gull, and yellow-billed loon showed no strong evidence for a long-term directional trend but were instead bound to within 5% annual changes and show large year-specific variation or increasing and decreasing trends over shorter periods. Posterior estimates for other species showed less evidence for the sign or magnitude of long-term trends (@tbl-results).
+## *Supplemental Material* {.unnumbered}
 
-Though observer bias is a factor in all aerial surveys, the experience-level and stability of the ACP Survey crew, particularly the left-seat pilot-observers, has been remarkably high.  From 2007–2024, there were only two pilot-observers who collected left-seat data (Larned [2007-2011] and Wilson [2012-2024]) and viewed together, seats occupied by Larned and Wilson represented one third of all data collected over the duration of the survey (2007-2024; @tbl-crew). Given this stability in observer-personnel, the estimated trends will be unbiased if there is little variation in detection or other observation processes within observers across years. We did, however, use a model to statistically remove average observer effects from the estimated average trajectory. This represents an improvement over past long-term trend estimates, and lacking any trend in detection or other observation biases, the trends reported here are the best currently available for this area without directly estimating these observer biases. Nevertheless, detection and availability biases are still largely unaccounted for, affecting our population indices. Thus, these estimate are not measures of absolute abundance. Though we do not provide detection-adjusted population estimates for 2007-2024, we did initiate a study examining observer detection of eiders and other waterbirds on the ACP in 2015 [@Wilson2017] and hope to incorporate detection and observer-adjusted estimates into future reports using methods similar to @Osnas2024.  
+Species-specific population indices, trends, and spatial distributions of observations can be found in the tables and figures of the Appendices. Original data for the ACP Survey can be found at Science Base - Alaska Arctic Coastal Plain Breeding Waterbird Aerial Survey 2007-Present <https://doi.org/10.7944/f6jd-2985> and point-estimates (and documentation of their calculation) were sourced from the R package AKaerial at <https://github.com/USFWS/AKaerial>. R Quarto code used to produce this report, the report itself, and associated tabular data, can be found at <https://doi.org/10.7944/dqf4-2z27>.
 
-The trajectories estimated here represent continuous smooth functions after removing average observer effects. We did not fit other models that allowed for more complex or discontinuous trends, such as year-specific random effects or spatially explicit predictions [e.g. @smith2021north; @Osnas2024]. Because many species do show large year-specific deviations from an average trend, a model with such effects is likely a better description for these species. Such models are not well-estimated when fit to the design-based estimates used here. The model we have used, however, can be viewed as a flexible way to estimate the average trajectory through time, smoothing over year-specific variations. Compared to a simple log-linear regression on point estimates, the current approach provides for more flexible functional forms of the trajectory, allowing for the identification of cycles or periods of change. One should keep these points in mind when interpreting results, as for many species, the year-specific variations are much larger than the average change over time (e.g., northern pintail) or show cyclical patterns over a shorter time (e.g, long-tail duck, yellow-billed loon).  
-
-Trajectories for rare species (those with observed zero estimates) should be interpreted with care. We attempted to fit our model by including zero estimates (after adding a small number and log transforming) but the GAM often failed to find stable estimates, so we used only positive estimates. This will have two important consequences. First, trajectories may be biased if there is a trend in the frequency of zero observations in the time series. Second, the GAM will tend to produce smoother trajectories than if the zeros were included. For example, the Steller's eider trajectory is essential a flat line (@fig-STEI); whereas @Osnas2024 found clear cyclical patterns in the trajectory when a different GAM model was fit to smaller-scale, spatially-explicit counts that included zero-counts. Interestingly, @Amundson2019 also excluded zero-counts in a spatially-explicit GAM, and found a flat trajectory for Steller's eider over a much longer time period; suggesting that the smooth GAM is due to a reduction in data when most observations are excluded. We expect similar patterns for other rare species. However, for more common species that do not include zero estimates, we believe the current model should approximate temporal trajectories in relative abundance. In the future, we also hope to fit a spatial model to the full set of species. 
-
-Although the long-standing, continental-scale aerial Waterfowl Breeding Population and Habitat Survey (WBPHS) samples most of Alaska’s primary waterfowl production areas, it has never included the rich wetlands of the Arctic Coastal Plain of Alaska or the high-Arctic of Canada in its annual efforts. Further, while several targeted monitoring programs for specific species or limited areas of the ACP have been conducted; to our knowledge the ACP Survey represents the most comprehensive aerial survey of arctic-breeding waterbirds in existence. The analysis and implementation of a multi-species, aerial monitoring program such as the ACP Survey is challenging due to the inherent variability of the natural ecosystem, the varied natural histories of 30+ species, and the logistical difficulties of conducting aerial surveys in the Arctic.  Moreover, it is difficult to achieve adequate within-year sampling of such a large spatial area within a short annual phenological window.  Surveys of this type are further complicated by several waterfowl species that exist in extremely low densities and/or breed irregularly (such as Steller’s eiders), making precise estimates and trends difficult to achieve (though see @Osnas2024).  Collection of such a long-term data set has been made possible by integrating improvements in sample design along the way. The sample design used in this survey was originally developed in 1986 to target breeding ducks [Original ACP Survey 1986-2006: @Mallek2007], and later augmented to better include coastal areas and earlier-nesting species, such as eiders [North Slope Eider Survey 1992–2006: @Larned2008]. The current redesigned survey [2007–present: @Stehn2013; @Wilson2018] amalgamated these two designs and provides good temporal, spatial, and inferential compromise.  However, the changing distributions and abundances of many waterfowl species, as well as the rapid and wide-spread landscape changes in the Arctic, may warrant reevaluation of the current stratification and overall survey design.  Nonetheless, this survey represents one of few broad-scale, long-term, systematic monitoring efforts for waterbirds in the Arctic of North America, and perhaps, the world. 
-
-## *Supplemental Material* {-}
-
-Species-specific population indices and spatial distributions of observations can be found in the tables and figures of the Appendices. Original data for the ACP Survey can be found at Science Base - Alaska Arctic Coastal Plain Breeding Waterbird Aerial Survey 2007-Present <https://doi.org/10.7944/f6jd-2985> and point-estimates (and documentation of their calculation) were sourced from the R package AKaerial at <https://github.com/USFWS/AKaerial>. R Quarto code used to produce this report, the report itself, and associated tabular data, can be found at <https://doi.org/10.7944/dqf4-2z27>. 
-
-## *Suggested Citation* {-}
+## *Suggested Citation* {.unnumbered}
 
 Wilson, H.M., Safine, D.E., Frost, C.J., and E.E. Osnas. 2025. Population indices, trends, and distribution of breeding waterbird on the Arctic Coastal Plain, Alaska, 2007-2024. Anchorage, Alaska: U.S. Fish and Wildlife Service, Migratory Bird Management. <https://doi.org/10.7944/dqf4-2z27>
 
+# ACKNOWLEDGEMENTS {.unnumbered}
 
-# ACKNOWLEDGEMENTS {-}
-
-This survey would not be possible without the generous support of the Bureau of Land Management, with particular thanks to Debora Nigro.  We also extend thanks to Bill Larned for his many years flying and mentoring on the survey, Michael Swaim for assistance with aviation survey and hazard maps, and Julian Fischer for his thoughtful report reviews, project support, and program leadership. We are grateful to the people of Atqasuk, Alaska for hosting us in their community for so many years, and for helping with logistics and housing. Finally, we acknowledge the tremendous contribution of the observers and pilots who collected aerial waterbird data on the ACP beginning in 1986 [@Mallek2007; @Stehn2013], and from 2007 forward (@tbl-crew), and all those who supported their efforts.
-
+This survey would not be possible without the generous support of the Bureau of Land Management, with particular thanks to Debora Nigro. We also extend thanks to Bill Larned for his many years flying and mentoring on the survey, Michael Swaim for assistance with aviation survey and hazard maps, and Julian Fischer for his thoughtful report reviews, project support, and program leadership. We are grateful to the people of Atqasuk, Alaska for hosting us in their community for so many years, and for helping with logistics and housing. Finally, we acknowledge the tremendous contribution of the observers and pilots who collected aerial waterbird data on the ACP beginning in 1986 [@Mallek2007; @Stehn2013], and from 2007 forward (@tbl-crew), and all those who supported their efforts.
 
 <center>
 
-![Arctic Coastal Plain Survey Crew 2018-2024.  David Safine (right-front seat observer) and Heather Wilson (left-front seat observer/pilot)]("//ifw7ro-file.fws.doi.net/datamgt/mbm/mbmwa_008_ACP_Aerial_Survey/documents/images/Crew_picture_Wilson_Safine_ACP_2018_2024.jpg")
+![Arctic Coastal Plain Survey Crew 2018-2024. David Safine (right-front seat observer) and Heather Wilson (left-front seat observer/pilot)](%22//ifw7ro-file.fws.doi.net/datamgt/mbm/mbmwa_008_ACP_Aerial_Survey/documents/images/Crew_picture_Wilson_Safine_ACP_2018_2024.jpg%22)
 
 </center>
 
+# LITERATURE CITED {.unnumbered}
 
-# LITERATURE CITED {-}
-
-<div id="refs"></div>
+::: {#refs}
+:::
 
 {{< pagebreak >}}
 
-# APPENDICES {-}
+# APPENDICES {.unnumbered}
 
-## Snow Goose {-}
+## Snow Goose {.unnumbered}
 
 ```{r SNGOcap, echo=FALSE, warning=FALSE}
  cap = paste0("Snow goose indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")  
@@ -1026,7 +994,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Snow Goose {-}
+## Snow Goose {.unnumbered}
 
 ```{r SNGO, include=TRUE, echo=FALSE}
 #| label: tbl-SNGO
@@ -1040,7 +1008,7 @@ kable(SNGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Snow Goose {-}
+## Snow Goose {.unnumbered}
 
 ```{r SNGOmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of snow geese along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1056,7 +1024,7 @@ AKaerial::ObsMap(area="ACP", species="SNGO")
 
 {{< pagebreak >}}
 
-## Greater White-fronted Goose {-}
+## Greater White-fronted Goose {.unnumbered}
 
 ```{r GWFGcap, echo=FALSE, warning=FALSE}
  cap = paste0("Greater white-fronted goose indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1096,7 +1064,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Greater White-fronted Goose {-}
+## Greater White-fronted Goose {.unnumbered}
 
 ```{r GWFG, include=TRUE, echo=FALSE}
 #| label: tbl-GWFG
@@ -1112,7 +1080,7 @@ kable(GWFG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Greater White-fronted Goose {-}
+## Greater White-fronted Goose {.unnumbered}
 
 ```{r GWFGmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of greater white-fronted geese along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1128,8 +1096,7 @@ AKaerial::ObsMap(area="ACP", species="GWFG")
 
 {{< pagebreak >}}
 
-
-## Brant {-}
+## Brant {.unnumbered}
 
 ```{r BRANcap, echo=FALSE, warning=FALSE}
  cap = paste0("Brant indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1169,7 +1136,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Brant {-}
+## Brant {.unnumbered}
 
 ```{r BRAN, include=TRUE, echo=FALSE}
 #| label: tbl-BRAN
@@ -1184,7 +1151,7 @@ kable(BRAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Brant {-}
+## Brant {.unnumbered}
 
 ```{r BRANmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of brant along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1200,9 +1167,7 @@ AKaerial::ObsMap(area="ACP", species="BRAN")
 
 {{< pagebreak >}}
 
-
-## Cackling/Canada Goose {-}
-
+## Cackling/Canada Goose {.unnumbered}
 
 ```{r CCGOcap, echo=FALSE, warning=FALSE}
  cap = paste0("Cackling/Canada goose indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1242,7 +1207,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Cackling/Canada Goose {-}
+## Cackling/Canada Goose {.unnumbered}
 
 ```{r CCGO, include=TRUE, echo=FALSE}
 #| label: tbl-CCGO
@@ -1257,7 +1222,7 @@ kable(CCGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Cackling/Canada Goose {-}
+## Cackling/Canada Goose {.unnumbered}
 
 ```{r CCGOmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of cackling/Canada geese along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1270,9 +1235,10 @@ kable(CCGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 AKaerial::ObsMap(area="ACP", species="CCGO")
 
 ```
+
 {{< pagebreak >}}
 
-## Tundra Swan {-}
+## Tundra Swan {.unnumbered}
 
 ```{r SWANcap, echo=FALSE, warning=FALSE}
  cap = paste0("Tundra swan indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")  
@@ -1311,7 +1277,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Tundra Swan {-}
+## Tundra Swan {.unnumbered}
 
 ```{r SWAN, include=TRUE, echo=FALSE}
 #| label: tbl-SWAN
@@ -1325,7 +1291,7 @@ kable(SWAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Tundra Swan {-}
+## Tundra Swan {.unnumbered}
 
 ```{r SWANmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of tundra swans along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1338,10 +1304,10 @@ kable(SWAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 AKaerial::ObsMap(area="ACP", species="SWAN")
 
 ```
+
 {{< pagebreak >}}
 
-
-## Northern Shoveler {-}
+## Northern Shoveler {.unnumbered}
 
 ```{r NSHOcap, echo=FALSE, warning=FALSE}
  cap = paste0("Northern shoveler indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1382,10 +1348,10 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Northern Shoveler {-}
+## Northern Shoveler {.unnumbered}
 
 ```{r NSHO, include=TRUE, echo=FALSE}
-#| label: tbl-NSHO
+ 
 cap <- paste0("Northern shoveler indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
 
 kable(NSHO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
@@ -1397,7 +1363,7 @@ kable(NSHO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Northern Shoveler {-}
+## Northern Shoveler {.unnumbered}
 
 ```{r NSHOmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of northern shoveler along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1410,9 +1376,10 @@ kable(NSHO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 AKaerial::ObsMap(area="ACP", species="NSHO")
 
 ```
+
 {{< pagebreak >}}
 
-## American Wigeon {-}
+## American Wigeon {.unnumbered}
 
 ```{r AMWIcap, echo=FALSE, warning=FALSE}
  cap = paste0("American wigeon indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1453,7 +1420,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## American Wigeon {-}
+## American Wigeon {.unnumbered}
 
 ```{r AMWI, include=TRUE, echo=FALSE}
 #| label: tbl-AMWI
@@ -1468,7 +1435,7 @@ kable(AMWI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## American Wigeon {-}
+## American Wigeon {.unnumbered}
 
 ```{r AMWImcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of American wigeon along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1484,8 +1451,7 @@ AKaerial::ObsMap(area="ACP", species="AMWI")
 
 {{< pagebreak >}}
 
-
-## Mallard {-}
+## Mallard {.unnumbered}
 
 ```{r MALLcap, echo=FALSE, warning=FALSE}
  cap = paste0("Mallard indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1526,7 +1492,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Mallard {-}
+## Mallard {.unnumbered}
 
 ```{r MALL, include=TRUE, echo=FALSE}
 #| label: tbl-MALL
@@ -1541,7 +1507,7 @@ kable(MALL, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Mallard {-}
+## Mallard {.unnumbered}
 
 ```{r MALLmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of mallards along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1557,7 +1523,7 @@ AKaerial::ObsMap(area="ACP", species="MALL")
 
 {{< pagebreak >}}
 
-## Northern Pintail {-}
+## Northern Pintail {.unnumbered}
 
 ```{r NOPIcap, echo=FALSE, warning=FALSE}
  cap = paste0("Northern pintail indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1598,7 +1564,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Northern Pintail {-}
+## Northern Pintail {.unnumbered}
 
 ```{r NOPI, include=TRUE, echo=FALSE}
 #| label: tbl-NOPI
@@ -1613,7 +1579,7 @@ kable(NOPI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Northern Pintail {-}
+## Northern Pintail {.unnumbered}
 
 ```{r NOPImcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of northern pintails along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1627,10 +1593,9 @@ AKaerial::ObsMap(area="ACP", species="NOPI")
 
 ```
 
-
 {{< pagebreak >}}
 
-## American Green-winged Teal {-}
+## American Green-winged Teal {.unnumbered}
 
 ```{r GWTEcap, echo=FALSE, warning=FALSE}
  cap = paste0("American green-winged teal indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1671,7 +1636,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## American Green-winged Teal {-}
+## American Green-winged Teal {.unnumbered}
 
 ```{r GWTE, include=TRUE, echo=FALSE}
 #| label: tbl-GWTE
@@ -1686,7 +1651,7 @@ kable(GWTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## American Green-winged Teal {-}
+## American Green-winged Teal {.unnumbered}
 
 ```{r GWTEmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of American green-winged teal along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1702,7 +1667,7 @@ AKaerial::ObsMap(area="ACP", species="GWTE")
 
 {{< pagebreak >}}
 
-## Scaup species {-}
+## Scaup species {.unnumbered}
 
 ```{r UNSCcap, echo=FALSE, warning=FALSE}
  cap = paste0("Scaup species indices of breeding birds (grey circles; singles + [2 x pairs] + flocked drakes <5) and total birds (black circles; singles + [2 x pairs] + flocked drakes <5 + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1741,7 +1706,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Scaup species {-}
+## Scaup species {.unnumbered}
 
 ```{r UNSC, include=TRUE, echo=FALSE}
 #| label: tbl-UNSC
@@ -1755,7 +1720,7 @@ kable(UNSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Scaup species {-}
+## Scaup species {.unnumbered}
 
 ```{r UNSCmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of scaup species along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1771,7 +1736,7 @@ AKaerial::ObsMap(area="ACP", species="UNSC")
 
 {{< pagebreak >}}
 
-## Steller's Eider {-}
+## Steller's Eider {.unnumbered}
 
 ```{r STEIcap, echo=FALSE, warning=FALSE}
  cap = paste0("Steller’s eider indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1812,7 +1777,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Steller's Eider {-}
+## Steller's Eider {.unnumbered}
 
 ```{r STEI, include=TRUE, echo=FALSE}
 #| label: tbl-STEI
@@ -1827,7 +1792,7 @@ kable(STEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Steller's Eider {-}
+## Steller's Eider {.unnumbered}
 
 ```{r STEImcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of Steller’s eiders along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1843,7 +1808,7 @@ AKaerial::ObsMap(area="ACP", species="STEI")
 
 {{< pagebreak >}}
 
-## Spectacled Eider {-}
+## Spectacled Eider {.unnumbered}
 
 ```{r SPEIcap, echo=FALSE, warning=FALSE}
  cap = paste0("Spectacled eider indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1884,7 +1849,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Spectacled Eider {-}
+## Spectacled Eider {.unnumbered}
 
 ```{r SPEI, include=TRUE, echo=FALSE}
 #| label: tbl-SPEI
@@ -1899,7 +1864,7 @@ kable(SPEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Spectacled Eider {-}
+## Spectacled Eider {.unnumbered}
 
 ```{r SPEImcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of spectacled eiders along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1915,7 +1880,7 @@ AKaerial::ObsMap(area="ACP", species="SPEI")
 
 {{< pagebreak >}}
 
-## King Eider {-}
+## King Eider {.unnumbered}
 
 ```{r KIEIcap, echo=FALSE, warning=FALSE}
  cap = paste0("King eider indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -1956,7 +1921,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## King Eider {-}
+## King Eider {.unnumbered}
 
 ```{r KIEI, include=TRUE, echo=FALSE}
 #| label: tbl-KIEI
@@ -1971,7 +1936,7 @@ kable(KIEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## King Eider {-}
+## King Eider {.unnumbered}
 
 ```{r KIEImcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of king eiders along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -1987,7 +1952,7 @@ AKaerial::ObsMap(area="ACP", species="KIEI")
 
 {{< pagebreak >}}
 
-## Common Eider {-}
+## Common Eider {.unnumbered}
 
 ```{r COEIcap, echo=FALSE, warning=FALSE}
  cap = paste0("Common eider indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2028,7 +1993,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Common Eider {-}
+## Common Eider {.unnumbered}
 
 ```{r COEI, include=TRUE, echo=FALSE}
 #| label: tbl-COEI
@@ -2043,7 +2008,7 @@ kable(COEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Common Eider {-}
+## Common Eider {.unnumbered}
 
 ```{r COEImcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of common eiders along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2059,8 +2024,7 @@ AKaerial::ObsMap(area="ACP", species="COEI")
 
 {{< pagebreak >}}
 
-
-## Surf Scoter {-}
+## Surf Scoter {.unnumbered}
 
 ```{r SUSCcap, echo=FALSE, warning=FALSE}
  cap = paste0("Surf scoter indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2101,7 +2065,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Surf Scoter {-}
+## Surf Scoter {.unnumbered}
 
 ```{r SUSC, include=TRUE, echo=FALSE}
 #| label: tbl-SUSC
@@ -2116,7 +2080,7 @@ kable(SUSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Surf Scoter {-}
+## Surf Scoter {.unnumbered}
 
 ```{r SUSCmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of surf scoters along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2132,7 +2096,7 @@ AKaerial::ObsMap(area="ACP", species="SUSC")
 
 {{< pagebreak >}}
 
-## White-winged Scoter {-}
+## White-winged Scoter {.unnumbered}
 
 ```{r WWSCcap, echo=FALSE, warning=FALSE}
  cap = paste0("White-winged scoter indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2173,7 +2137,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## White-winged Scoter {-}
+## White-winged Scoter {.unnumbered}
 
 ```{r WWSC, include=TRUE, echo=FALSE}
 #| label: tbl-WWSC
@@ -2188,7 +2152,7 @@ kable(WWSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## White-winged Scoter {-}
+## White-winged Scoter {.unnumbered}
 
 ```{r WWSCmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of white-winged scoters along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2201,9 +2165,10 @@ kable(WWSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 AKaerial::ObsMap(area="ACP", species="WWSC")
 
 ```
+
 {{< pagebreak >}}
 
-## Black Scoter {-}
+## Black Scoter {.unnumbered}
 
 ```{r BLSCcap, echo=FALSE, warning=FALSE}
  cap = paste0("Black scoter indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2244,7 +2209,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Black Scoter {-}
+## Black Scoter {.unnumbered}
 
 ```{r BLSC, include=TRUE, echo=FALSE}
 #| label: tbl-BLSC
@@ -2259,7 +2224,7 @@ kable(BLSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Black Scoter {-}
+## Black Scoter {.unnumbered}
 
 ```{r BLSCmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of black scoters along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2275,8 +2240,7 @@ AKaerial::ObsMap(area="ACP", species="BLSC")
 
 {{< pagebreak >}}
 
-
-## Long-tailed Duck {-}
+## Long-tailed Duck {.unnumbered}
 
 ```{r LTDUcap, echo=FALSE, warning=FALSE}
  cap = paste0("Long-tailed duck indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2317,7 +2281,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Long-tailed Duck {-}
+## Long-tailed Duck {.unnumbered}
 
 ```{r LTDU, include=TRUE, echo=FALSE}
 #| label: tbl-LTDU
@@ -2332,7 +2296,7 @@ kable(LTDU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Long-tailed Duck {-}
+## Long-tailed Duck {.unnumbered}
 
 ```{r LTDUmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of long-tailed ducks along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2345,9 +2309,10 @@ kable(LTDU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 AKaerial::ObsMap(area="ACP", species="LTDU")
 
 ```
+
 {{< pagebreak >}}
 
-## Red-breasted Merganser {-}
+## Red-breasted Merganser {.unnumbered}
 
 ```{r RBMEcap, echo=FALSE, warning=FALSE}
  cap = paste0("Red-breasted merganser indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2388,7 +2353,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Red-breasted Merganser {-}
+## Red-breasted Merganser {.unnumbered}
 
 ```{r RBME, include=TRUE, echo=FALSE}
 #| label: tbl-RBME
@@ -2403,7 +2368,7 @@ kable(RBME, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Red-breasted Merganser {-}
+## Red-breasted Merganser {.unnumbered}
 
 ```{r RBMEmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of red-breasted mergansers along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2417,10 +2382,9 @@ AKaerial::ObsMap(area="ACP", species="RBME")
 
 ```
 
-
 {{< pagebreak >}}
 
-## Red-necked Grebe {-}
+## Red-necked Grebe {.unnumbered}
 
 ```{r RNGRcap, echo=FALSE, warning=FALSE}
  cap = paste0("Red-necked grebe indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2459,7 +2423,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Red-necked Grebe {-}
+## Red-necked Grebe {.unnumbered}
 
 ```{r RNGR, include=TRUE, echo=FALSE}
 #| label: tbl-RNGR
@@ -2473,7 +2437,7 @@ kable(RNGR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Red-necked Grebe {-}
+## Red-necked Grebe {.unnumbered}
 
 ```{r RNGRmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of red-necked grebes along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2489,7 +2453,7 @@ AKaerial::ObsMap(area="ACP", species="RNGR")
 
 {{< pagebreak >}}
 
-## Sandhill Crane {-}
+## Sandhill Crane {.unnumbered}
 
 ```{r SACRcap, echo=FALSE, warning=FALSE}
  cap = paste0("Sandhill crane indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2528,7 +2492,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Sandhill Crane {-}
+## Sandhill Crane {.unnumbered}
 
 ```{r SACR, include=TRUE, echo=FALSE}
 #| label: tbl-SACR
@@ -2543,7 +2507,7 @@ kable(SACR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Sandhill Crane {-}
+## Sandhill Crane {.unnumbered}
 
 ```{r SACRmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of sandhill cranes along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2559,7 +2523,7 @@ AKaerial::ObsMap(area="ACP", species="SACR")
 
 {{< pagebreak >}}
 
-## Jaeger species {-}
+## Jaeger species {.unnumbered}
 
 ```{r JAEGcap, echo=FALSE, warning=FALSE}
  cap = paste0("Jaeger species indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2598,7 +2562,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Jaeger species {-}
+## Jaeger species {.unnumbered}
 
 ```{r JAEG, include=TRUE, echo=FALSE}
 #| label: tbl-JAEG
@@ -2612,7 +2576,7 @@ kable(JAEG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Jaeger species {-}
+## Jaeger species {.unnumbered}
 
 ```{r JAEGmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of jaeger species along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2628,7 +2592,7 @@ AKaerial::ObsMap(area="ACP", species="JAEG")
 
 {{< pagebreak >}}
 
-## Sabine's Gull {-}
+## Sabine's Gull {.unnumbered}
 
 ```{r SAGUcap, echo=FALSE, warning=FALSE}
  cap = paste0("Sabine's gull indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2667,7 +2631,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Sabine's Gull {-}
+## Sabine's Gull {.unnumbered}
 
 ```{r SAGU, include=TRUE, echo=FALSE}
 #| label: tbl-SAGU
@@ -2681,7 +2645,7 @@ kable(SAGU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Sabine's Gull {-}
+## Sabine's Gull {.unnumbered}
 
 ```{r SAGUmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of Sabine's gulls along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2697,7 +2661,7 @@ AKaerial::ObsMap(area="ACP", species="SAGU")
 
 {{< pagebreak >}}
 
-## Glaucous Gull {-}
+## Glaucous Gull {.unnumbered}
 
 ```{r GLGUcap, echo=FALSE, warning=FALSE}
  cap = paste0("Glaucous gull indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2736,7 +2700,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Glaucous Gull {-}
+## Glaucous Gull {.unnumbered}
 
 ```{r GLGU, include=TRUE, echo=FALSE}
 #| label: tbl-GLGU
@@ -2750,7 +2714,7 @@ kable(GLGU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Glaucous Gull {-}
+## Glaucous Gull {.unnumbered}
 
 ```{r GLGUmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of glaucous gulls along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2766,8 +2730,7 @@ AKaerial::ObsMap(area="ACP", species="GLGU")
 
 {{< pagebreak >}}
 
-
-## Arctic Tern {-}
+## Arctic Tern {.unnumbered}
 
 ```{r ARTEcap, echo=FALSE, warning=FALSE}
  cap = paste0("Arctic tern indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2806,7 +2769,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Arctic Tern {-}
+## Arctic Tern {.unnumbered}
 
 ```{r ARTE, include=TRUE, echo=FALSE}
 #| label: tbl-ARTE
@@ -2820,7 +2783,7 @@ kable(ARTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Arctic Tern {-}
+## Arctic Tern {.unnumbered}
 
 ```{r ARTEmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of Arctic terns along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2836,8 +2799,7 @@ AKaerial::ObsMap(area="ACP", species="ARTE")
 
 {{< pagebreak >}}
 
-
-## Red-throated Loon {-}
+## Red-throated Loon {.unnumbered}
 
 ```{r RTLOcap, echo=FALSE, warning=FALSE}
  cap = paste0("Red-throated loon indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2876,7 +2838,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Red-throated Loon {-}
+## Red-throated Loon {.unnumbered}
 
 ```{r RTLO, include=TRUE, echo=FALSE}
 #| label: tbl-RTLO
@@ -2890,7 +2852,7 @@ kable(RTLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Red-throated Loon {-}
+## Red-throated Loon {.unnumbered}
 
 ```{r RTLOmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of red-throated loons along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2906,7 +2868,7 @@ AKaerial::ObsMap(area="ACP", species="RTLO")
 
 {{< pagebreak >}}
 
-## Pacific Loon {-}
+## Pacific Loon {.unnumbered}
 
 ```{r PALOcap, echo=FALSE, warning=FALSE}
  cap = paste0("Pacific loon indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -2945,7 +2907,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Pacific Loon {-}
+## Pacific Loon {.unnumbered}
 
 ```{r PALO, include=TRUE, echo=FALSE}
 #| label: tbl-PALO
@@ -2959,7 +2921,7 @@ kable(PALO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Pacific Loon {-}
+## Pacific Loon {.unnumbered}
 
 ```{r PALOmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of Pacific loons along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -2975,7 +2937,7 @@ AKaerial::ObsMap(area="ACP", species="PALO")
 
 {{< pagebreak >}}
 
-## Yellow-billed Loon {-}
+## Yellow-billed Loon {.unnumbered}
 
 ```{r YBLOcap, echo=FALSE, warning=FALSE}
  cap = paste0("Yellow-billed loon indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -3014,7 +2976,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Yellow-billed Loon {-}
+## Yellow-billed Loon {.unnumbered}
 
 ```{r YBLO, include=TRUE, echo=FALSE}
 #| label: tbl-YBLO
@@ -3028,7 +2990,7 @@ kable(YBLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Yellow-billed Loon {-}
+## Yellow-billed Loon {.unnumbered}
 
 ```{r YBLOmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of yellow-billed loons along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -3041,9 +3003,10 @@ kable(YBLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 AKaerial::ObsMap(area="ACP", species="YBLO")
 
 ```
+
 {{< pagebreak >}}
 
-## Golden Eagle {-}
+## Golden Eagle {.unnumbered}
 
 ```{r GOEAcap, echo=FALSE, warning=FALSE}
  cap = paste0("Golden eagle indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -3079,9 +3042,10 @@ ggplot(data = df2) +
   theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
 
 ```
+
 {{< pagebreak >}}
 
-## Golden Eagle {-}
+## Golden Eagle {.unnumbered}
 
 ```{r GOEA, include=TRUE, echo=FALSE}
 #| label: tbl-GOEA
@@ -3095,7 +3059,7 @@ kable(GOEA, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Golden Eagle {-}
+## Golden Eagle {.unnumbered}
 
 ```{r GOEAmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of golden eagles along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -3108,9 +3072,10 @@ kable(GOEA, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 AKaerial::ObsMap(area="ACP", species="GOEA")
 
 ```
+
 {{< pagebreak >}}
 
-## Short-eared Owl {-}
+## Short-eared Owl {.unnumbered}
 
 ```{r SEOWcap, echo=FALSE, warning=FALSE}
  cap = paste0("Short-eared owl indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -3149,7 +3114,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Short-eared Owl {-}
+## Short-eared Owl {.unnumbered}
 
 ```{r SEOW, include=TRUE, echo=FALSE}
 #| label: tbl-SEOW
@@ -3163,7 +3128,7 @@ kable(SEOW, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Short-eared Owl {-}
+## Short-eared Owl {.unnumbered}
 
 ```{r SEOWmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of short-eared owls along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -3179,7 +3144,7 @@ AKaerial::ObsMap(area="ACP", species="SEOW")
 
 {{< pagebreak >}}
 
-## Snowy Owl {-}
+## Snowy Owl {.unnumbered}
 
 ```{r SNOWcap, echo=FALSE, warning=FALSE}
  cap = paste0("Snowy owl indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -3218,7 +3183,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Snowy Owl {-}
+## Snowy Owl {.unnumbered}
 
 ```{r SNOW, include=TRUE, echo=FALSE}
 #| label: tbl-SNOW
@@ -3232,7 +3197,7 @@ kable(SNOW, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Snowy Owl {-}
+## Snowy Owl {.unnumbered}
 
 ```{r SNOWmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of snowy owls along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
@@ -3248,7 +3213,7 @@ AKaerial::ObsMap(area="ACP", species="SNOW")
 
 {{< pagebreak >}}
 
-## Common Raven {-}
+## Common Raven {.unnumbered}
 
 ```{r CORAcap, echo=FALSE, warning=FALSE}
  cap = paste0("Common raven indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
@@ -3287,7 +3252,7 @@ ggplot(data = df2) +
 
 {{< pagebreak >}}
 
-## Common Raven {-}
+## Common Raven {.unnumbered}
 
 ```{r CORA, include=TRUE, echo=FALSE}
 #| label: tbl-CORA
@@ -3301,7 +3266,7 @@ kable(CORA, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 {{< pagebreak >}}
 
-## Common Raven {-}
+## Common Raven {.unnumbered}
 
 ```{r CORAmcap, echo=FALSE, warning=FALSE}
  cap = paste0("Observations of common ravens along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),")." )
