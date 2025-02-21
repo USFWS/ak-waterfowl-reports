@@ -799,7 +799,7 @@ The Arctic Coastal Plain (ACP) is a vast area of Arctic lowland tundra in far no
 
 Annual aerial surveys of waterbirds on the ACP have been conducted since 1986. Prior to 2007, two surveys with different timing and coverage [i.e., the Original ACP Survey, 1986–2006: @Brackney1993; @Mallek2007; and the North Slope Eider Survey, 1992–2006: @Larned2006] were used to monitor waterbirds on the ACP. In 2007, the two historical surveys were merged [@Stehn2013], and the amalgamated survey, called the “Arctic Coastal Plain Aerial Breeding Population Survey", hereafter "ACP Survey” [@Larned2008; @Larned2012; @Stehn2013; @Stehn2014; @Wilson2018] has been flown annually since 2007 (with the exception of 2020 and 2021, due to the COVID pandemic). The survey provides distribution and abundance information for 33 species of birds, including loons, swans, geese, ducks, gulls, jaegers, terns, and selected landbird species breeding in northern Alaska. These results provide population status and distribution information to the Pacific Flyway Council, the Alaska Migratory Bird Co-Management Council, spectacled and Steller’s eider Recovery Teams, U.S. Fish and Wildlife Service (USFWS), U.S. Geological Survey, Bureau of Land Management, North Slope Borough, various non-governmental organizations, local communities, consulting firms, and industry. This report focuses on the previously unreported 2018-2024 survey data and presents updated population information for all 33 bird species monitored from `r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`.
 
-![Study area and survey design for the Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) in northern Alaska, illustrating the 2024 transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and Teshekpuk high).](data/fig1.png){#fig-Fig1 fig-alt="Color-coded map of study area and survey design for the Arctic Coastal Plain Aerial Breeding Population Survey in northern Alaska, illustrating the 2024 transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and Teshekpuk high)."}
+![Study area and survey design for the Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) in northern Alaska, illustrating the 2024 transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and Teshekpuk high).](data/fig1.png){#fig-Fig1 fig-alt="Study area and survey design map for the Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) in northern Alaska, illustrating the 2024 transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and Teshekpuk high)."}
 
 # METHODS {.unnumbered}
 
@@ -866,7 +866,7 @@ Trajectories in population indices were estimated using generalized additive mod
 
 We summarized the simulated yearly GAM predictions (i.e., the posterior distribution of trajectories) by calculating the mean and standard deviation for each year. An example of simulated results and observer-specific estimates for one species (Pacific loon) is shown in @fig-loon. For plots and tables presented in the Results and Appendices, we do not report the observer-specific index estimates or individual samples of the smooths, in an effort to reduce clutter. Instead, we show only the average index between observers in any year, the mean posterior trajectory, and $\pm$ 2 standard errors from this mean.
 
-![An example of the modeled index estimates and trend results for Pacific loon, accounting for observer effects. Colored points and bars are observer-specific index estimates, which were sampled 300 times and used as the response in a generalized additive model. Individal modeled predictions for each sample are shown by the thin gray lines. These make up the posterior distribution of modeled trajectories and are summarized by the orange band (approximate 95% credible interval) and the thick gray line (posterior mean). End points of the modeled predictions (thin gray lines) are used to calculate the posterior distribution of the long-term growth rate.](data/plot_trends/figures/PALO_index_2.png){#fig-loon width="50%" height="50%" fig-alt="A figure showing observer-specific estimate for Pacific loon and 300 posterior samples of the modeled GAM trajectories, the posterior mean traectory, and the approximate 95% confidence interval on the trajectory."}
+![An example of the modeled index estimates and trend results for Pacific loon, accounting for observer effects. Colored points and bars are observer-specific index estimates, which were sampled 300 times and used as the response in a generalized additive model. Individal modeled predictions for each sample are shown by the thin gray lines. These make up the posterior distribution of modeled trajectories and are summarized by the orange band (approximate 95% credible interval) and the thick gray line (posterior mean). End points of the modeled predictions (thin gray lines) are used to calculate the posterior distribution of the long-term growth rate.](data/plot_trends/figures/PALO_index_2.png){#fig-loon width="50%" height="50%" fig-alt="A figure showing observer-specific estimate for Pacific loon and 300 posterior samples of the modeled GAM trajectories, the posterior mean trajectory, and the approximate 95% confidence interval on the trajectory."}
 
 We estimated the long-term average growth rate from year $a$ to $b$ for each simulated replicate as
 
@@ -920,7 +920,7 @@ Species-specific population indices, trends, and spatial distributions of observ
 
 ## *Suggested Citation* {.unnumbered}
 
-Wilson, H.M., Safine, D.E., Frost, C.J., and E.E. Osnas. 2025. Population indices, trends, and distribution of breeding waterbird on the Arctic Coastal Plain, Alaska, 2007-2024. Anchorage, Alaska: U.S. Fish and Wildlife Service, Migratory Bird Management. <https://doi.org/10.7944/dqf4-2z27>
+Wilson, H.M., Safine, D.E., Frost, C.J., and E.E. Osnas. 2025. Population indices, trends, and distribution of breeding waterbirds on the Arctic Coastal Plain, Alaska, 2007-2024. Anchorage, Alaska: U.S. Fish and Wildlife Service, Migratory Bird Management. <https://doi.org/10.7944/dqf4-2z27>
 
 # ACKNOWLEDGEMENTS {.unnumbered}
 
@@ -928,7 +928,7 @@ This survey would not be possible without the generous support of the Bureau of 
 
 <center>
 
-![Arctic Coastal Plain Aerial Breeding Population Survey Crew 2018-2024: David Safine (right-front seat observer) and Heather Wilson (left-front seat observer/pilot)](data/Crew_picture_Wilson_Safine_ACP_2018_2024.jpg){fig-alt="A photograph of the 2-person survey crew and airplane (Amphibious Cessna 206 N375F) in Deadhorse, Alaska."}
+![Arctic Coastal Plain Aerial Breeding Population Survey Crew 2018-2024: David Safine (right-front seat observer) and Heather Wilson (left-front seat observer/pilot)](data/Crew_picture_Wilson_Safine_ACP_2018_2024.jpg){fig-alt="Photo of the Arctic Coastal Plain Aerial Breeding Population Survey (ACP Survey) Crew 2018-2024. David Safine (right-front seat observer) and Heather Wilson (left-front seat observer/pilot) stand next to an amphibious-equipped Cessna 206 aircraft N375F in Deadhorse, Alaska."}
 
 </center>
 
@@ -950,7 +950,7 @@ This survey would not be possible without the generous support of the Bureau of 
 ```{r SNGOfig, echo=FALSE, warning=FALSE}
 #| label: fig-SNGO
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line). 
  
 spp = "SNGO"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1004,7 +1004,7 @@ kable(SNGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r SNGOmap, echo=FALSE, warning=FALSE}
 #| label: fig-SNGOmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="SNGO")
 
@@ -1021,7 +1021,7 @@ AKaerial::ObsMap(area="ACP", species="SNGO")
 ```{r GWFGfig, echo=FALSE, warning=FALSE}
 #| label: fig-GWFG
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
  
 spp = "GWFG"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1078,7 +1078,7 @@ kable(GWFG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r GWFGmap, echo=FALSE, warning=FALSE}
 #| label: fig-GWFGmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="GWFG")
 
@@ -1095,7 +1095,7 @@ AKaerial::ObsMap(area="ACP", species="GWFG")
 ```{r BRANfig, echo=FALSE, warning=FALSE}
 #| label: fig-BRAN
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "BRAN"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1151,7 +1151,7 @@ kable(BRAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r BRANmap, echo=FALSE, warning=FALSE}
 #| label: fig-BRANmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="BRAN")
 
@@ -1168,7 +1168,7 @@ AKaerial::ObsMap(area="ACP", species="BRAN")
 ```{r CCGOfig, echo=FALSE, warning=FALSE}
 #| label: fig-CCGO
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "CCGO"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1224,7 +1224,7 @@ kable(CCGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r CCGOmap, echo=FALSE, warning=FALSE}
 #| label: fig-CCGOmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="CCGO")
 
@@ -1241,7 +1241,7 @@ AKaerial::ObsMap(area="ACP", species="CCGO")
 ```{r SWANfig, echo=FALSE, warning=FALSE}
 #| label: fig-SWAN
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "SWAN"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1295,7 +1295,7 @@ kable(SWAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r SWANmap, echo=FALSE, warning=FALSE}
 #| label: fig-SWANmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="SWAN")
 
@@ -1312,7 +1312,7 @@ AKaerial::ObsMap(area="ACP", species="SWAN")
 ```{r NSHOfig, echo=FALSE, warning=FALSE}
 #| label: fig-NSHO
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "NSHO"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1369,7 +1369,7 @@ kable(NSHO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r NSHOmap, echo=FALSE, warning=FALSE}
 #| label: fig-NSHOmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="NSHO")
 
@@ -1386,7 +1386,7 @@ AKaerial::ObsMap(area="ACP", species="NSHO")
 ```{r AMWIfig, echo=FALSE, warning=FALSE}
 #| label: fig-AMWI
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "AMWI"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1443,7 +1443,7 @@ kable(AMWI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r AMWImap, echo=FALSE, warning=FALSE}
 #| label: fig-AMWImap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="AMWI")
 
@@ -1460,7 +1460,7 @@ AKaerial::ObsMap(area="ACP", species="AMWI")
 ```{r MALLfig, echo=FALSE, warning=FALSE}
 #| label: fig-MALL
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "MALL"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1517,7 +1517,7 @@ kable(MALL, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r MALLmap, echo=FALSE, warning=FALSE}
 #| label: fig-MALLmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="MALL")
 
@@ -1534,7 +1534,7 @@ AKaerial::ObsMap(area="ACP", species="MALL")
 ```{r NOPIfig, echo=FALSE, warning=FALSE}
 #| label: fig-NOPI
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "NOPI"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1591,7 +1591,7 @@ kable(NOPI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r NOPImap, echo=FALSE, warning=FALSE}
 #| label: fig-NOPImap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="NOPI")
 
@@ -1608,7 +1608,7 @@ AKaerial::ObsMap(area="ACP", species="NOPI")
 ```{r GWTEfig, echo=FALSE, warning=FALSE}
 #| label: fig-GWTE
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "GWTE"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1665,7 +1665,7 @@ kable(GWTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r GWTEmap, echo=FALSE, warning=FALSE}
 #| label: fig-GWTEmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="GWTE")
 
@@ -1682,7 +1682,7 @@ AKaerial::ObsMap(area="ACP", species="GWTE")
 ```{r UNSCfig, echo=FALSE, warning=FALSE}
 #| label: fig-UNSC
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "UNSC"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1736,7 +1736,7 @@ kable(UNSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r UNSCmap, echo=FALSE, warning=FALSE}
 #| label: fig-UNSCmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="UNSC")
 
@@ -1753,7 +1753,7 @@ AKaerial::ObsMap(area="ACP", species="UNSC")
 ```{r STEIfig, echo=FALSE, warning=FALSE}
 #| label: fig-STEI
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "STEI"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1810,7 +1810,7 @@ kable(STEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r STEImap, echo=FALSE, warning=FALSE}
 #| label: fig-STEImap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="STEI")
 
@@ -1827,7 +1827,7 @@ AKaerial::ObsMap(area="ACP", species="STEI")
 ```{r SPEIfig, echo=FALSE, warning=FALSE}
 #| label: fig-SPEI
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "SPEI"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1884,7 +1884,7 @@ kable(SPEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r SPEImap, echo=FALSE, warning=FALSE}
 #| label: fig-SPEImap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="SPEI")
 
@@ -1901,7 +1901,7 @@ AKaerial::ObsMap(area="ACP", species="SPEI")
 ```{r KIEIfig, echo=FALSE, warning=FALSE}
 #| label: fig-KIEI
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "KIEI"
 df <- AKaerial::ACPHistoric$combined |>
@@ -1958,7 +1958,7 @@ kable(KIEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r KIEImap, echo=FALSE, warning=FALSE}
 #| label: fig-KIEImap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="KIEI")
 
@@ -1975,7 +1975,7 @@ AKaerial::ObsMap(area="ACP", species="KIEI")
 ```{r COEIfig, echo=FALSE, warning=FALSE}
 #| label: fig-COEI
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "COEI"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2032,7 +2032,7 @@ kable(COEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r COEImap, echo=FALSE, warning=FALSE}
 #| label: fig-COEImap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="COEI")
 
@@ -2049,7 +2049,7 @@ AKaerial::ObsMap(area="ACP", species="COEI")
 ```{r SUSCfig, echo=FALSE, warning=FALSE}
 #| label: fig-SUSC
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "SUSC"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2106,7 +2106,7 @@ kable(SUSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r SUSCmap, echo=FALSE, warning=FALSE}
 #| label: fig-SUSCmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="SUSC")
 
@@ -2123,7 +2123,7 @@ AKaerial::ObsMap(area="ACP", species="SUSC")
 ```{r WWSCfig, echo=FALSE, warning=FALSE}
 #| label: fig-WWSC
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "WWSC"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2180,7 +2180,7 @@ kable(WWSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r WWSCmap, echo=FALSE, warning=FALSE}
 #| label: fig-WWSCmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="WWSC")
 
@@ -2197,7 +2197,7 @@ AKaerial::ObsMap(area="ACP", species="WWSC")
 ```{r BLSCfig, echo=FALSE, warning=FALSE}
 #| label: fig-BLSC
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "BLSC"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2254,7 +2254,7 @@ kable(BLSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r BLSCmap, echo=FALSE, warning=FALSE}
 #| label: fig-BLSCmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="BLSC")
 
@@ -2271,7 +2271,7 @@ AKaerial::ObsMap(area="ACP", species="BLSC")
 ```{r LTDUfig, echo=FALSE, warning=FALSE}
 #| label: fig-LTDU
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "LTDU"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2328,7 +2328,7 @@ kable(LTDU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r LTDUmap, echo=FALSE, warning=FALSE}
 #| label: fig-LTDUmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="LTDU")
 
@@ -2345,7 +2345,7 @@ AKaerial::ObsMap(area="ACP", species="LTDU")
 ```{r RBMEfig, echo=FALSE, warning=FALSE}
 #| label: fig-RBME
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "RBME"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2402,7 +2402,7 @@ kable(RBME, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r RBMEmap, echo=FALSE, warning=FALSE}
 #| label: fig-RBMEmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="RBME")
 
@@ -2419,7 +2419,7 @@ AKaerial::ObsMap(area="ACP", species="RBME")
 ```{r RNGRfig, echo=FALSE, warning=FALSE}
 #| label: fig-RNGR
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "RNGR"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2473,7 +2473,7 @@ kable(RNGR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r RNGRmap, echo=FALSE, warning=FALSE}
 #| label: fig-RNGRmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="RNGR")
 
@@ -2490,7 +2490,7 @@ AKaerial::ObsMap(area="ACP", species="RNGR")
 ```{r SACRfig, echo=FALSE, warning=FALSE}
 #| label: fig-SACR
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "SACR"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2545,7 +2545,7 @@ kable(SACR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r SACRmap, echo=FALSE, warning=FALSE}
 #| label: fig-SACRmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="SACR")
 
@@ -2562,7 +2562,7 @@ AKaerial::ObsMap(area="ACP", species="SACR")
 ```{r JAEGfig, echo=FALSE, warning=FALSE}
 #| label: fig-JAEG
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "JAEG"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2616,7 +2616,7 @@ kable(JAEG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r JAEGmap, echo=FALSE, warning=FALSE}
 #| label: fig-JAEGmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="JAEG")
 
@@ -2633,7 +2633,7 @@ AKaerial::ObsMap(area="ACP", species="JAEG")
 ```{r SAGUfig, echo=FALSE, warning=FALSE}
 #| label: fig-SAGU
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "SAGU"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2687,7 +2687,7 @@ kable(SAGU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r SAGUmap, echo=FALSE, warning=FALSE}
 #| label: fig-SAGUmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="SAGU")
 
@@ -2704,7 +2704,7 @@ AKaerial::ObsMap(area="ACP", species="SAGU")
 ```{r GLGUfig, echo=FALSE, warning=FALSE}
 #| label: fig-GLGU
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "GLGU"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2758,7 +2758,7 @@ kable(GLGU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r GLGUmap, echo=FALSE, warning=FALSE}
 #| label: fig-GLGUmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="GLGU")
 
@@ -2775,7 +2775,7 @@ AKaerial::ObsMap(area="ACP", species="GLGU")
 ```{r ARTEfig, echo=FALSE, warning=FALSE}
 #| label: fig-ARTE
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "ARTE"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2829,7 +2829,7 @@ kable(ARTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r ARTEmap, echo=FALSE, warning=FALSE}
 #| label: fig-ARTEmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="ARTE")
 
@@ -2846,7 +2846,7 @@ AKaerial::ObsMap(area="ACP", species="ARTE")
 ```{r RTLOfig, echo=FALSE, warning=FALSE}
 #| label: fig-RTLO
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "RTLO"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2900,7 +2900,7 @@ kable(RTLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r RTLOmap, echo=FALSE, warning=FALSE}
 #| label: fig-RTLOmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="RTLO")
 
@@ -2917,7 +2917,7 @@ AKaerial::ObsMap(area="ACP", species="RTLO")
 ```{r PALOfig, echo=FALSE, warning=FALSE}
 #| label: fig-PALO
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "PALO"
 df <- AKaerial::ACPHistoric$combined |>
@@ -2971,7 +2971,7 @@ kable(PALO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r PALOmap, echo=FALSE, warning=FALSE}
 #| label: fig-PALOmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="PALO")
 
@@ -2988,7 +2988,7 @@ AKaerial::ObsMap(area="ACP", species="PALO")
 ```{r YBLOfig, echo=FALSE, warning=FALSE}
 #| label: fig-YBLO
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "YBLO"
 df <- AKaerial::ACPHistoric$combined |>
@@ -3042,7 +3042,7 @@ kable(YBLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r YBLOmap, echo=FALSE, warning=FALSE}
 #| label: fig-YBLOmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="YBLO")
 
@@ -3059,7 +3059,7 @@ AKaerial::ObsMap(area="ACP", species="YBLO")
 ```{r GOEAfig, echo=FALSE, warning=FALSE}
 #| label: fig-GOEA
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "GOEA"
 df <- AKaerial::ACPHistoric$combined |>
@@ -3113,7 +3113,7 @@ kable(GOEA, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r GOEAmap, echo=FALSE, warning=FALSE}
 #| label: fig-GOEAmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="GOEA")
 
@@ -3130,7 +3130,7 @@ AKaerial::ObsMap(area="ACP", species="GOEA")
 ```{r SEOWfig, echo=FALSE, warning=FALSE}
 #| label: fig-SEOW
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "SEOW"
 df <- AKaerial::ACPHistoric$combined |>
@@ -3184,7 +3184,7 @@ kable(SEOW, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r SEOWmap, echo=FALSE, warning=FALSE}
 #| label: fig-SEOWmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="SEOW")
 
@@ -3201,7 +3201,7 @@ AKaerial::ObsMap(area="ACP", species="SEOW")
 ```{r SNOWfig, echo=FALSE, warning=FALSE}
 #| label: fig-SNOW
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "SNOW"
 df <- AKaerial::ACPHistoric$combined |>
@@ -3255,7 +3255,7 @@ kable(SNOW, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r SNOWmap, echo=FALSE, warning=FALSE}
 #| label: fig-SNOWmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="SNOW")
 
@@ -3272,7 +3272,7 @@ AKaerial::ObsMap(area="ACP", species="SNOW")
 ```{r CORAfig, echo=FALSE, warning=FALSE}
 #| label: fig-CORA
 #| fig-cap: !expr cap
-#| fig-alt: A plot of the average index estimate between observers, the posterior mean population growth trajectory, and the approximate 95% confidence interval for the trajectory.
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
  
 spp = "CORA"
 df <- AKaerial::ACPHistoric$combined |>
@@ -3326,7 +3326,7 @@ kable(CORA, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```{r CORAmap, echo=FALSE, warning=FALSE}
 #| label: fig-CORAmap
 #| fig-cap: !expr cap
-#| fig-alt: A map of the 2024 observations for the species. 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area="ACP", species="CORA")
 
