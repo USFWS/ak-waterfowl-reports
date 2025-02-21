@@ -1,6 +1,11 @@
 ---
 title: "POPULATION INDICES, TRENDS, AND DISTRIBUTION OF BREEDING WATERBIRDS ON THE ARCTIC COASTAL PLAIN, ALASKA, 2007-2024"
 subtitle: ""
+affiliation:
+  - id: fws
+    name: U.S Fish and Wildlife Service
+    department: Migratory Bird Management
+    city: "Anchorage, AK 99503"
 authors:
   - name: HEATHER M. WILSON
     email: heather_wilson@fws.gov
@@ -55,7 +60,6 @@ execute:
       <img src="https://websiteaccessibilitychecker.com/images/icon_W2_aa.jpg" alt="WCAG 2.0 (Level AA)" height="32" width="102" />
     </a>
 </p>
-
 
 ```{r setup, include=FALSE, echo=FALSE}
 library(tidyverse)
