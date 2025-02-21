@@ -4,6 +4,7 @@
 .Ruserdata
 ACP_Report/*
 !ACP_Report/ACP_report.qmd
+!ACP_Report/ACP_report_html.qmd
 !ACP_Report/ACP_report.tex
 !ACP_Report/ACP_report.pdf
 !ACP_Report/bibliography.bib
