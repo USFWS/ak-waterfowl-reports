@@ -1,0 +1,1786 @@
+---
+title: "POPULATION INDICES, TRENDS, AND DISTRIBUTION OF BREEDING WATERBIRDs ON THE YUKON-KUSKOKWIM DELTA, ALASKA, 1985-2024"
+subtitle: ""
+author:
+  name: HEATHER M. WILSON, MICHAEL A. SWAIM, DAVID E. SAFINE, CHARLES J. FROST, TAMARA K. ZELLER, AND ERIK E. OSNAS
+  email: heather_wilson@fws.gov, michael_swaim@fws.gov, david_safine@fws.gov, charles_frost@fws.gov, erik_osnas@fws.gov, and tamara_zeller@fws.gov
+  affiliation:
+      name: U.S Fish and Wildlife Service
+      department: Migratory Bird Management
+      city: "Anchorage, AK 99503"
+date: ""
+bibliography: "bibliography.bib"
+bibliographystyle: apalike
+toc: false
+lof: false
+lot: false
+fig-cap-location: bottom
+tbl-cap-location: top
+format:
+  arxiv-pdf:
+    runninghead: "Yukon-Kuskokwim Delta Coastal Zone Survey Report 1985-2024"
+    number_sections: false
+    keep-tex: true  
+    fig-width: 8
+    fig-height: 5
+    include-in-header:
+      text: |
+        \setlength{\defaultaddspace}{0pt}
+prefer-html: true
+editor: source
+
+embed-resources: true
+linenumbers: true
+execute:
+  message: false
+  warning: false
+  echo: false
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+library(tidyverse)
+library(AKaerial)
+library(kableExtra)
+library(tinytex)
+library(zoo)
+library(tmap)
+load(file="data/YKD_report.RData")
+```
+
+# ABSTRACT {.unnumbered}
+
+
+The Yukon Kuskokwim Delta aerial breeding pair survey provides data on the distribution, abundance, and trend of 19 waterbird species that nest in western Alaska, including emperor geese, and the threatened spectacled eider. This report summarizes conditions and results from the 2019-2024 surveys, and presents population and trend information for all species. In 2015 and 2016, spring breakup on the Kuskokwim River occurred on 4 May and 20 April, respectively, compared to the long-term (1988–2016) average date of 10 May (range = 20 April to 30 May). The timing of spring breakup in 2016 was the earliest on record. No surveys were conducted in 2020 due to the COVID pandemic. For surveys flown in 2019 and 2021-2024, the respective indicated total population indices for spectacled eiders were `r formatC(SPEI$itotal[SPEI$Year==2019], big.mark=",", format="d")` (95% CI `r formatC(SPEI$itotal[SPEI$Year==2019]-1.96* SPEI$itotal.se[SPEI$Year==2019], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2019]+1.96* SPEI$itotal.se[SPEI$Year==2019], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2021], big.mark=",", format="d")` (95% CI `r formatC(SPEI$itotal[SPEI$Year==2021]-1.96* SPEI$itotal.se[SPEI$Year==2021], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2021]+1.96* SPEI$itotal.se[SPEI$Year==2021], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2022], big.mark=",", format="d")` (95% CI `r formatC(SPEI$itotal[SPEI$Year==2022]-1.96* SPEI$itotal.se[SPEI$Year==2022], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2022]+1.96* SPEI$itotal.se[SPEI$Year==2022], big.mark=",", format="d")`), `r formatC(SPEI$itotal[SPEI$Year==2023], big.mark=",", format="d")` (95% CI `r formatC(SPEI$itotal[SPEI$Year==2023]-1.96* SPEI$itotal.se[SPEI$Year==2023], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2023]+1.96* SPEI$itotal.se[SPEI$Year==2023], big.mark=",", format="d")`), and `r formatC(SPEI$itotal[SPEI$Year==2024], big.mark=",", format="d")` (95% CI `r formatC(SPEI$itotal[SPEI$Year==2024]-1.96* SPEI$itotal.se[SPEI$Year==2024], big.mark=",", format="d")` - `r formatC(SPEI$itotal[SPEI$Year==2024]+1.96* SPEI$itotal.se[SPEI$Year==2024], big.mark=",", format="d")`); and for Emperor geese were `r formatC(EMGO$itotal[SPEI$Year==2019], big.mark=",", format="d")` (95% CI `r formatC(EMGO$itotal[EMGO$Year==2019]-1.96* EMGO$itotal.se[EMGO$Year==2019], big.mark=",", format="d")` -  `r formatC(EMGO$itotal[EMGO$Year==2019]+1.96* EMGO$itotal.se[EMGO$Year==2019], big.mark=",", format="d")`), `r formatC(EMGO$itotal[EMGO$Year==2021],big.mark=",", format="d")`, (95% CI `r formatC(EMGO$itotal[EMGO$Year==2021]-1.96* EMGO$itotal.se[EMGO$Year==2021], big.mark=",", format="d")` - `r formatC(EMGO$itotal[EMGO$Year==2021]+1.96* EMGO$itotal.se[EMGO$Year==2021], big.mark=",", format="d")`), `r formatC(EMGO$itotal[EMGO$Year==2022], big.mark=",", format="d")` (95% CI `r formatC(EMGO$itotal[EMGO$Year==2022]-1.96* EMGO$itotal.se[EMGO$Year==2022], big.mark=",", format="d")` - `r formatC(EMGO$itotal[EMGO$Year==2022]+1.96* EMGO$itotal.se[EMGO$Year==2022], big.mark=",", format="d")`), `r formatC(EMGO$itotal[EMGO$Year==2023], big.mark=",", format="d")` (95% CI `r formatC(EMGO$itotal[EMGO$Year==2023]-1.96* EMGO$itotal.se[EMGO$Year==2023], big.mark=",", format="d")` - `r formatC(EMGO$itotal[EMGO$Year==2023]+1.96* EMGO$itotal.se[EMGO$Year==2023], big.mark=",", format="d")`), `r formatC(EMGO$itotal[EMGO$Year==2024], big.mark=",", format="d")` (95% CI `r formatC(EMGO$itotal[EMGO$Year==2024]-1.96* EMGO$itotal.se[EMGO$Year==2024], big.mark=",", format="d")` - `r formatC(EMGO$itotal[EMGO$Year==2024]+1.96* EMGO$itotal.se[EMGO$Year==2024], big.mark=",", format="d")`). Long-term mean (`r min(EMGO$Year)`-`r max(EMGO$Year)`) annual indicated total population indices for these species and others of conservation concern, were as follows: spectacled eiders: `r formatC(SPEIh, big.mark=",", format="d")` (95% CI `r formatC(SPEIh-1.96*SPEIhse, big.mark=",", format="d")` - `r formatC(SPEIh+1.96*SPEIhse, big.mark=",", format="d")`), emperor geese: `r formatC(EMGOh, big.mark=",", format="d")` (95% CI `r formatC(EMGOh-1.96*EMGOhse, big.mark=",", format="d")` - `r formatC(EMGOh+1.96*EMGOhse, big.mark=",", format="d")`).
+
+Long-term (`r min(EMGO$Year)`-`r max(EMGO$Year)`) mean annual population indices and trends (and their associated 95% CIs) for these species and others of conservation concern, were as follows: spectacled eiders (indicated total birds) `r formatC(SPEIh, big.mark=",", format="d")` (`r formatC(SPEIh-1.96*SPEIhse, big.mark=",", format="d")` - `r formatC(SPEIh+1.96*SPEIhse, big.mark=",", format="d")`), growth rate `r sppdf$Trend[sppdf$Species == "SPEI"]`; and emperor geese (total birds) `r formatC(EMGOh, big.mark=",", format="d")` (`r formatC(EMGOh-1.96*EMGOhse, big.mark=",", format="d")` - `r formatC(EMGOh+1.96*EMGOhse, big.mark=",", format="d")`), growth rate `r sppdf$Trend[sppdf$Species == "EMGO"]`. Our population indices do not account for incomplete detection or other sources of bias at this time, although the model we used to estimate growth rate removes average observer effects. 
+
+THIS NEEDS TO BE UPDATED FOR THE YKD...
+Posterior probabilities for a long-term (2007–`r max(YKDHistoric$combined$Year)`) growth rate \< 1.00 were \> 0.975 for scaup, spectacled eiders, king eiders, and jaeger species, indicating high confidence in long-term population declines for these species. By the same metrics, posterior probabilities for population increase were $\geq$ 0.90 for snow geese and sandhill cranes, indicating moderate confidence in long-term population increases for these species, while mallards and common ravens showed moderate confidence for decreasing trends (\> 0.90 posterior probability of decrease). Growth rates for greater white-fronted geese and tundra swans indicated relatively stable populations (95% credible interval bounds for long-term growth rate were $\pm$ 3% of a long-term growth rate of 1.00), although the posterior probability of a decrease for tundra swans was 0.91, indicating moderate confidence in a slow decrease for that species. Confidence in directional trends for all other species was more limited (\< 0.90 posterior probability for decrease or \< 0.80 for increase). \newline
+
+## *Key Words* {.unnumbered}
+
+Aerial breeding pair survey, Alaska, Emperor goose *Chen canagica*, population index, growth rate, species occurrence, spectacled eider *Somateria fischeri*, waterfowl, waterbird, Yukon-Kuskokwim Delta.
+
+{{< pagebreak >}}
+
+# INTRODUCTION {.unnumbered}
+
+The coastal zone of the Yukon-Kuskokwim (YKD) is a vast area of sub-arctic lowland tundra in far western Alaska important for many species of breeding birds [@Johnson2007; @Bart2013; @Stehn2013]; especially waterbirds.  Importantly, it is the primary breeding area in Alaska for emperor geese [*Chen canagica*], and one of only three breeding areas for the threatened spectacled eiders [*Somateria fischeri*: @USFWS1996].  Additionally, the YKD hosts many other waterbird species of conservation concern, including red-throated loons (*Gavia stellata*), Pacific black brant (*Branta bernicla nigricans*), common eiders (*S. mollissima*), black (*Melanitta nigra*) and white-winged scoters (*Melanitta fusca*), and long-tailed Ducks (*Clangula hyemalis*).
+
+Annual aerial surveys of waterbirds on the YKD have been conducted since 1986 [@Stehn2013]. The survey provides distribution and abundance information for 33 species of birds, including loons, swans, geese, ducks, gulls, jaegers, terns, and selected landbird species breeding in northern Alaska.  These results provide population status and distribution information to the Pacific Flyway Council, the Alaska Migratory Bird Co-Management Council, Spectacled Eider Recovery Team, U.S. Fish and Wildlife Service, U.S. Geological Survey, Bureau of Land Management, Association of Village Council Presidents, and various non-governmental organizations.  This report focuses on the previously unreported 2019-2024 survey data and presents updated population information for all 23? bird species monitored from `r min(YKDHistoric$combined$Year)`-`r max(YKDHistoric$combined$Year)`.
+
+
+
+
+The Arctic Coastal Plain (ACP) is a vast area of Arctic lowland tundra in far northern Alaska important for many species of breeding birds [@Johnson2007; @Bart2013; @Amundson2019], especially waterbirds. Importantly, it is the only regularly used breeding area for the threatened population of Steller’s eiders [*Polysticta stelleri*: @USFWS2002], and one of only three breeding areas for threatened spectacled eiders [*Somateria fischeri*: @USFWS1996]. Additionally, the ACP hosts many other waterbird species of conservation concern, including red-throated (*Gavia stellata*) and yellow-billed loons (*G. adamsii*), snow geese (*Anser caerulescens*), Pacific black brant (*Branta bernicla nigricans*), common eiders (*S. mollissima*), black (*Melanitta americana*) and white-winged scoters (*Melanitta deglandi*), and long-tailed ducks (*Clangula hyemalis*).
+
+Annual aerial surveys of waterbirds on the YKD have been conducted since 1985. Prior to 1988, two surveys with different timing and coverage [i.e., the Original ACP Survey, 1986–2006: @Brackney1993; @Mallek2007; and the North Slope Eider Survey, 1992–2006: @Larned2006] were used to monitor waterbirds on the ACP. In 2007, the two historical surveys were merged [@Stehn2013], and the amalgamated survey, called the “Arctic Coastal Plain Aerial Breeding Population Survey", hereafter "ACP Survey” [@Larned2008; @Larned2012; @Stehn2013; @Stehn2014; @Wilson2018] has been flown annually since 2007 (with the exception of 2020 and 2021, due to the COVID pandemic). The survey provides distribution and abundance information for 33 species of birds, including loons, swans, geese, ducks, gulls, jaegers, terns, and selected landbird species breeding in northern Alaska. These results provide population status and distribution information to the Pacific Flyway Council, the Alaska Migratory Bird Co-Management Council, spectacled and Steller’s eider Recovery Teams, U.S. Fish and Wildlife Service (USFWS), U.S. Geological Survey, Bureau of Land Management, North Slope Borough, various non-governmental organizations, local communities, consulting firms, and industry. This report focuses on the previously unreported 2018-2024 survey data and presents updated population information for all 33 bird species monitored from `r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`.
+
+![Study area and survey design for the Yukon-Kuskokwim Coastal Zone Breeding Population Survey (YKD Survey) in western Alaska, illustrating the 2024 transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and very high).](data/fig1.png){#fig-Fig1 fig-alt="Study area and survey design map for the Yukon-Kuskokwim Coastal Zone Aerial Breeding Population Survey (YKD Survey) in northern Alaska, illustrating the 2024 transects, strata, and village locations. The exact locations of survey transects vary slightly each year based on a four-year rotating panel within four physiographic and bird-density-based strata (high, medium, low, and very high)."}
+
+
+# METHODS {.unnumbered}
+
+## Survey Design {.unnumbered}
+
+The YKD Survey study area extends along the Yukon-Kuskokwim Delta coast from Kuskokwim Bay in the south to Norton Sound in the north and extends approximately 50 km (31 Mi) inland (@fig-Fig1). The coastal zone was originally divided into 16 strata based on homogeneous physiographic regions determined from unclassified LANDSAT imagery (Butler 1988). The survey design was reduced to four primary strata based on goose densities in 1998. In 2004, the current 5-strata design was developed, when an additional stratum was created to accommodate historic data in a high-density area where transect spacing varied over time (@fig-Fig1) . A randomly selected starting point was used to construct a series of systematically placed transects in an east-west orientation. Transects were spaced at 1.6 km (1.0 mi) intervals in the highest density stratum, and at 3.2 km (2.0 mi), 6.4 km (4.0 mi), and 12.9 km (8.0 mi) intervals in high, medium, and low density strata, respectively (@fig-Fig1).
+
+Since 1998 this aerial survey has used a rotating panel design to balance the spatial coverage of transects for estimating population means with temporal replication for monitoring trends over time. Near complete coverage (>95%) of the highest density stratum was obtained over a four-year rotation by shifting transects 0.4 km each year. The location of transects in areas surveyed less intensively were proportionally adjusted so that the lines were spaced approximately 0.8, 1.0, and 3.0 km in the high, medium, and low density strata, respectively. The 2024 survey represents the first year of the seventh 4-year rotation of this survey, during which 104 transects were flown, covering 2,047 linear km.
+
+
+## Survey Methods {.unnumbered}
+
+The YKD Survey methodology is based on standard operating procedures for the North American Waterfowl Breeding Population and Habitat Survey (USFWS and CWS 1987), with both the left-front seat biologist-pilot and right-front seat observers recording all swans, geese, and cranes, and a single rear-seat observer recording all other species (i.e., loons, ducks, grebes) within a strip transect encompassing 200 m either side of the flight path.  To estimate the outer transect boundary, crews determine the required viewing angle trigonometrically and mark a reference point on the wing strut and side window for each observer, using a clinometer and marking tape/pens. Surveys are flown at an approximate ground speed of 161 km/hr (~87 kts; though actual ground speeds vary due to winds), and an altitude of 38 m (125 ft) above ground level (AGL), as referenced by a radar altimeter installed in the aircraft. Georeferenced observations made from both sides of the aircraft are voice-recorded into panel-mounted devices for later transcription using the custom software packages RECORD and TRANSCRIBE [2018-2022: @Hodges2015Record] and H2 and SCRIBE [2023-present: @H2].  For most of the survey, we used a Cessna 206 amphibious or float-equipped aircraft (Cessna Aircraft Company, Wichita, KS), with the exception of one year using an amphibious-equipped Kodiak-100. The front-seat crew was the same in all of the years for which we are presenting new data (2019, 2022-2024; @tbl-crew and @tbl-results), while a rear-seat observer switch occurred in 2023.  The survey required 35, 41, 38, 37, and 34 flight-hours to complete, respectively, in 2019 and 2021-2024, not including ferry time to and from the study area.
+
+
+
+```{r table1, include=TRUE, echo=FALSE}
+#| label: tbl-crew
+cap <- paste0 ("Yukon-Kuskokwim Delta Breeding Population Survey (YKD Survey) dates and crews (1985-present). The current YKD Survey combines counts of swans, geese, and cranes from the two front-seat observers (1985-present), with data from a single rear-seat observer recording all other species (i.e., loons, ducks, grebes; 1988-present). No rear-seat observer was present in 2011, and pilots in 2012-2013 did not collect data. No surveys were flown in 2020 due to the COVID pandemic. An amphibious or float-equipped Cessna 206 aircraft was used for all years except 2012, when an amphibious Kodiak 100 was used.")
+
+kable(table1, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, caption=cap, align = "cccccc", col.names = c("Year", "Data Collection", "Left-front", "observer", "observer", "Aircraft")) %>%
+  kable_styling(font_size=10, position="center") %>%
+  add_header_above(bold = TRUE, c(" "=1, "Dates of" = 1, "Observer & Pilot" = 1, "Right-front " = 1, "Right-rear" = 1, " "=1)) %>% 
+  row_spec(row = 0, bold = TRUE) 
+
+```
+
+
+## Survey Timing and Weather Conditions {.unnumbered}
+*UPDATE FOR YKD - NOT ACP
+Timing of survey initiation is intended to coincide with the egg laying/early incubation period of nesting geese and eiders on the ACP, and the peak presence of male ducks and pairs of other waterfowl species. This is a period when nesting habitat is just becoming available (i.e., ice-free water is visible in most shallow vegetated wetlands, and tundra vegetation is mostly snow-free around pond margins), typically within the first three weeks of June. According to @Troy1997, median nest initiation dates for spectacled eiders at Prudhoe Bay averaged 15 June from 1982 to 1996, with males departing within 3–5 days of median initiation. More recent data from Utqiagvik, estimated average spectacled eider nest initiation to be 14 June [@Safine2013], consistent with indicated average (5-year; 2017-2019, 2021-2022) nest initiation for cackling geese on the Canning River Delta (14 June; C. Latty, personal communication, Feb. 11, 2025). Within the first two weeks of June each year (@tbl-crew), we refined our survey start dates based on close monitoring of weather and temperature data, examining snow and ice-cover changes via satellite ([NASA Worldview](https://worldview.earthdata.nasa.gov/)) and web-camera imagery (<https://weathercams.faa.gov//>), and by receiving updates on current landscape conditions from biologists and other local residents on the ACP.  From 2018–2024, weather conditions varied considerably within and among survey years. Reduced visibility and ceilings due to coastal fog were the most consistent weather impediments to surveying in all years of the survey. Fog was particularly troublesome along the northern coastal fringe of the study area, where on-shore winds (blowing over the ice), small temperature-dew point spreads, and daily temperature cycles often created instantaneous, low-visibility conditions.
+
+## Population Indices {.unnumbered}
+
+We calculated population indices to be consistent with their use in other USFWS surveys. Duck indices followed the guidance of @USFWSandCWS1987, and goose, swan, and crane indices followed @Eldridge2003. Pairs were defined as the total number of male-female pairs (or two monomorphic birds \[e.g., geese\] in close association), not the total number of birds in pairs [@USFWSandCWS1987]. Flocked drakes were defined as the total number of males observed with one or more other males and no female present [@USFWSandCWS1987], and were only recorded for ducks. Flocked drakes in groups of less than 5 birds were doubled (except for scaup; see below), and flocked drakes in groups of 5 or more were treated as a flock and not doubled [@USFWSandCWS1987]. Flocks were defined as a closely associated single-sex or mixed-sex grouping of 5 or more birds (or 2 or more birds of different species) that could not be separated into singles and pairs. For scaup, single drakes and flocked drakes in groups of less than 5 birds were not doubled as they were for other ducks. This is because sex ratios in scaup lean heavily towards males, such that not all males can be assumed to have a female mate [@USFWSandCWS1987]. From 2007 to 2023, our breeding birds index for scaup did not include flocked drakes in groups of less than 5 birds, leading to an average bias in the breeding birds index for scaup of -10%. Starting in 2024, the breeding birds index for scaup began to include flocked drakes. Formulas for the calculation of the four population indices presented in this report are shown below.
+
+For dimorphic species (e.g., ducks \[except scaup\]) and some monomorphic species (cranes and dark geese \[e.g., greater white-fronted geese, cackling/Canada geese, and brant\]):
+
+```{=tex}
+\begin{center}
+
+\textit{Indicated Breeding Birds = 2(singles + pairs + flocked drakes in groups of < 5 birds)} \newline
+
+\textit{Indicated Total Birds = 2(singles + pairs + flocked drakes in groups of < 5 birds) + birds in flocks} \newline
+
+\end{center}
+
+For the remainder of the monomorphic species (e.g., swans, snow geese, grebes, loons, terns, gulls, jaegers, owls, eagles, ravens) and scaup species:\newline
+
+\begin{center}
+
+\textit{Breeding Birds = singles + 2(pairs) + flocked drakes in groups of < 5 birds} \newline
+
+\textit{Total Birds = singles + 2(pairs) + flocked drakes in groups of < 5 birds + birds in flocks} \newline
+
+\end{center}
+```
+## The Ratio Estimator {.unnumbered}
+UPDATE FOR YKD--post stratification
+Population totals for each index were calculated using a ratio estimator [@Cochran1977] with transects as the sample units. The classical ratio estimator [@Cochran1977] is a straightforward approach that can be used to estimate the population total of observed birds in a survey area given a systematic or random sampling design with large sample size (i.e., number of transects). The ratio estimator is especially good when the response (i.e., number of birds on a transect) is linearly related to the length or area of the transect. We employed a stratified strip-transect design for the majority of our surveys of breeding waterfowl. Study areas are separated into spatial strata based on physiographic features and historical bird densities. Strata were sampled by low-level flights along a series of strip transects, with one or two observers searching 200 meters out from the transect center. Observations and sampled areas are then summed across transects within each stratum to produce strata-specific density estimates. These densities are then multiplied by associated strata areas to produce stratum-specific population indices that are summed to produce the overall population indices, $$E[\hat Y] = \displaystyle\sum_{i}^{S} \frac{\bar y_i}{\bar a_i} A_i = \displaystyle\sum_{i}^{S} \hat D_i A_i$$ where $y_i$ are observations and $a_i$ are sampled areas in strata $i$, and $$A_i = \displaystyle\sum_{j}^{M_i} a_{ij}$$ with estimated variance from Williams et al. (2002), where standard error (SE) is calculated based on inter-transect variance,  $$Var(\hat Y) = \displaystyle\sum_{i}^{S} M_i^2 \frac{(1-m_i / M_i)}{m_i} ( s^2_{iy} + \hat {D^2}_i s^2_{ia} - 2 \hat {D_i} s_{iay} ),$$ where $m_i$ and $M_i$ are the number of sampled and total transects in strata $i$, respectively, and there are $S$ total strata;  $$S^2_{ix} = \displaystyle\sum_{j}^{m_i} (x_{ij} - \bar x )/(m_i -1), $$ and  $$S^2_{ixy} = \displaystyle\sum_{j}^{m_i} (x_{ij} - \bar x )(y_{ij} - \bar y )/(m_i -1).$$ The equations above are observer-specific (i.e., calculated for each observer independently). However, the estimates presented in this report are the arithmetic mean of observer-specific estimates (n=2, in most years). Design transects (@fig-Fig1) were used to calculate survey effort, but flight lines sometimes deviated slightly from the these due to weather avoidance or other factors. Data manuplulation was completed using the R [@R] package `AKaerial` [@r-akaerial].
+
+Population indices presented here do not account for incomplete detection, though there are efforts to incorporate detection data into annual population estimates for some species [@Wilson2017; @Osnas2024]. Summary statistics were calculated for the indicated total bird (or total bird) index for each bird species, including the long-term (`r min(SPEI$Year)`- `r max(SPEI$Year)`) and most recent 3-year averages and their standard errors (@tbl-results). Indicated breeding bird (or breeding bird) indices and indicated total bird (or total bird) indices for each bird species are presented in the Appendices (@tbl-SNGO - @tbl-CORA and @fig-SNGO - @fig-CORA). Throughout, we report point estimates $\pm$ (1.96 x SE) as a 95% confidence interval, except in the simulations for trends (see next section).
+
+## Index Trends {.unnumbered}
+
+Trajectories in population indices were estimated using generalized additive models [GAM, @wood2017] in the R package `mgcv` [@r-mgcv] fit to observer-specific index estimates. The GAM model used a scaled-t likelihood, a continuous smooth term for year, and a random effect for observer in the linear predictor. The observer effect allowed us to remove observer-specific effects from any estimated average trajectory, and the scaled-t likelihood allowed for extra residual variance from the trend line over a normal likelihood that might be due to additional year-specific variance from the trend line. To account for uncertainty in the index estimate, we used a parametric bootstrap of the estimated index as the modeled response in the GAM. Thus, for each year, a response was sampled from a normal distribution (with the mean and standard deviation of the point estimate), truncated to a small value (1e-10) for samples $\leq$ 0, and log-transformed. Then a GAM was fit, and a sample of the parameters was obtained from a multivariate normal distribution using the estimated parameter vector and covariance matrix. Annual predictions over the full time series were made from this parameter sample after removing the effect of observer, and the results were saved. This procedure was repeated 300 times. As such, this procedure is an empricial Bayesian method to approximate the posterior distribution of the trajectory [@miller2025bayesian]. For rarer species, some of which were not observed in all years (e.g., red-necked grebes and Steller's eiders), we excluded years when no birds were observed. We did this because observed zeros in these design-based estimates are more likely due to non-detection or random sampling, rather than complete absence of the species in the survey area, and model-fit to data that included zeros did not produce stable estimates. However, we acknowledge that this may have resulted in some over-smoothing and bias of estimated trends for species with zero-count years. For improved methods, that better account for zero observations in rare species see [@Amundson2019, @Osnas2024].
+
+{{< pagebreak >}}
+
+We summarized the simulated yearly GAM predictions (i.e., the posterior distribution of trajectories) by calculating the mean and standard deviation for each year. An example of simulated results and observer-specific estimates for one species (Pacific loon) is shown in @fig-loon. For plots and tables presented in the Results and Appendices, we do not report the observer-specific index estimates or individual samples of the smooths, in an effort to reduce clutter. Instead, we show only the average index between observers in any year, the mean posterior trajectory, and $\pm$ 2 standard errors from this mean.
+
+![An example of the modeled index estimates and trend results for spectacled eiders, accounting for observer effects. Colored points and bars are observer-specific index estimates, which were sampled 300 times and used as the response in a generalized additive model. Individal modeled predictions for each sample are shown by the thin gray lines. These make up the posterior distribution of modeled trajectories and are summarized by the orange band (approximate 95% credible interval) and the thick gray line (posterior mean). End points of the modeled predictions (thin gray lines) are used to calculate the posterior distribution of the long-term growth rate.](data/plot_trends/figures/SPEI_index_2.png){#fig-spei width="50%" height="50%" fig-alt="A figure showing observer-specific estimate for spectacled eiders and 300 posterior samples of the modeled GAM trajectories, the posterior mean trajectory, and the approximate 95% confidence interval on the trajectory."}
+
+We estimated the long-term average growth rate from year $a$ to $b$ for each simulated replicate as
+
+$$T_{b-a} = (\hat N_{b}/\hat N_{a})^{1/(b-a)},$$
+
+
+where $\hat N_t$ is the predicted index value at year $t$ from the bootstrap replicate GAM model, $t = a$ is the first year of a non-zero estimate, and $t = b$ is the last year. Thus, the growth rate was calculated as the geometric mean annual change in the model-predicted index. We summarized growth rate by the mean and 95% credible interval across the sampled replicates. We also calculated the posterior probability of a negative growth rate by summarizing the proportion of posterior samples that were \< 1 (Pr\[Trend \< 1\], @tbl-results). We only calculated growth rate for total or indicated total bird indices shown in @tbl-results. Code is available in the file `plot_trends_design.R` at [@osnasgithub].
+
+# RESULTS {.unnumbered}
+
+## Survey Timing and Weather Conditions {.unnumbered}
+
+Dates of data collection for 2019, and 2022-24 were: 23 May - 5 June, 28 May - 4 June, 28 May - 2 June, 28 May - 6 June, and 1-7 June, respectively (@tbl-crew). Survey timing was the earliest on record for the survey in 2019 (23 May - 5 June; @tbl-crew). The first day of data collection on the ACP in 2018 was 5 days later than the long-term (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) average start date of 10 June. In 2018, in particular, sustained cold temperatures, strong east winds, and significant snow and ice covered much of the northern ACP landscape well into June. While 2018, 2022, and 2024 were on the later end of the range of start dates (@tbl-crew), 2019 was a relatively early year on the ACP.  Breakup chronology on the ACP varies greatly annually, but in general, we have observed later breakups in the years we have surveyed since 2017.
+
+
+```{r table2, include=TRUE, echo=FALSE}
+#| label: tbl-results
+
+#TABLE 2 - Creates a summary table with a row of estimates for each species
+
+cap <- paste0 ("The most recent 3-year (2022-2024) and long-term (",min(ACPHistoric$combined$Year),"-",max(ACPHistoric$combined$Year),") average population indices and associated standard errors (SE), as well as long-term annual growth rates (long-term trend), associated 95% credible intervals (CI), and posterior probability that a trend is decreasing (Pr[Trend < 1]) for bird species on the Yukon-Kuskokwim Delta Aerial Breeding Population Survey in Alaska.  Index formulas used are species-specific, with indicated total birds (ITB) used for dimorphic species, dark geese, and sandhill cranes, and total birds (TB) used for the remaining monomorphic species, other than dark geese, sandhill cranes, and scaup. See the Methods section for detailed index definitions and trend calculations. Estimates are not corrected for incomplete detection, but trends do account for observer effects.")
+
+kable(table2, digits = 0, booktabs = TRUE, longtable=TRUE, format.args = list(big.mark = ","), caption=cap, align = "llrrrrcc", col.names = c("Species", "Index", "Average", "SE", "Average", "SE", "Trend (CI)", "Pr(Trend < 1)"), linesep = "") %>%
+  kable_styling(font_size=10, position="center") %>%
+  add_header_above(bold = TRUE, c(" "=1, " "=1, "3-Year" = 1, " "=1, "Long-term" = 1, 
+                                  " "=1,"Long-term"=1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+
+## Population Indices {.unnumbered}
+
+We summarize the most recent 3-year average (2022-2024) and long-term average (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) population indices, as well as long-term (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) posterior mean trajectories (trends) and associated 95% credible intervals (CI), as well as posterior probabilities that trends are decreasing (Pr[Trend \< 1]) for 33 bird species observed on the ACP Survey (@tbl-results). Herein, we follow the taxonomic ordering of @Chesser2024. For each species, we also present individual annual population indices (`r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`) and trajectories in graphical and tabular formats, and maps of individual species-observations for 2024 (Appendices: @tbl-SNGO - @tbl-CORA and @fig-SNGO - @fig-CORA). Though our maps provide accurate observation locations for each species, we caution that our location data should not be interpreted as densities, due to differences in sampling effort across strata boundaries. Historical density models have been published for our previous data [@Amundson2019], but more current density-modeling efforts [see @Osnas2024] for all species in this report have not yet been completed.
+
+# DISCUSSION {.unnumbered}
+
+This report describes trends in relative abundance for all common waterbirds (excluding shorebirds; due to their small size and inconsistent data collection), owls, eagles, and ravens on the ACP of Alaska, collected by USFWS from `r min(ACPHistoric$combined$Year)`-`r max(ACPHistoric$combined$Year)`; including 2018–2024 survey data not previously reported. Upper 95% credible intervals for long-term (2007–`r max(ACPHistoric$combined$Year)`) growth rates of scaup, spectacled eiders, king eiders, and jaeger species were all \< 1.00 and the posterior probability that the trend was decreasing was \> 0.975, indicating high confidence in population decreases for those species. Other species showed less evidence (lower posterior probability) for a population decrease (@tbl-results). With less, but still relatively high confidence, tundra swan (0.91), mallard (0.93), American green-winged teal (0.84), Arctic tern (0.89), Pacific loon (0.81), and common raven (0.93) all showed some evidence for a decreasing trend (@tbl-results). Snow geese showed a high probability (\> 0.975) of a population increase, with a large magnitude (up to 25% per year). Greater white-fronted geese were relatively stable, with a mean growth rate centered on 1.0 and a 95% credible interval bound to less than a 3% increase or decrease. Growth rate posterior estimates for northern pintail, long-tailed duck, Sabine's gull, glaucous gull, and yellow-billed loon showed no strong evidence for a long-term directional trend, but were instead bound to within 5% annual changes from 1.00 and showed large year-specific variation or increasing and decreasing trends over shorter periods. Posterior estimates for other species showed less evidence for the sign or magnitude of long-term population change (@tbl-results).
+
+Though observer bias is a factor in all aerial surveys, the experience-level and stability of the ACP Survey crew, particularly the left-seat pilot-observers, has been remarkably high. From 2007–2024, there were only two pilot-observers who collected left-seat data (Larned [2007-2011] and Wilson [2012-2024]) and viewed together, seats occupied by Larned and Wilson represented one third of all data collected over the duration of the survey (2007-2024; @tbl-crew). Given this stability in observer-personnel, the estimated trends will be unbiased if there is little variation in detection or other observation processes within observers across years. We did, however, use a model to statistically remove average observer effects from the estimated average trajectory. This represents an improvement over past long-term trend estimates, and lacking any trend in detection or other observation biases, the trends reported here are the best currently available for this area without directly estimating these observer biases. Nevertheless, detection and availability biases are still largely unaccounted for, affecting our population indices. Thus, these estimate are not measures of absolute abundance. Though we do not provide detection-adjusted population estimates for 2007-2024, we did initiate a study examining observer detection of eiders and other waterbirds on the ACP in 2015 [@Wilson2017] and hope to incorporate detection and observer-adjusted estimates into future reports using methods similar to @Osnas2024.
+
+The trajectories estimated here represent continuous smooth functions after removing average observer effects. We did not fit other models that allowed for more complex or discontinuous trends, such as year-specific random effects or spatially explicit predictions [e.g. @smith2021north; @Osnas2024]. Because many species do show large year-specific deviations from an average trend, a model with such effects is likely a better description for these species. Such models are not well-estimated when fit to the design-based estimates used here. The model we have used, however, can be viewed as a flexible way to estimate the average trajectory through time, smoothing over year-specific variations. Compared to a simple log-linear regression on point estimates, the current approach provides for more flexible functional forms of the trajectory, allowing for the identification of cycles or periods of change. One should keep these points in mind when interpreting results, as for many species, the year-specific variations are much larger than the average change over time (e.g., northern pintail) or show cyclical patterns over a shorter time (e.g., long-tailed duck, yellow-billed loon).
+
+Trajectories for rare species (those with observed zero estimates) should be interpreted with care. We attempted to fit our model by including zero estimates (after adding a small number and log transforming) but the GAM often failed to find stable estimates, so we used only positive estimates. This will have two important consequences. First, trajectories may be biased if there is a trend in the frequency of zero observations in the time series. Second, the GAM will tend to produce smoother trajectories than if the zeros were included. For example, the Steller's eider trajectory is essential a flat line (@fig-STEI); whereas @Osnas2024 found clear cyclical patterns in the trajectory when a different GAM model was fit to smaller-scale, spatially-explicit counts that included zero-counts. Interestingly, @Amundson2019 also excluded zero-counts in a spatially-explicit GAM, and found a flat trajectory for Steller's eider over a much longer time period; suggesting that the smooth GAM is due to a reduction in data when most observations are excluded. We expect similar patterns for other rare species. However, for more common species that do not include zero estimates, we believe the current model should approximate temporal trajectories in relative abundance. In the future, we also hope to fit a spatial model to the full set of species.
+
+Although the long-standing, continental-scale aerial Waterfowl Breeding Population and Habitat Survey (WBPHS) samples most of Alaska’s primary waterfowl production areas, it has never included the rich wetlands of the Arctic Coastal Plain of Alaska or the high-Arctic of Canada in its annual efforts. Further, while several targeted monitoring programs for specific species or limited areas of the ACP have been conducted; to our knowledge, the ACP Survey represents the most comprehensive aerial survey of Arctic-breeding waterbirds in existence. The analysis and implementation of a multi-species, aerial monitoring program such as the ACP Survey is challenging due to the inherent variability of the natural ecosystem, the varied natural histories of 30+ species, and the logistical difficulties of conducting aerial surveys in the Arctic. Moreover, it is difficult to achieve adequate within-year sampling of such a large spatial area within a short annual phenological window. Surveys of this type are further complicated by several waterfowl species that exist in extremely low densities and/or breed irregularly (such as Steller’s eiders), making precise estimates and trends difficult to achieve [though see @Osnas2024]. Collection of such a long-term data set has been made possible by integrating improvements in sample design along the way. The sample design used in this survey was originally developed in 1986 to target breeding ducks [Original ACP Survey 1986-2006: @Mallek2007], and later augmented to better include coastal areas and earlier-nesting species, such as eiders [North Slope Eider Survey 1992–2006: @Larned2008]. The current redesigned survey [2007–present: @Stehn2013; @Wilson2018] amalgamated these two designs and provides good temporal, spatial, and inferential compromise. However, the changing distributions and abundances of many waterfowl species, as well as the rapid and wide-spread landscape changes in the Arctic, may warrant reevaluation of the current stratification and overall survey design. Nonetheless, this survey represents one of few broad-scale, long-term, systematic monitoring efforts for waterbirds in the Arctic of North America, and perhaps, the world.
+
+## *Supplemental Material* {.unnumbered}
+
+Species-specific population indices, trends, and spatial distributions of observations can be found in the tables and figures of the Appendices. Original data for the YKD Survey can be found at Science Base - Alaska Yukon-Kuskokwim Delta Aerial Breeding Pair Survey <https://www.sciencebase.gov/catalog/item/662858ead34ea70bd5f056a5> and point-estimates (and documentation of their calculation) were sourced from the R package AKaerial at <https://github.com/USFWS/AKaerial>. R Quarto code used to produce this report, the report itself, and associated tabular data, can be found at <https://doi.org/10.7944/dqf4-2z27>.**REPLACE ACP DOI WITH YKD
+
+## *Suggested Citation* {.unnumbered}
+
+Wilson, H.M., Swaim, M. A., Safine, D.E., Frost, C.J., and E.E. Osnas. 2025. Population indices, trends, and distribution of breeding waterbirds on the Yukon-Kuskokwim Delta, Alaska, 1985-2024. Anchorage, Alaska: U.S. Fish and Wildlife Service, Migratory Bird Management.**REPLACE ACP DOI WITH YKD <https://doi.org/10.7944/dqf4-2z27>
+
+# ACKNOWLEDGEMENTS {.unnumbered}
+
+This survey would not be possible without the generous support of the Bureau of Land Management, with particular thanks to Debora Nigro. We also extend thanks to Bill Larned for his many years flying and mentoring on the survey, Michael Swaim for assistance with aviation survey and hazard maps, and Julian Fischer for his thoughtful report reviews, project support, and program leadership. We are grateful to the people of Atqasuk, Alaska for hosting us in their community for so many years, and for helping with logistics and housing. Finally, we acknowledge the tremendous contribution of the observers and pilots who collected aerial waterbird data on the ACP beginning in 1986 [@Mallek2007; @Stehn2013], and from 2007 forward (@tbl-crew), and all those who supported their efforts.
+
+<center>
+
+![Yukon-Kuskokwim Delta Survey Crew 2024 with survey aircraft N721NR: Michael Swaim (right-front seat observer), Heather Wilson (left-front seat observer/pilot), and David Safine (right-rear seat observer))](data/YKD_Crew_Photo_2024.jpg){fig-alt="Photo of the Yukon-Kuskokwim Delta Aerial Breeding Population Survey (YKD Survey) Crew 2024. Left to right: Michael Swaim (right-front seat observer), Heather Wilson (left-front seat observer/pilot), David Safine (right-front seat observer) stand next to an amphibious-equipped Cessna 206 aircraft N721NR in Bethel, Alaska."}
+
+</center>
+
+# LITERATURE CITED {.unnumbered}
+
+::: {#refs}
+:::
+
+{{< pagebreak >}}
+
+# APPENDICES {.unnumbered}
+
+## Emperor Goose {.unnumbered}
+
+```{r cap2}
+ cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r EMGOfig}
+#| label: fig-SNGO
+#| fig-cap: !expr paste0("Emperor goose",cap2)
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 1985-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line). 
+
+sppfig(spp = "EMGO")
+```
+
+{{< pagebreak >}}
+
+### Emperor Goose Data Table {.unnumbered}
+
+```{r EMGO, include=TRUE, echo=FALSE}
+#| label: tbl-EMGO
+cap <- paste0("Emperor goose indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKGHistoric$combined$Year),".")
+
+kable(SNGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+### Emperor Goose Map {.unnumbered}
+
+```{r mcap}
+ cap3 = paste0("Observations of emperor geese along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKGHistoric$combined$Year),")." )
+```
+
+```{r EMGOmap, echo=FALSE, warning=FALSE}
+#| label: fig-EMGOmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKG", species="EMGO")
+
+```
+
+{{< pagebreak >}}
+
+## Greater White-fronted Goose {.unnumbered}
+
+```{r GWFGcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Greater white-fronted goose indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r GWFGfig, echo=FALSE, warning=FALSE}
+#| label: fig-GWFG
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "GWFG"
+df <- AKaerial::YKGHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+```
+
+{{< pagebreak >}}
+
+## Greater White-fronted Goose {.unnumbered}
+
+```{r GWFG, include=TRUE, echo=FALSE}
+#| label: tbl-GWFG
+cap <- paste0("Greater white-fronted goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKGHistoric$combined$Year),".")
+
+kable(GWFG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  #add_header adds a to tiered column header 'top' (e.g., instead of just 'Breeding Birds', the column header reads 'Indicated Breeding Birds'. This is not necessary for non-indicated species)
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Greater White-fronted Goose {.unnumbered}
+
+```{r GWFGmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of greater white-fronted geese along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKGHistoric$combined$Year),")." )
+```
+
+```{r GWFGmap, echo=FALSE, warning=FALSE}
+#| label: fig-GWFGmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Yukon-Kuskokwim Delta Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKG", species="GWFG")
+
+```
+
+{{< pagebreak >}}
+
+## Brant {.unnumbered}
+
+```{r BRANcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Brant indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r BRANfig, echo=FALSE, warning=FALSE}
+#| label: fig-BRAN
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "BRAN"
+df <- AKaerial::YKGHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+```
+
+{{< pagebreak >}}
+
+## Brant {.unnumbered}
+
+```{r BRAN, include=TRUE, echo=FALSE}
+#| label: tbl-BRAN
+cap <- paste0("Brant indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKGHistoric$combined$Year),".")
+
+kable(BRAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Brant {.unnumbered}
+
+```{r BRANmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of brant along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKGHistoric$combined$Year),")." )
+```
+
+```{r BRANmap, echo=FALSE, warning=FALSE}
+#| label: fig-BRANmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Yukon-Kuskokwim Delta Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKG", species="BRAN")
+
+```
+
+{{< pagebreak >}}
+
+## Cackling/Canada Goose {.unnumbered}
+
+```{r CCGOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Cackling/Canada goose indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r CCGOfig, echo=FALSE, warning=FALSE}
+#| label: fig-CCGO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "CCGO"
+df <- AKaerial::YKGHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+```
+
+{{< pagebreak >}}
+
+## Cackling/Canada Goose {.unnumbered}
+
+```{r CCGO, include=TRUE, echo=FALSE}
+#| label: tbl-CCGO
+cap <- paste0("Cackling/Canada goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKGHistoric$combined$Year),".")
+
+kable(CCGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Cackling/Canada Goose {.unnumbered}
+
+```{r CCGOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of cackling/Canada geese along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKGHistoric$combined$Year),")." )
+```
+
+```{r CCGOmap, echo=FALSE, warning=FALSE}
+#| label: fig-CCGOmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Yukon-Kuskokwim Delta Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKG", species="CCGO")
+
+```
+
+{{< pagebreak >}}
+
+## Tundra Swan {.unnumbered}
+
+```{r SWANcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Tundra swan indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")  
+```
+
+```{r SWANfig, echo=FALSE, warning=FALSE}
+#| label: fig-SWAN
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "SWAN"
+df <- AKaerial::YKGHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Tundra Swan {.unnumbered}
+
+```{r SWAN, include=TRUE, echo=FALSE}
+#| label: tbl-SWAN
+cap <- paste0("Tundra swan indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKGHistoric$combined$Year),".")
+
+kable(SWAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Tundra Swan {.unnumbered}
+
+```{r SWANmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of tundra swans along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKGHistoric$combined$Year),")." )
+```
+
+```{r SWANmap, echo=FALSE, warning=FALSE}
+#| label: fig-SWANmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Yukon-Kuskokwim Delta Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKG", species="SWAN")
+
+```
+
+{{< pagebreak >}}
+
+## Northern Shoveler {.unnumbered}
+
+```{r NSHOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Northern shoveler indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r NSHOfig, echo=FALSE, warning=FALSE}
+#| label: fig-NSHO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "NSHO"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Northern Shoveler {.unnumbered}
+
+```{r NSHO, include=TRUE, echo=FALSE}
+ 
+cap <- paste0("Northern shoveler indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(NSHO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Northern Shoveler {.unnumbered}
+
+```{r NSHOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of northern shoveler along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r NSHOmap, echo=FALSE, warning=FALSE}
+#| label: fig-NSHOmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="NSHO")
+
+```
+
+{{< pagebreak >}}
+
+## American Wigeon {.unnumbered}
+
+```{r AMWIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("American wigeon indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r AMWIfig, echo=FALSE, warning=FALSE}
+#| label: fig-AMWI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "AMWI"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## American Wigeon {.unnumbered}
+
+```{r AMWI, include=TRUE, echo=FALSE}
+#| label: tbl-AMWI
+cap <- paste0("American wigeon indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(AMWI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## American Wigeon {.unnumbered}
+
+```{r AMWImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of American wigeon along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r AMWImap, echo=FALSE, warning=FALSE}
+#| label: fig-AMWImap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="AMWI")
+
+```
+
+{{< pagebreak >}}
+
+## Mallard {.unnumbered}
+
+```{r MALLcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Mallard indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r MALLfig, echo=FALSE, warning=FALSE}
+#| label: fig-MALL
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "MALL"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Mallard {.unnumbered}
+
+```{r MALL, include=TRUE, echo=FALSE}
+#| label: tbl-MALL
+cap <- paste0("Mallard indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(MALL, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Mallard {.unnumbered}
+
+```{r MALLmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of mallards along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r MALLmap, echo=FALSE, warning=FALSE}
+#| label: fig-MALLmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="MALL")
+
+```
+
+{{< pagebreak >}}
+
+## Northern Pintail {.unnumbered}
+
+```{r NOPIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Northern pintail indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r NOPIfig, echo=FALSE, warning=FALSE}
+#| label: fig-NOPI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "NOPI"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Northern Pintail {.unnumbered}
+
+```{r NOPI, include=TRUE, echo=FALSE}
+#| label: tbl-NOPI
+cap <- paste0("Northern pintail indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(NOPI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Northern Pintail {.unnumbered}
+
+```{r NOPImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of northern pintails along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r NOPImap, echo=FALSE, warning=FALSE}
+#| label: fig-NOPImap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="NOPI")
+
+```
+
+{{< pagebreak >}}
+
+## American Green-winged Teal {.unnumbered}
+
+```{r GWTEcap, echo=FALSE, warning=FALSE}
+ cap = paste0("American green-winged teal indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r GWTEfig, echo=FALSE, warning=FALSE}
+#| label: fig-GWTE
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "GWTE"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## American Green-winged Teal {.unnumbered}
+
+```{r GWTE, include=TRUE, echo=FALSE}
+#| label: tbl-GWTE
+cap <- paste0("American green-winged teal indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(GWTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "ccccc", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## American Green-winged Teal {.unnumbered}
+
+```{r GWTEmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of American green-winged teal along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r GWTEmap, echo=FALSE, warning=FALSE}
+#| label: fig-GWTEmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="GWTE")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+{{< pagebreak >}}
+
+
+
+## Canvasback {.unnumbered}
+
+```{r CANVcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Canvasback indices of breeding birds (grey circles; singles + [2 x pairs] + flocked drakes <5) and total birds (black circles; singles + [2 x pairs] + flocked drakes <5 + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r CANVfig, echo=FALSE, warning=FALSE}
+#| label: fig-CANV
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "CANV"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Canvasback {.unnumbered}
+
+```{r CANV, include=TRUE, echo=FALSE}
+#| label: tbl-CANV
+cap <- paste0("Canvasback indices of breeding birds (singles + [2 x pairs] + flocked drakes <5) and total birds (singles + [2 x pairs] + flocked drakes <5 + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(CANV, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Canvasback {.unnumbered}
+
+```{r CANVmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of canvasback along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r CANVmap, echo=FALSE, warning=FALSE}
+#| label: fig-CANVmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="CANV")
+
+```
+
+{{< pagebreak >}}
+
+
+## Scaup species {.unnumbered}
+
+```{r UNSCcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Scaup species indices of breeding birds (grey circles; singles + [2 x pairs] + flocked drakes <5) and total birds (black circles; singles + [2 x pairs] + flocked drakes <5 + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r UNSCfig, echo=FALSE, warning=FALSE}
+#| label: fig-UNSC
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "UNSC"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Scaup species {.unnumbered}
+
+```{r UNSC, include=TRUE, echo=FALSE}
+#| label: tbl-UNSC
+cap <- paste0("Scaup species indices of breeding birds (singles + [2 x pairs] + flocked drakes <5) and total birds (singles + [2 x pairs] + flocked drakes <5 + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(UNSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Scaup species {.unnumbered}
+
+```{r UNSCmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of scaup species along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r UNSCmap, echo=FALSE, warning=FALSE}
+#| label: fig-UNSCmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="UNSC")
+
+```
+
+{{< pagebreak >}}
+
+
+## Spectacled Eider {.unnumbered}
+
+```{r SPEIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Spectacled eider indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r SPEIfig, echo=FALSE, warning=FALSE}
+#| label: fig-SPEI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "SPEI"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Spectacled Eider {.unnumbered}
+
+```{r SPEI, include=TRUE, echo=FALSE}
+#| label: tbl-SPEI
+cap <- paste0("Spectacled eider indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(SPEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Spectacled Eider {.unnumbered}
+
+```{r SPEImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of spectacled eiders along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r SPEImap, echo=FALSE, warning=FALSE}
+#| label: fig-SPEImap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="SPEI")
+
+```
+
+{{< pagebreak >}}
+
+## Common Eider {.unnumbered}
+
+```{r COEIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Common eider indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r COEIfig, echo=FALSE, warning=FALSE}
+#| label: fig-COEI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "COEI"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Common Eider {.unnumbered}
+
+```{r COEI, include=TRUE, echo=FALSE}
+#| label: tbl-COEI
+cap <- paste0("Common eider indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(COEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Common Eider {.unnumbered}
+
+```{r COEImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of common eiders along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r COEImap, echo=FALSE, warning=FALSE}
+#| label: fig-COEImap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="COEI")
+
+```
+
+{{< pagebreak >}}
+
+## Black Scoter {.unnumbered}
+
+```{r BLSCcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Black scoter indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r BLSCfig, echo=FALSE, warning=FALSE}
+#| label: fig-BLSC
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "BLSC"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Black Scoter {.unnumbered}
+
+```{r BLSC, include=TRUE, echo=FALSE}
+#| label: tbl-BLSC
+cap <- paste0("Black scoter indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(BLSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Black Scoter {.unnumbered}
+
+```{r BLSCmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of black scoters along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r BLSCmap, echo=FALSE, warning=FALSE}
+#| label: fig-BLSCmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="BLSC")
+
+```
+
+{{< pagebreak >}}
+
+## Long-tailed Duck {.unnumbered}
+
+```{r LTDUcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Long-tailed duck indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r LTDUfig, echo=FALSE, warning=FALSE}
+#| label: fig-LTDU
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "LTDU"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Long-tailed Duck {.unnumbered}
+
+```{r LTDU, include=TRUE, echo=FALSE}
+#| label: tbl-LTDU
+cap <- paste0("Long-tailed duck indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(LTDU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Long-tailed Duck {.unnumbered}
+
+```{r LTDUmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of long-tailed ducks along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r LTDUmap, echo=FALSE, warning=FALSE}
+#| label: fig-LTDUmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="LTDU")
+
+```
+
+{{< pagebreak >}}
+
+## Red-breasted Merganser {.unnumbered}
+
+```{r RBMEcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Red-breasted merganser indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r RBMEfig, echo=FALSE, warning=FALSE}
+#| label: fig-RBME
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "RBME"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Red-breasted Merganser {.unnumbered}
+
+```{r RBME, include=TRUE, echo=FALSE}
+#| label: tbl-RBME
+cap <- paste0("Red-breasted merganser indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(RBME, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Red-breasted Merganser {.unnumbered}
+
+```{r RBMEmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of red-breasted mergansers along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r RBMEmap, echo=FALSE, warning=FALSE}
+#| label: fig-RBMEmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="RBME")
+
+```
+
+{{< pagebreak >}}
+
+
+## Sandhill Crane {.unnumbered}
+
+```{r SACRcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Sandhill crane indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r SACRfig, echo=FALSE, warning=FALSE}
+#| label: fig-SACR
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "SACR"
+df <- AKaerial::YKGHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se)  |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Sandhill Crane {.unnumbered}
+
+```{r SACR, include=TRUE, echo=FALSE}
+#| label: tbl-SACR
+cap <- paste0("Sandhill crane indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKGHistoric$combined$Year),".")
+
+kable(SACR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Sandhill Crane {.unnumbered}
+
+```{r SACRmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of sandhill cranes along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKGHistoric$combined$Year),")." )
+```
+
+```{r SACRmap, echo=FALSE, warning=FALSE}
+#| label: fig-SACRmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKG", species="SACR")
+
+```
+
+{{< pagebreak >}}
+
+## Jaeger species {.unnumbered}
+
+```{r JAEGcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Jaeger species indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r JAEGfig, echo=FALSE, warning=FALSE}
+#| label: fig-JAEG
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "JAEG"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Jaeger species {.unnumbered}
+
+```{r JAEG, include=TRUE, echo=FALSE}
+#| label: tbl-JAEG
+cap <- paste0("Jaeger species indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(JAEG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Jaeger species {.unnumbered}
+
+```{r JAEGmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of jaeger species along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r JAEGmap, echo=FALSE, warning=FALSE}
+#| label: fig-JAEGmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="JAEG")
+
+```
+
+{{< pagebreak >}}
+
+## Red-throated Loon {.unnumbered}
+
+```{r RTLOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Red-throated loon indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r RTLOfig, echo=FALSE, warning=FALSE}
+#| label: fig-RTLO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "RTLO"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Red-throated Loon {.unnumbered}
+
+```{r RTLO, include=TRUE, echo=FALSE}
+#| label: tbl-RTLO
+cap <- paste0("Red-throated loon indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(RTLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Red-throated Loon {.unnumbered}
+
+```{r RTLOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of red-throated loons along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r RTLOmap, echo=FALSE, warning=FALSE}
+#| label: fig-RTLOmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="RTLO")
+
+```
+
+{{< pagebreak >}}
+
+## Pacific Loon {.unnumbered}
+
+```{r PALOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Pacific loon indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(YKDHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKDHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r PALOfig, echo=FALSE, warning=FALSE}
+#| label: fig-PALO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)..
+ 
+spp = "PALO"
+df <- AKaerial::YKDHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Pacific Loon {.unnumbered}
+
+```{r PALO, include=TRUE, echo=FALSE}
+#| label: tbl-PALO
+cap <- paste0("Pacific loon indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKDHistoric$combined$Year),".")
+
+kable(PALO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Pacific Loon {.unnumbered}
+
+```{r PALOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Observations of Pacific loons along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKDHistoric$combined$Year),")." )
+```
+
+```{r PALOmap, echo=FALSE, warning=FALSE}
+#| label: fig-PALOmap
+#| fig-cap: !expr cap
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+
+AKaerial::ObsMap(area="YKD", species="PALO")
+
+```
+
+{{< pagebreak >}}
+
+```{r output, include=TRUE, echo=FALSE, eval=FALSE}
+
+#The printing of species-specific tables is now taken care of earlier in the code (line 782) via a function that Erik built to print species results.
+
+#write.csv(SNGO, "results/SnowGoose_Table3.csv", quote=FALSE, row.names=FALSE)
+#write.csv(GWFG, "results/GreaterWhitefrontedGoose_Table4.csv", quote = FALSE, row.names=FALSE)
+#write.csv(BRAN, "results/Brant_Table5.csv", quote = FALSE, row.names=FALSE)
+#write.csv(CCGO, "results/CacklingCanadaGoose_Table6.csv", quote = FALSE, row.names=FALSE)
+#write.csv(SWAN, "results/TundraSwan_Table7.csv", quote = FALSE, row.names=FALSE)
+#write.csv(NSHO, "results/NorthernShoveler_Table8.csv", quote = FALSE, row.names=FALSE)
+#write.csv(AMWI, "results/AmericanWigeon_Table9.csv", quote = FALSE, row.names=FALSE)
+#write.csv(MALL, "results/Mallard_Table10.csv", quote = FALSE, row.names=FALSE)
+#write.csv(NOPI, "results/NorthernPintail_Table11.csv", quote = FALSE, row.names=FALSE)
+#write.csv(GWTE, "results/GreenwingedTeal_Table12.csv", quote = FALSE, row.names=FALSE)
+#write.csv(UNSC, "results/ScaupSpecies_Table13.csv", quote = FALSE, row.names=FALSE)
+#write.csv(STEI, "results/StellersEider_Table14.csv", quote = FALSE, row.names=FALSE)
+#write.csv(SPEI, "results/SpectacledEider_Table15.csv", quote = FALSE, row.names=FALSE)
+#write.csv(KIEI, "results/KingEider_Table16.csv", quote = FALSE, row.names=FALSE)
+#write.csv(COEI, "results/CommonEider_Table17.csv", quote = FALSE, row.names=FALSE)
+#write.csv(SUSC, "results/SurfScoter_Table18.csv", quote = FALSE, row.names=FALSE)
+#write.csv(WWSC, "results/WhitewingedScoter_Table19.csv", quote = FALSE, row.names=FALSE)
+#write.csv(BLSC, "results/BlackScoter_Table20.csv", quote = FALSE, row.names=FALSE)
+#write.csv(LTDU, "results/LongtailedDuck_Table21.csv", quote = FALSE, row.names=FALSE)
+#write.csv(RBME, "results/RedbreastedMerganser_Table22.csv", quote = FALSE, row.names=FALSE)
+#write.csv(RNGR, "results/RedneckedGrebe_Table23.csv", quote = FALSE, row.names=FALSE)
+#write.csv(SACR, "results/SandhillCrane_Table24.csv", quote = FALSE, row.names=FALSE)
+#write.csv(JAEG, "results/JaegerSpecies_Table25.csv", quote = FALSE, row.names=FALSE)
+#write.csv(SAGU, "results/SabinesGull_Table26.csv", quote = FALSE, row.names=FALSE)
+#write.csv(GLGU, "results/GlaucousGull_Table27.csv", quote = FALSE, row.names=FALSE)
+#write.csv(ARTE, "results/ArcticTern_Table28.csv", quote = FALSE, row.names=FALSE)
+#write.csv(RTLO, "results/RedthroatedLoon_Table29.csv", quote = FALSE, row.names=FALSE)
+#write.csv(PALO, "results/PacificLoon_Table30.csv", quote = FALSE, row.names=FALSE)
+#write.csv(YBLO, "results/YellowbilledLoon_Table31.csv", quote = FALSE, row.names=FALSE)
+#write.csv(GOEA, "results/GoldenEagle_Table32.csv", quote = FALSE, row.names=FALSE)
+#write.csv(SEOW, "results/ShortearedOwl_Table33.csv", quote = FALSE, row.names=FALSE)
+#write.csv(SNOW, "results/SnowyOwl_Table34.csv", quote = FALSE, row.names=FALSE)
+#write.csv(CORA, "results/CommonRaven_Table35.csv", quote = FALSE, row.names=FALSE)
+
+```

@@ -10,3 +10,8 @@ ACP_Report/*
 !ACP_Report/ACP_report.pdf
 !ACP_Report/bibliography.bib
 !ACP_Report/_extensions
+YKD_Report/*
+!YKD_Report/YKD_report.qmd
+!YKD_Report/YKD_report.R
+!YKD_Report/bibliography.bib
+
