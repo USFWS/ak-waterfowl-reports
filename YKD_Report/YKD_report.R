@@ -75,10 +75,10 @@ ykd.transects=read_sf("data/YKD_DesignTrans.gpkg", this.layer) |>
 tmap_mode("plot")
 
 new_bbox = st_bbox(ykd.strata)
-new_bbox[1]=-164
-new_bbox[2]=59
-new_bbox[3]=-163
-new_bbox[4]=61
+new_bbox[1]=-162.5
+new_bbox[2]=59.5
+new_bbox[3]=-166.5
+new_bbox[4]=63.5
 new_bbox=st_as_sfc(new_bbox)
 
 fig1 = tm_shape(ykd.strata, bbox = new_bbox) +
@@ -111,7 +111,7 @@ EMGOh = zoo::rollmean(EMGO$itotal, k = length(EMGO$itotal), na.rm=TRUE)
 EMGOhse = sqrt(zoo::rollmean(EMGO$itotal.se^2, k=length(EMGO$itotal), na.rm=TRUE))
 EMGOentry = data.frame(Species="Emperor goose", 
                        Code="EMGO",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(EMGO3,0),
                        Y3se=round(EMGO3se,0),
                        LT=round(EMGOh,0),
@@ -130,7 +130,7 @@ GWFGh = zoo::rollmean(GWFG$itotal, k = length(GWFG$itotal), na.rm=TRUE)
 GWFGhse = sqrt(zoo::rollmean(GWFG$itotal.se^2, k=length(GWFG$itotal), na.rm=TRUE))
 GWFGentry = data.frame(Species="Greater white-fronted goose", 
                        Code="GWFG",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(GWFG3,0),
                        Y3se=round(GWFG3se,0),
                        LT=round(GWFGh,0),
@@ -150,7 +150,7 @@ BRANh = zoo::rollmean(BRAN$itotal, k = length(BRAN$itotal), na.rm=TRUE)
 BRANhse = sqrt(zoo::rollmean(BRAN$itotal.se^2, k=length(BRAN$itotal), na.rm=TRUE))
 BRANentry = data.frame(Species="Brant", 
                        Code="BRAN",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(BRAN3,0),
                        Y3se=round(BRAN3se,0),
                        LT=round(BRANh,0),
@@ -170,7 +170,7 @@ CCGOh = zoo::rollmean(CCGO$itotal, k = length(CCGO$itotal), na.rm=TRUE)
 CCGOhse = sqrt(zoo::rollmean(CCGO$itotal.se^2, k=length(CCGO$itotal), na.rm=TRUE))
 CCGOentry = data.frame(Species="Cackling Canada goose", 
                        Code="CCGO",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(CCGO3,0),
                        Y3se=round(CCGO3se,0),
                        LT=round(CCGOh,0),
@@ -190,7 +190,7 @@ TAVSh = zoo::rollmean(TAVS$itotal, k = length(TAVS$itotal), na.rm=TRUE)
 TAVShse = sqrt(zoo::rollmean(TAVS$itotal.se^2, k=length(TAVS$itotal), na.rm=TRUE))
 TAVSentry = data.frame(Species="Taverner's Canada goose", 
                        Code="TAVS",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(TAVS3,0),
                        Y3se=round(TAVS3se,0),
                        LT=round(TAVSh,0),
@@ -210,7 +210,7 @@ SWANh = zoo::rollmean(SWAN$total, k = length(SWAN$total), na.rm=TRUE)
 SWANhse = sqrt(zoo::rollmean(SWAN$total.se^2, k=length(SWAN$total), na.rm=TRUE))
 SWANentry = data.frame(Species="Tundra swan", 
                        Code="SWAN",
-                       Index="Total",
+                       Index="TB",
                        Y3=round(SWAN3,0),
                        Y3se=round(SWAN3se,0),
                        LT=round(SWANh,0),
@@ -230,7 +230,7 @@ NSHOh = zoo::rollmean(NSHO$itotal, k = length(NSHO$itotal), na.rm=TRUE)
 NSHOhse = sqrt(zoo::rollmean(NSHO$itotal.se^2, k=length(NSHO$itotal), na.rm=TRUE))
 NSHOentry = data.frame(Species="Northern shoveler", 
                        Code="NSHO",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(NSHO3,0),
                        Y3se=round(NSHO3se,0),
                        LT=round(NSHOh,0),
@@ -250,7 +250,7 @@ AMWIh = zoo::rollmean(AMWI$itotal, k = length(AMWI$itotal), na.rm=TRUE)
 AMWIhse = sqrt(zoo::rollmean(AMWI$itotal.se^2, k=length(AMWI$itotal), na.rm=TRUE))
 AMWIentry = data.frame(Species="American wigeon", 
                        Code="AMWI",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(AMWI3,0),
                        Y3se=round(AMWI3se,0),
                        LT=round(AMWIh,0),
@@ -270,7 +270,7 @@ MALLh = zoo::rollmean(MALL$itotal, k = length(MALL$itotal), na.rm=TRUE)
 MALLhse = sqrt(zoo::rollmean(MALL$itotal.se^2, k=length(MALL$itotal), na.rm=TRUE))
 MALLentry = data.frame(Species="Mallard", 
                        Code="MALL",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(MALL3,0),
                        Y3se=round(MALL3se,0),
                        LT=round(MALLh,0),
@@ -289,7 +289,7 @@ NOPIh = zoo::rollmean(NOPI$itotal, k = length(NOPI$itotal), na.rm=TRUE)
 NOPIhse = sqrt(zoo::rollmean(NOPI$itotal.se^2, k=length(NOPI$itotal), na.rm=TRUE))
 NOPIentry = data.frame(Species="Northern pintail", 
                        Code="NOPI",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(NOPI3,0),
                        Y3se=round(NOPI3se,0),
                        LT=round(NOPIh,0),
@@ -309,7 +309,7 @@ GWTEh = zoo::rollmean(GWTE$itotal, k = length(GWTE$itotal), na.rm=TRUE)
 GWTEhse = sqrt(zoo::rollmean(GWTE$itotal.se^2, k=length(GWTE$itotal), na.rm=TRUE))
 GWTEentry = data.frame(Species="American green-winged teal", 
                        Code="GWTE",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(GWTE3,0),
                        Y3se=round(GWTE3se,0),
                        LT=round(GWTEh,0),
@@ -329,7 +329,7 @@ CANVh = zoo::rollmean(CANV$itotal, k = length(CANV$itotal), na.rm=TRUE)
 CANVhse = sqrt(zoo::rollmean(CANV$itotal.se^2, k=length(CANV$itotal), na.rm=TRUE))
 CANVentry = data.frame(Species="Surf scoter", 
                        Code="CANV",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(CANV3,0),
                        Y3se=round(CANV3se,0),
                        LT=round(CANVh,0),
@@ -349,7 +349,7 @@ UNSCh = zoo::rollmean(UNSC$total, k = length(UNSC$total), na.rm=TRUE)
 UNSChse = sqrt(zoo::rollmean(UNSC$total.se^2, k=length(UNSC$total), na.rm=TRUE))
 UNSCentry = data.frame(Species="Scaup species", 
                        Code="UNSC",
-                       Index="Total",
+                       Index="TB",
                        Y3=round(UNSC3,0),
                        Y3se=round(UNSC3se,0),
                        LT=round(UNSCh,0),
@@ -369,7 +369,7 @@ SPEIh = zoo::rollmean(SPEI$itotal, k = length(SPEI$itotal), na.rm=TRUE)
 SPEIhse = sqrt(zoo::rollmean(SPEI$itotal.se^2, k=length(SPEI$itotal), na.rm=TRUE))
 SPEIentry = data.frame(Species="Spectacled eider", 
                        Code="SPEI",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(SPEI3,0),
                        Y3se=round(SPEI3se,0),
                        LT=round(SPEIh,0),
@@ -389,7 +389,7 @@ COEIh = zoo::rollmean(COEI$itotal, k = length(COEI$itotal), na.rm=TRUE)
 COEIhse = sqrt(zoo::rollmean(COEI$itotal.se^2, k=length(COEI$itotal), na.rm=TRUE))
 COEIentry = data.frame(Species="Common eider", 
                        Code="COEI",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(COEI3,0),
                        Y3se=round(COEI3se,0),
                        LT=round(COEIh,0),
@@ -409,7 +409,7 @@ BLSCh = zoo::rollmean(BLSC$itotal, k = length(BLSC$itotal), na.rm=TRUE)
 BLSChse = sqrt(zoo::rollmean(BLSC$itotal.se^2, k=length(BLSC$itotal), na.rm=TRUE))
 BLSCentry = data.frame(Species="Black scoter", 
                        Code="BLSC",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(BLSC3,0),
                        Y3se=round(BLSC3se,0),
                        LT=round(BLSCh,0),
@@ -429,7 +429,7 @@ LTDUh = zoo::rollmean(LTDU$itotal, k = length(LTDU$itotal), na.rm=TRUE)
 LTDUhse = sqrt(zoo::rollmean(LTDU$itotal.se^2, k=length(LTDU$itotal), na.rm=TRUE))
 LTDUentry = data.frame(Species="Long-tailed duck", 
                        Code="LTDU",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(LTDU3,0),
                        Y3se=round(LTDU3se,0),
                        LT=round(LTDUh,0),
@@ -449,7 +449,7 @@ RBMEh = zoo::rollmean(RBME$itotal, k = length(RBME$itotal), na.rm=TRUE)
 RBMEhse = sqrt(zoo::rollmean(RBME$itotal.se^2, k=length(RBME$itotal), na.rm=TRUE))
 RBMEentry = data.frame(Species="Red-breasted merganser", 
                        Code="RBME",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(RBME3,0),
                        Y3se=round(RBME3se,0),
                        LT=round(RBMEh,0),
@@ -468,7 +468,7 @@ SACRh = zoo::rollmean(SACR$itotal, k = length(SACR$itotal), na.rm=TRUE)
 SACRhse = sqrt(zoo::rollmean(SACR$itotal.se^2, k=length(SACR$itotal), na.rm=TRUE))
 SACRentry = data.frame(Species="Sandhill crane", 
                        Code="SACR",
-                       Index="Indicated total",
+                       Index="ITB",
                        Y3=round(SACR3,0),
                        Y3se=round(SACR3se,0),
                        LT=round(SACRh,0),
@@ -514,7 +514,7 @@ RTLOhse = sqrt(zoo::rollmean(RTLO$total.se^2, k=length(RTLO$total), na.rm=TRUE))
 
 RTLOentry = data.frame(Species="Red-throated loon", 
                        Code="RTLO",
-                       Index="Total",
+                       Index="TB",
                        Y3=round(RTLO3,0),
                        Y3se=round(RTLO3se,0),
                        LT=round(RTLOh,0),
@@ -536,7 +536,7 @@ PALOhse = sqrt(zoo::rollmean(PALO$total.se^2, k=length(PALO$total), na.rm=TRUE))
 
 PALOentry = data.frame(Species="Pacific loon", 
                        Code="PALO",
-                       Index="Total",
+                       Index="TB",
                        Y3=round(PALO3,0),
                        Y3se=round(PALO3se,0),
                        LT=round(PALOh,0),
