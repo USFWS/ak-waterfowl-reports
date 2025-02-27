@@ -25,7 +25,7 @@ sppfig <- function(spp = "EMGO", index1 = "itotal", index2 = "ibb"){
     geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
                                    col = "Indicated Breeding")) +
     labs(x = "Year", y = "Population Index") +
-    scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
+    scale_x_continuous(breaks = seq(min(df$Year), max(df$Year), by = 4)) + 
     #scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
     scale_y_continuous(labels = scales::comma) +
     scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
@@ -64,9 +64,11 @@ ykd_cities = st_as_sf(ykd_cities, coords = c("lon","lat"))
 
 st_crs(ykd_cities) = 4269
 #Data objects created from YKD survey data in the RDR: x-y coordinates associated with species observations, used to make maps
-ykd.strata = read_sf("//ifw7ro-file.fws.doi.net/datamgt/mbm/mbmwa_001_YKD_Aerial_Survey/data/source_data/YKD_DesignStrata.gpkg")
-ykd.strata = ykd.strata %>% filter(STRATNAME != "Nonhabitat")
-ykd.transects=read_sf("//ifw7ro-file.fws.doi.net/datamgt/mbm/mbmwa_001_YKD_Aerial_Survey/data/source_data/YKD_DesignTrans.gpkg", this.layer)
+ykd.strata = read_sf("data/YKD_DesignStrata.gpkg") |>
+  filter(STRATNAME != "Nonhabitat") |>
+  st_transform(crs=4326)
+ykd.transects=read_sf("data/YKD_DesignTrans.gpkg", this.layer) |>
+  st_transform(crs=4326)
 
 
 #Data objects and layers for making Fig. 1 - Study area map of the ACP with strata, most recent year transects, and village names
@@ -94,9 +96,6 @@ fig1 = tm_shape(ykd.strata, bbox = new_bbox) +
 
 tmap_save(fig1, "data/fig1.png")
 
-
-
-
 #Reading species-level tables here to allow for n-year averaging
 
 EMGO <- YKGHistoric$combined %>%
@@ -117,7 +116,6 @@ EMGOentry = data.frame(Species="Emperor goose",
                        Y3se=round(EMGO3se,0),
                        LT=round(EMGOh,0),
                        LTse=round(EMGOhse,0))
-
 
 GWFG <- YKGHistoric$combined %>%
   filter(Species=="GWFG") %>%
@@ -579,4 +577,4 @@ for(i in 1:dim(spplist)[1]){
                                            spplist[i,1], ".csv"), 
             quote = FALSE, row.names=FALSE)
 }
-save.image(file="data/YKD_report.RData")
+save.image(file="data/YKD_Report.RData")
