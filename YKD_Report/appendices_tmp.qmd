@@ -1,128 +1,85 @@
-# APPENDICES {.unnumbered}
+---
+title: "test"
+execute:
+  keep-md: true
+format: html
+tbl-cap-location: top
+---
 
-## Emperor Goose {.unnumbered}
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(AKaerial)
+library(tidyverse)
+library(kableExtra)
 
-```{r cap2}
+load("data/YKD_Report.RData")
+
  cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
 
 cap3 <- paste0(" indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKGHistoric$combined$Year),".")
 
  cap4 = paste0(" along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKGHistoric$combined$Year),")." )
 
-spptext = "Emperor goose"
-sppAOU = "EMGO"
 alttext = "A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 1985-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)."
 
-altmap = "A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024)." 
+altmap = "A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (2024)." 
+
+# spptext = c("Emperor Goose", "Greater White-fronted Goose", "Cackling Goose")
+# sppAOU = c("EMGO", "GWFG", "CCGO")
+spptext <- spptext[-5]
+sppAOU <- sppAOU[-5]
+for(i in 1:length(sppAOU)){
+  s <- sppfig(spp = sppAOU[i])
+  ggsave(plot = s, filename=paste0("data/plot_trends/figures/",sppAOU[i],"index.png"))
+  m <- AKaerial::ObsMap(area="YKG", species=sppAOU[i])
+  ggsave(plot=m, filename=paste0("data/plot_trends/figures/",sppAOU[i],"map.png"))
+}
 ```
 
-```{r EMGOfig}
-#| label: !expr paste0("fig-", sppAOU)
-#| fig-cap: !expr paste0(spptext,cap2)
-#| fig-alt: !expr alttext
+```{r}
+#| echo: false
+#| output: asis
 
-sppfig(spp = "EMGO")
+cat("# APPENDICES {.unnumbered}\n")
+
+for(i in 1:length(sppAOU)){
+
+cat("## ", spptext[i], " {.unnumbered}\n", sep="")
+
+cat("\n")
+
+cat("![",spptext[i],cap2,")](data/plot_trends/figures/",sppAOU[i],"index.png){#fig-",sppAOU[i],"}\n", sep="")
+
+cat("\n")
+
+cat("{{< pagebreak >}}\n")
+
+cat("### ", spptext[i], " Data Table {.unnumbered}\n")
+
+cat("\n")
+
+cat(kable(EMGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = paste0(spptext[i], cap3), align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) |>
+  kable_styling(font_size=10, position="center") |>
+  row_spec(row = 0, bold = TRUE))
+
+cat("\n")
+
+cat(": tbl-", sppAOU[i], "\n")
+
+cat("\n")
+
+cat("{{< pagebreak >}}\n")
+
+cat("### ", spptext[i], " Map {.unnumbered}\n")
+
+cat("\n")
+
+cat("![Observations of ", spptext[i], cap4,"](data/plot_trends/figures/",sppAOU[i], "map.png){#fig-", sppAOU[i], "map","}\n", sep="")
+
+cat("\n")
+
+cat("{{< pagebreak >}}\n")
+}
 ```
-
-{{< pagebreak >}}
-
-### Emperor Goose Data Table {.unnumbered}
-
-```{r EMGO, include=TRUE, echo=FALSE}
-#| label: !expr paste0("tbl-", sppAOU)
-
-kable(EMGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = paste0(spptext, cap3), align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
-  kable_styling(font_size=10, position="center")%>%
-  row_spec(row = 0, bold = TRUE)
-
-```
-
-{{< pagebreak >}}
-
-### Emperor Goose Map {.unnumbered}
-
-```{r EMGOmap, echo=FALSE, warning=FALSE}
-#| label: !expr paste0("fig-", sppAOU, "map")
-#| fig-cap: !expr paste0("Observations of ", spptext, cap4)
-#| fig-alt: !expr altmap
-
-AKaerial::ObsMap(area="YKG", species="EMGO")
-
-```
-
-{{< pagebreak >}}
-
-## Greater White-fronted Goose {.unnumbered}
-
-```{r GWFGcap, echo=FALSE, warning=FALSE}
- cap = paste0("Greater white-fronted goose indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
-```
-
-```{r GWFGfig, echo=FALSE, warning=FALSE}
-#| label: fig-GWFG
-#| fig-cap: !expr cap
-#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
- 
-spp = "GWFG"
-df <- AKaerial::YKGHistoric$combined |>
-  filter(Species == spp) |>
-  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
-  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
-         lower2 = index2 - 1.96*se2)
-df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
-ggplot(data = df2) + 
-  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
-              alpha = 0.5) + 
-  geom_line(aes(x=Year, y=mean), lwd = 1) + 
-  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
-                  col = "Indicated Total")) + 
-  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
-                  col = "Indicated Breeding")) +
-  labs(x = "Year", y = "Population Index") +
-  scale_x_continuous(breaks = seq(2007, 2024, by = 2)) + 
-#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
-  scale_y_continuous(labels = scales::comma) +
-  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
-  theme_bw() + 
-  theme(legend.position = "top", legend.title=element_blank()) +
-  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
-  theme(text=element_text(family="Times")) +
-  theme(axis.title=element_text(size=13,face="bold")) +
-  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
-```
-
-{{< pagebreak >}}
-
-## Greater White-fronted Goose {.unnumbered}
-
-```{r GWFG, include=TRUE, echo=FALSE}
-#| label: tbl-GWFG
-cap <- paste0("Greater white-fronted goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 2007-",max(YKGHistoric$combined$Year),".")
-
-kable(GWFG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
-  kable_styling(font_size=10, position="center")%>%
-  #add_header adds a to tiered column header 'top' (e.g., instead of just 'Breeding Birds', the column header reads 'Indicated Breeding Birds'. This is not necessary for non-indicated species)
-  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
-  row_spec(row = 0, bold = TRUE)
-
-```
-
-{{< pagebreak >}}
-
-## Greater White-fronted Goose {.unnumbered}
-
-```{r GWFGmcap, echo=FALSE, warning=FALSE}
- cap = paste0("Observations of greater white-fronted geese along transects within four physiographic-based strata (high, medium, low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(YKGHistoric$combined$Year),")." )
-```
-
-```{r GWFGmap, echo=FALSE, warning=FALSE}
-#| label: fig-GWFGmap
-#| fig-cap: !expr cap
-#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Yukon-Kuskokwim Delta Breeding Population Survey, Alaska, during the most recent survey year (2024). 
-
-AKaerial::ObsMap(area="YKG", species="GWFG")
-
-```
-
-{{< pagebreak >}}
-

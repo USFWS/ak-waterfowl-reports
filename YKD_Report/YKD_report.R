@@ -8,7 +8,12 @@ library(tmap)
 
 #define species results function
 sppfig <- function(spp = "EMGO", index1 = "itotal", index2 = "ibb"){
-  df <- AKaerial::YKGHistoric$combined |>
+  if(spp %in% unique(AKaerial::YKGHistoric$combined$Species)){
+    df <- AKaerial::YKGHistoric$combined
+    }else{
+      df <- AKaerial::YKDHistoric$combined
+    } 
+  df <- df |>
     filter(Species == spp) |>
     select(Year, index = index1, se = paste0(index1,".se"), 
            index2 = index2, 
@@ -38,7 +43,7 @@ sppfig <- function(spp = "EMGO", index1 = "itotal", index2 = "ibb"){
   return(gg)
 }
 #test
-sppfig()
+#sppfig()
 ################################################################################
 #Table 1 AIRCREWS AND DATES OF ANNUAL SURVEYS - is currently drawn from a .csv file Heather created. Ultimately, it should come directly from the data.
 table1 <- read.csv("data/Table1_YKDCrewDates.csv", stringsAsFactors = F, header=TRUE)
@@ -548,6 +553,8 @@ PALOentry = data.frame(Species="Pacific loon",
 table2 = rbind(EMGOentry, GWFGentry, BRANentry, CCGOentry, TAVSentry, SWANentry, NSHOentry, AMWIentry,  MALLentry, NOPIentry, GWTEentry, CANVentry, UNSCentry, SPEIentry, COEIentry, BLSCentry, LTDUentry, RBMEentry, SACRentry, JAEGentry, RTLOentry, PALOentry) #ADD SEOW? CORA? GADW? RNGR?
 
 spplist <- table2[,1:2]
+spptext <- table2[,1]
+sppAOU <- table2[,2]
 #TRENDS code from Erik O. This code pulls from a folder in our working directory that has plot_trends .csv output from his observer effects GAM model run elsewhere. "mutate" is a function that allows the same work to be done on each species, but just specifying the species.
 
 path = "data/plot_trends/data/"
