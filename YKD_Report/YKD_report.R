@@ -571,11 +571,43 @@ sppdf$confInt <- paste0(format(round(sppdf$mean, 2), nsmall = 2), " (",
                         format(round(sppdf$upper, 2), nsmall = 2), ")")
 sppdf$P <- format(round(sppdf$P, 2), nsmall = 2)
 sppdf <- select(sppdf, Species, Trend=confInt, P)
+sppdf2 <- sppdf
 #Adds last column to Table 2 with trend and CIs.
-table2 <- cbind(table2, select(sppdf, -Species)) |>
+table2 <- table2 |>
+  # cbind(table2, select(sppdf, -Species)) |>
   # table2 <- add_column(table2, sppdf$Trend, .after = 7) |>
   #   add_column(sppdf$P, .after = Trend) |>
   select(-Code)
+################################################################################
+## make table 3 for 10-year trend
+sppdf <- data.frame(NULL)
+for( i in spplist$Code){
+  tmp <- read_csv(file = paste0(path,i,"_trend.csv")) |>
+    nth(n=10) |>
+    mutate(Species = i)
+  sppdf <- rbind(sppdf, tmp)
+}
+#Code below creates 95% confidence intervals in parentheses to be displayed right after long-term average trend point estimate in Table 2.
+sppdf$confInt <- paste0(format(round(sppdf$mean, 2), nsmall = 2), " (",
+                        format(round(sppdf$lower, 2), nsmall = 2), " - ", 
+                        format(round(sppdf$upper, 2), nsmall = 2), ")")
+sppdf$P <- format(round(sppdf$P, 2), nsmall = 2)
+sppdf <- select(sppdf, Species, Trend=confInt, P)
+table3 <- table2 |> select(Species, Index) |>
+  cbind(select(sppdf, Trend10 = Trend, P10 = P)) |>
+  cbind(select(sppdf2, -Species))
+################################################################################
+##write files for appendices
+#make figures
+for(i in 1:length(sppAOU)){
+  s <- sppfig(spp = sppAOU[i])
+  ggsave(plot = s, filename=paste0("data/plot_trends/figures/",sppAOU[i],"index.png"))
+  if(sppAOU[i] != "TAVS"){
+    m <- AKaerial::ObsMap(area="YKG", species=sppAOU[i])
+    ggsave(plot=m, filename=paste0("data/plot_trends/figures/",sppAOU[i],"map.png"))
+  }
+}
+################################################################################
 #write species-specific output tables to file
 spplist[,1] <- str_remove(spplist[,1], "/") |>
   str_remove(" ") |> str_remove("'")
