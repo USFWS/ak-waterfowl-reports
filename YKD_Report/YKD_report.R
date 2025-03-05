@@ -8,7 +8,7 @@ library(tmap)
 
 #define species results function
 sppfig <- function(spp = "EMGO", index1 = "itotal", index2 = "ibb"){
-  if(spp %in% unique(AKaerial::YKGHistoric$combined$Species)){
+  if(spp %in% c("BRAN", "CCGO", "EMGO", "GWFG", "TAVS", "SACR", "SWAN")){
     df <- AKaerial::YKGHistoric$combined
     }else{
       df <- AKaerial::YKDHistoric$combined
@@ -599,14 +599,14 @@ table3 <- table2 |> select(Species, Index) |>
 ################################################################################
 ##write files for appendices
 #make figures
-for(i in 1:length(sppAOU)){
-  s <- sppfig(spp = sppAOU[i])
-  ggsave(plot = s, filename=paste0("data/plot_trends/figures/",sppAOU[i],"index.png"))
-  if(sppAOU[i] != "TAVS"){
-    m <- AKaerial::ObsMap(area="YKG", species=sppAOU[i])
-    ggsave(plot=m, filename=paste0("data/plot_trends/figures/",sppAOU[i],"map.png"))
-  }
-}
+# for(i in 1:length(sppAOU)){
+#   s <- sppfig(spp = sppAOU[i])
+#   ggsave(plot = s, filename=paste0("data/plot_trends/figures/",sppAOU[i],"index.png"))
+#   if(sppAOU[i] != "TAVS"){
+#     m <- AKaerial::ObsMap(area="YKG", species=sppAOU[i])
+#     ggsave(plot=m, filename=paste0("data/plot_trends/figures/",sppAOU[i],"map.png"))
+#   }
+# }
 ################################################################################
 #write species-specific output tables to file
 spplist[,1] <- str_remove(spplist[,1], "/") |>

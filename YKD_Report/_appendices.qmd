@@ -38,14 +38,9 @@ cap4 = paste0(" along transects within four physiographic-based strata (high, me
               Population Survey, Alaska, during the most recent survey year (",
               max(YKGHistoric$combined$Year),")." )
 
-alttext = "A graph of the average index estimate between observers (vertical bars 
-from circles), the posterior mean population growth trajectory 1985-2024 (black line), 
-and the approximate 95% confidence interval for the trajectory (grey band around line)."
+alttext = "A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 1985-2024 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line)."
 
-altmap = "A map of species-specific observation locations (black dots) along 
-transects within four physiographic-based strata (high, medium, low, and very high) 
-of the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the 
-most recent survey year (2024)." 
+altmap = "A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (2024)." 
 ```
 
 ## Emperor goose {.unnumbered}
