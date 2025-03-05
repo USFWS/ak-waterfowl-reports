@@ -15,6 +15,6 @@ YKD_Report/*
 !YKD_Report/YKD_report.R
 !YKD_Report/bibliography.bib
 !YKD_Report/_appendices.qmd
-!YKD_Report/appendices_qmd.jinja
+!YKD_Report/appendices.qmd.jinja
 !YKD_Report/make_appendices.R
 
