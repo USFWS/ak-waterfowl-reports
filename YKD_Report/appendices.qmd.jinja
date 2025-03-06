@@ -56,7 +56,7 @@ most recent survey year (2024)."
 #| fig-cap: !expr paste( "{{spp.spptext}}", cap2)
 #| fig-alt: !expr alttext
 
-sppfig(spp = "{{spp.sppAOU}}" )
+sppfig(spp = "{{spp.sppAOU}}", index = "{{spp.index11}}", index2 = "{{spp.index22}}" )
 ```
 
 PAGEBREAK
@@ -84,7 +84,8 @@ PAGEBREAK
 #| fig-cap: !expr paste0( "{{spp.spptext}}", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
-AKaerial::ObsMap(area = "{{spp.sppArea}}", species = "{{spp.sppAOU}}")
+AKaerial::ObsMap(area = "{{spp.sppArea}}", species = "{{spp.sppAOU}}", 
+                 mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/")
 
 ```
 

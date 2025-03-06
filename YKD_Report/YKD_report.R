@@ -21,19 +21,23 @@ sppfig <- function(spp = "EMGO", index1 = "itotal", index2 = "ibb"){
     mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
            lower2 = index2 - 1.96*se2)
   df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+  df$collab1 <- ifelse(index1 == "itotal", "Indicated Total Birds", "Total Birds")
+  df$collab2 <- ifelse(index2 == "ibb", "Indicated Breeding Birds", "Breeding Birds")
   gg <- ggplot(data = df2) + 
     geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
                 alpha = 0.5) + 
     geom_line(aes(x=Year, y=mean), lwd = 1) + 
     geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
-                                   col = "Indicated Total")) + 
+                                   col = collab1)) + 
     geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
-                                   col = "Indicated Breeding")) +
+                                   col = collab2)) +
     labs(x = "Year", y = "Population Index") +
     scale_x_continuous(breaks = seq(min(df$Year), max(df$Year), by = 4)) + 
     #scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
     scale_y_continuous(labels = scales::comma) +
-    scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+    scale_colour_manual(values=c("Indicated Total Birds"= "black", 
+                                 "Indicated Breeding Birds" = "darkgray", 
+                                 "Total Birds"="black", "Breeding Birds"="darkgray")) +  
     theme_bw() + 
     theme(legend.position = "top", legend.title=element_blank()) +
     theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
