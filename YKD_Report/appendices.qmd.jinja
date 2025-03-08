@@ -1,22 +1,12 @@
----
-title: "test"
-execute:
-  keep-md: true
-  echo: false
-  warning: false
-  message: false
-format: pdf
-tbl-cap-location: top
----
 
 # APPENDICES {.unnumbered}
 
 ```{r}
-library(AKaerial)
-library(tidyverse)
-library(kableExtra)
+#library(AKaerial)
+#library(tidyverse)
+#library(kableExtra)
 
-load("data/YKD_Report.RData")
+#load("data/YKD_Report.RData")
 
 cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + 
               pairs]) and indicated total birds (black circles; 2 x [singles + pairs] 
@@ -74,7 +64,6 @@ kable({{spp.sppAOU}}, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE,
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 PAGEBREAK
 
 ### {{spp.spptext}} map {.unnumbered}

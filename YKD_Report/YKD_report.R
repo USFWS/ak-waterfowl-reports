@@ -12,33 +12,33 @@ sppfig <- function(spp = "EMGO", index1 = "itotal", index2 = "ibb"){
     df <- AKaerial::YKGHistoric$combined
     }else{
       df <- AKaerial::YKDHistoric$combined
-    } 
+    }
   df <- df |>
     filter(Species == spp) |>
-    select(Year, index = index1, se = paste0(index1,".se"), 
-           index2 = index2, 
-           se2 = paste0(index2,".se")) |> 
-    mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+    select(Year, index = index1, se = paste0(index1,".se"),
+           index2 = index2,
+           se2 = paste0(index2,".se")) |>
+    mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2,
            lower2 = index2 - 1.96*se2)
   df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
   df$collab1 <- ifelse(index1 == "itotal", "Indicated Total Birds", "Total Birds")
   df$collab2 <- ifelse(index2 == "ibb", "Indicated Breeding Birds", "Breeding Birds")
-  gg <- ggplot(data = df2) + 
-    geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
-                alpha = 0.5) + 
-    geom_line(aes(x=Year, y=mean), lwd = 1) + 
-    geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
-                                   col = collab1)) + 
-    geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+  gg <- ggplot(data = df2) +
+    geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray",
+                alpha = 0.5) +
+    geom_line(aes(x=Year, y=mean), lwd = 1) +
+    geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper,
+                                   col = collab1)) +
+    geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2,
                                    col = collab2)) +
     labs(x = "Year", y = "Population Index") +
-    scale_x_continuous(breaks = seq(min(df$Year), max(df$Year), by = 4)) + 
-    #scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+    scale_x_continuous(breaks = seq(min(df$Year), max(df$Year), by = 4)) +
+    #scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels
     scale_y_continuous(labels = scales::comma) +
-    scale_colour_manual(values=c("Indicated Total Birds"= "black", 
-                                 "Indicated Breeding Birds" = "darkgray", 
-                                 "Total Birds"="black", "Breeding Birds"="darkgray")) +  
-    theme_bw() + 
+    scale_colour_manual(values=c("Indicated Total Birds"= "black",
+                                 "Indicated Breeding Birds" = "darkgray",
+                                 "Total Birds"="black", "Breeding Birds"="darkgray")) +
+    theme_bw() +
     theme(legend.position = "top", legend.title=element_blank()) +
     theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
     theme(text=element_text(family="Times")) +
@@ -66,7 +66,9 @@ this.layer = MasterFileList$LAYER[MasterFileList$AREA=="YKD" & MasterFileList$YE
 ykd_cities <- data.frame(
   city = c("Newtok", "Hooper Bay", "Chevak", "Mertarvik", "Kotlik", "Emmonak", "Kipnuk", "Scammon Bay", "Chefornak", "Nightmute"),
   lat = c(60.9444, 61.528980, 61.527673, 60.82504559, 63.0358, 62.7772477, 59.937619, 61.843, 60.159070, 60.4914),
-  lon = c(-164.6417, -166.096196, -165.578702, -164.471214, -163.5597, -164.5319605, -164.043926, -165.582, -164.269437, -164.8261))        
+  lon = c(-164.6417, -166.096196, -165.578702, -164.471214, -163.5597, -164.5319605, -164.043926, -165.582, -164.269437, -164.8261),
+  x= c(1.1,0,1.9,0.45,.7,0.2,-1.75,-1,1.9,-1),
+  y= c(.65,-.7,0,-.5,.65,.8,0,.6,.6,.75))
 
 
 ykd_cities = st_as_sf(ykd_cities, coords = c("lon","lat"))
@@ -100,7 +102,7 @@ fig1 = tm_shape(ykd.strata, bbox = new_bbox) +
   tm_shape(ykd_cities) +
   tm_symbols(size = 0.5, col = "black") +
   tm_graticules(lines=FALSE) +
-  tm_text("city", fontface="bold", size=1.0, ymod=.9, xmod=.5) +
+  tm_text("city", fontface="bold", size=1.0, ymod="y", xmod="x") +
   tm_compass(position = c("LEFT", "TOP"))
 
 tmap_save(fig1, "data/fig1.png")
@@ -118,7 +120,7 @@ EMGO3se = sqrt(zoo::rollmean(EMGO$itotal.se^2, k=3)[length(EMGO3)])
 EMGO3 = EMGO3[length(EMGO3)]
 EMGOh = zoo::rollmean(EMGO$itotal, k = length(EMGO$itotal), na.rm=TRUE)
 EMGOhse = sqrt(zoo::rollmean(EMGO$itotal.se^2, k=length(EMGO$itotal), na.rm=TRUE))
-EMGOentry = data.frame(Species="Emperor goose", 
+EMGOentry = data.frame(Species="Emperor goose",
                        Code="EMGO",
                        Index="ITB",
                        Y3=round(EMGO3,0),
@@ -137,7 +139,7 @@ GWFG3se = sqrt(zoo::rollmean(GWFG$itotal.se^2, k=3)[length(GWFG3)])
 GWFG3 = GWFG3[length(GWFG3)]
 GWFGh = zoo::rollmean(GWFG$itotal, k = length(GWFG$itotal), na.rm=TRUE)
 GWFGhse = sqrt(zoo::rollmean(GWFG$itotal.se^2, k=length(GWFG$itotal), na.rm=TRUE))
-GWFGentry = data.frame(Species="Greater white-fronted goose", 
+GWFGentry = data.frame(Species="Greater white-fronted goose",
                        Code="GWFG",
                        Index="ITB",
                        Y3=round(GWFG3,0),
@@ -157,7 +159,7 @@ BRAN3se = sqrt(zoo::rollmean(BRAN$itotal.se^2, k=3)[length(BRAN3)])
 BRAN3 = BRAN3[length(BRAN3)]
 BRANh = zoo::rollmean(BRAN$itotal, k = length(BRAN$itotal), na.rm=TRUE)
 BRANhse = sqrt(zoo::rollmean(BRAN$itotal.se^2, k=length(BRAN$itotal), na.rm=TRUE))
-BRANentry = data.frame(Species="Brant", 
+BRANentry = data.frame(Species="Brant",
                        Code="BRAN",
                        Index="ITB",
                        Y3=round(BRAN3,0),
@@ -177,7 +179,7 @@ CCGO3se = sqrt(zoo::rollmean(CCGO$itotal.se^2, k=3)[length(CCGO3)])
 CCGO3 = CCGO3[length(CCGO3)]
 CCGOh = zoo::rollmean(CCGO$itotal, k = length(CCGO$itotal), na.rm=TRUE)
 CCGOhse = sqrt(zoo::rollmean(CCGO$itotal.se^2, k=length(CCGO$itotal), na.rm=TRUE))
-CCGOentry = data.frame(Species="Cackling Canada goose", 
+CCGOentry = data.frame(Species="Cackling Canada goose",
                        Code="CCGO",
                        Index="ITB",
                        Y3=round(CCGO3,0),
@@ -197,7 +199,7 @@ TAVS3se = sqrt(zoo::rollmean(TAVS$itotal.se^2, k=3)[length(TAVS3)])
 TAVS3 = TAVS3[length(TAVS3)]
 TAVSh = zoo::rollmean(TAVS$itotal, k = length(TAVS$itotal), na.rm=TRUE)
 TAVShse = sqrt(zoo::rollmean(TAVS$itotal.se^2, k=length(TAVS$itotal), na.rm=TRUE))
-TAVSentry = data.frame(Species="Taverner's Canada goose", 
+TAVSentry = data.frame(Species="Taverner's Canada goose",
                        Code="TAVS",
                        Index="ITB",
                        Y3=round(TAVS3,0),
@@ -217,7 +219,7 @@ SWAN3se = sqrt(zoo::rollmean(SWAN$total.se^2, k=3)[length(SWAN3)])
 SWAN3 = SWAN3[length(SWAN3)]
 SWANh = zoo::rollmean(SWAN$total, k = length(SWAN$total), na.rm=TRUE)
 SWANhse = sqrt(zoo::rollmean(SWAN$total.se^2, k=length(SWAN$total), na.rm=TRUE))
-SWANentry = data.frame(Species="Tundra swan", 
+SWANentry = data.frame(Species="Tundra swan",
                        Code="SWAN",
                        Index="TB",
                        Y3=round(SWAN3,0),
@@ -237,7 +239,7 @@ NSHO3se = sqrt(zoo::rollmean(NSHO$itotal.se^2, k=3)[length(NSHO3)])
 NSHO3 = NSHO3[length(NSHO3)]
 NSHOh = zoo::rollmean(NSHO$itotal, k = length(NSHO$itotal), na.rm=TRUE)
 NSHOhse = sqrt(zoo::rollmean(NSHO$itotal.se^2, k=length(NSHO$itotal), na.rm=TRUE))
-NSHOentry = data.frame(Species="Northern shoveler", 
+NSHOentry = data.frame(Species="Northern shoveler",
                        Code="NSHO",
                        Index="ITB",
                        Y3=round(NSHO3,0),
@@ -257,7 +259,7 @@ AMWI3se = sqrt(zoo::rollmean(AMWI$itotal.se^2, k=3)[length(AMWI3)])
 AMWI3 = AMWI3[length(AMWI3)]
 AMWIh = zoo::rollmean(AMWI$itotal, k = length(AMWI$itotal), na.rm=TRUE)
 AMWIhse = sqrt(zoo::rollmean(AMWI$itotal.se^2, k=length(AMWI$itotal), na.rm=TRUE))
-AMWIentry = data.frame(Species="American wigeon", 
+AMWIentry = data.frame(Species="American wigeon",
                        Code="AMWI",
                        Index="ITB",
                        Y3=round(AMWI3,0),
@@ -277,7 +279,7 @@ MALL3se = sqrt(zoo::rollmean(MALL$itotal.se^2, k=3)[length(MALL3)])
 MALL3 = MALL3[length(MALL3)]
 MALLh = zoo::rollmean(MALL$itotal, k = length(MALL$itotal), na.rm=TRUE)
 MALLhse = sqrt(zoo::rollmean(MALL$itotal.se^2, k=length(MALL$itotal), na.rm=TRUE))
-MALLentry = data.frame(Species="Mallard", 
+MALLentry = data.frame(Species="Mallard",
                        Code="MALL",
                        Index="ITB",
                        Y3=round(MALL3,0),
@@ -296,7 +298,7 @@ NOPI3se = sqrt(zoo::rollmean(NOPI$itotal.se^2, k=3)[length(NOPI3)])
 NOPI3 = NOPI3[length(NOPI3)]
 NOPIh = zoo::rollmean(NOPI$itotal, k = length(NOPI$itotal), na.rm=TRUE)
 NOPIhse = sqrt(zoo::rollmean(NOPI$itotal.se^2, k=length(NOPI$itotal), na.rm=TRUE))
-NOPIentry = data.frame(Species="Northern pintail", 
+NOPIentry = data.frame(Species="Northern pintail",
                        Code="NOPI",
                        Index="ITB",
                        Y3=round(NOPI3,0),
@@ -316,7 +318,7 @@ GWTE3se = sqrt(zoo::rollmean(GWTE$itotal.se^2, k=3)[length(GWTE3)])
 GWTE3 = GWTE3[length(GWTE3)]
 GWTEh = zoo::rollmean(GWTE$itotal, k = length(GWTE$itotal), na.rm=TRUE)
 GWTEhse = sqrt(zoo::rollmean(GWTE$itotal.se^2, k=length(GWTE$itotal), na.rm=TRUE))
-GWTEentry = data.frame(Species="American green-winged teal", 
+GWTEentry = data.frame(Species="American green-winged teal",
                        Code="GWTE",
                        Index="ITB",
                        Y3=round(GWTE3,0),
@@ -336,7 +338,7 @@ CANV3se = sqrt(zoo::rollmean(CANV$itotal.se^2, k=3)[length(CANV3)])
 CANV3 = CANV3[length(CANV3)]
 CANVh = zoo::rollmean(CANV$itotal, k = length(CANV$itotal), na.rm=TRUE)
 CANVhse = sqrt(zoo::rollmean(CANV$itotal.se^2, k=length(CANV$itotal), na.rm=TRUE))
-CANVentry = data.frame(Species="Surf scoter", 
+CANVentry = data.frame(Species="Surf scoter",
                        Code="CANV",
                        Index="ITB",
                        Y3=round(CANV3,0),
@@ -356,7 +358,7 @@ UNSC3se = sqrt(zoo::rollmean(UNSC$total.se^2, k=3)[length(UNSC3)])
 UNSC3 = UNSC3[length(UNSC3)]
 UNSCh = zoo::rollmean(UNSC$total, k = length(UNSC$total), na.rm=TRUE)
 UNSChse = sqrt(zoo::rollmean(UNSC$total.se^2, k=length(UNSC$total), na.rm=TRUE))
-UNSCentry = data.frame(Species="Scaup species", 
+UNSCentry = data.frame(Species="Scaup species",
                        Code="UNSC",
                        Index="TB",
                        Y3=round(UNSC3,0),
@@ -376,7 +378,7 @@ SPEI3se = sqrt(zoo::rollmean(SPEI$itotal.se^2, k=3)[length(SPEI3)])
 SPEI3 = SPEI3[length(SPEI3)]
 SPEIh = zoo::rollmean(SPEI$itotal, k = length(SPEI$itotal), na.rm=TRUE)
 SPEIhse = sqrt(zoo::rollmean(SPEI$itotal.se^2, k=length(SPEI$itotal), na.rm=TRUE))
-SPEIentry = data.frame(Species="Spectacled eider", 
+SPEIentry = data.frame(Species="Spectacled eider",
                        Code="SPEI",
                        Index="ITB",
                        Y3=round(SPEI3,0),
@@ -396,7 +398,7 @@ COEI3se = sqrt(zoo::rollmean(COEI$itotal.se^2, k=3)[length(COEI3)])
 COEI3 = COEI3[length(COEI3)]
 COEIh = zoo::rollmean(COEI$itotal, k = length(COEI$itotal), na.rm=TRUE)
 COEIhse = sqrt(zoo::rollmean(COEI$itotal.se^2, k=length(COEI$itotal), na.rm=TRUE))
-COEIentry = data.frame(Species="Common eider", 
+COEIentry = data.frame(Species="Common eider",
                        Code="COEI",
                        Index="ITB",
                        Y3=round(COEI3,0),
@@ -416,7 +418,7 @@ BLSC3se = sqrt(zoo::rollmean(BLSC$itotal.se^2, k=3)[length(BLSC3)])
 BLSC3 = BLSC3[length(BLSC3)]
 BLSCh = zoo::rollmean(BLSC$itotal, k = length(BLSC$itotal), na.rm=TRUE)
 BLSChse = sqrt(zoo::rollmean(BLSC$itotal.se^2, k=length(BLSC$itotal), na.rm=TRUE))
-BLSCentry = data.frame(Species="Black scoter", 
+BLSCentry = data.frame(Species="Black scoter",
                        Code="BLSC",
                        Index="ITB",
                        Y3=round(BLSC3,0),
@@ -436,7 +438,7 @@ LTDU3se = sqrt(zoo::rollmean(LTDU$itotal.se^2, k=3)[length(LTDU3)])
 LTDU3 = LTDU3[length(LTDU3)]
 LTDUh = zoo::rollmean(LTDU$itotal, k = length(LTDU$itotal), na.rm=TRUE)
 LTDUhse = sqrt(zoo::rollmean(LTDU$itotal.se^2, k=length(LTDU$itotal), na.rm=TRUE))
-LTDUentry = data.frame(Species="Long-tailed duck", 
+LTDUentry = data.frame(Species="Long-tailed duck",
                        Code="LTDU",
                        Index="ITB",
                        Y3=round(LTDU3,0),
@@ -456,7 +458,7 @@ RBME3se = sqrt(zoo::rollmean(RBME$itotal.se^2, k=3)[length(RBME3)])
 RBME3 = RBME3[length(RBME3)]
 RBMEh = zoo::rollmean(RBME$itotal, k = length(RBME$itotal), na.rm=TRUE)
 RBMEhse = sqrt(zoo::rollmean(RBME$itotal.se^2, k=length(RBME$itotal), na.rm=TRUE))
-RBMEentry = data.frame(Species="Red-breasted merganser", 
+RBMEentry = data.frame(Species="Red-breasted merganser",
                        Code="RBME",
                        Index="ITB",
                        Y3=round(RBME3,0),
@@ -475,7 +477,7 @@ SACR3se = sqrt(zoo::rollmean(SACR$itotal.se^2, k=3)[length(SACR3)])
 SACR3 = SACR3[length(SACR3)]
 SACRh = zoo::rollmean(SACR$itotal, k = length(SACR$itotal), na.rm=TRUE)
 SACRhse = sqrt(zoo::rollmean(SACR$itotal.se^2, k=length(SACR$itotal), na.rm=TRUE))
-SACRentry = data.frame(Species="Sandhill crane", 
+SACRentry = data.frame(Species="Sandhill crane",
                        Code="SACR",
                        Index="ITB",
                        Y3=round(SACR3,0),
@@ -494,7 +496,7 @@ JAEG3se = sqrt(zoo::rollmean(JAEG$total.se^2, k=3)[length(JAEG3)])
 JAEG3 = JAEG3[length(JAEG3)]
 JAEGh = zoo::rollmean(JAEG$total, k = length(JAEG$total), na.rm=TRUE)
 JAEGhse = sqrt(zoo::rollmean(JAEG$total.se^2, k=length(JAEG$total), na.rm=TRUE))
-JAEGentry = data.frame(Species="Jaeger species", 
+JAEGentry = data.frame(Species="Jaeger species",
                        Code="JAEG",
                        Index="TB",
                        Y3=round(JAEG3,0),
@@ -511,7 +513,7 @@ RTLO <- YKDHistoric$combined %>%
 
 #3-year (k=3) average on total index (RTLO$total)
 RTLO3 = zoo::rollmean(RTLO$total, k = 3)
-#3-year average variance turned into SE 
+#3-year average variance turned into SE
 RTLO3se = sqrt(zoo::rollmean(RTLO$total.se^2, k=3)[length(RTLO3)])
 
 #Now just grab the last one
@@ -521,7 +523,7 @@ RTLO3 = RTLO3[length(RTLO3)]
 RTLOh = zoo::rollmean(RTLO$total, k = length(RTLO$total), na.rm=TRUE)
 RTLOhse = sqrt(zoo::rollmean(RTLO$total.se^2, k=length(RTLO$total), na.rm=TRUE))
 
-RTLOentry = data.frame(Species="Red-throated loon", 
+RTLOentry = data.frame(Species="Red-throated loon",
                        Code="RTLO",
                        Index="TB",
                        Y3=round(RTLO3,0),
@@ -543,7 +545,7 @@ PALO3 = PALO3[length(PALO3)]
 PALOh = zoo::rollmean(PALO$total, k = length(PALO$total), na.rm=TRUE)
 PALOhse = sqrt(zoo::rollmean(PALO$total.se^2, k=length(PALO$total), na.rm=TRUE))
 
-PALOentry = data.frame(Species="Pacific loon", 
+PALOentry = data.frame(Species="Pacific loon",
                        Code="PALO",
                        Index="TB",
                        Y3=round(PALO3,0),
@@ -571,7 +573,7 @@ for( i in spplist$Code){
 }
 #Code below creates 95% confidence intervals in parentheses to be displayed right after long-term average trend point estimate in Table 2.
 sppdf$confInt <- paste0(format(round(sppdf$mean, 2), nsmall = 2), " (",
-                        format(round(sppdf$lower, 2), nsmall = 2), " - ", 
+                        format(round(sppdf$lower, 2), nsmall = 2), " - ",
                         format(round(sppdf$upper, 2), nsmall = 2), ")")
 sppdf$P <- format(round(sppdf$P, 2), nsmall = 2)
 sppdf <- select(sppdf, Species, Trend=confInt, P)
@@ -593,7 +595,7 @@ for( i in spplist$Code){
 }
 #Code below creates 95% confidence intervals in parentheses to be displayed right after long-term average trend point estimate in Table 2.
 sppdf$confInt <- paste0(format(round(sppdf$mean, 2), nsmall = 2), " (",
-                        format(round(sppdf$lower, 2), nsmall = 2), " - ", 
+                        format(round(sppdf$lower, 2), nsmall = 2), " - ",
                         format(round(sppdf$upper, 2), nsmall = 2), ")")
 sppdf$P <- format(round(sppdf$P, 2), nsmall = 2)
 sppdf <- select(sppdf, Species, Trend=confInt, P)
@@ -616,8 +618,8 @@ table3 <- table2 |> select(Species, Index) |>
 spplist[,1] <- str_remove(spplist[,1], "/") |>
   str_remove(" ") |> str_remove("'")
 for(i in 1:dim(spplist)[1]){
-  write.csv(get(spplist[i,2]), file=paste0("results/Table_", i+2, "_", 
-                                           spplist[i,1], ".csv"), 
+  write.csv(get(spplist[i,2]), file=paste0("results/Table_", i+2, "_",
+                                           spplist[i,1], ".csv"),
             quote = FALSE, row.names=FALSE)
 }
 save.image(file="data/YKD_Report.RData")

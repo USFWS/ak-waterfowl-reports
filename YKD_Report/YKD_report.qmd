@@ -1,13 +1,48 @@
 ---
 title: "POPULATION INDICES, TRENDS, AND DISTRIBUTION OF BREEDING WATERBIRDs ON THE YUKON-KUSKOKWIM DELTA, ALASKA, 1985-2024"
 subtitle: ""
-author:
-  name: H.M. WILSON, M.A. SWAIM, D.E. SAFINE, C.J. FROST, T.K. ZELLER, AND E.E. OSNAS 
-  email: heather_wilson, michael_swaim, david_safine, charles_frost, tamara_zeller, erik_osnas@fws.gov
-  affiliation:
-      name: U.S Fish and Wildlife Service
-      department: Migratory Bird Management
-      city: "Anchorage, AK 99503"
+# author:
+#   name: H.M. WILSON, M.A. SWAIM, D.E. SAFINE, C.J. FROST, T.K. ZELLER, AND E.E. OSNAS 
+#   email: heather_wilson, michael_swaim, david_safine, charles_frost, tamara_zeller, erik_osnas@fws.gov
+#   affiliation:
+#       name: U.S Fish and Wildlife Service
+#       department: Migratory Bird Management
+#       city: "Anchorage, AK 99503"
+affiliation:
+  - id: fws
+    name: U.S Fish and Wildlife Service
+    department: Migratory Bird Management
+    city: "Anchorage, AK 99503"
+authors:
+  - name: HEATHER M. WILSON
+    email: heather_wilson@fws.gov
+    affiliation:
+      - ref: fws
+  - name: M.A. SWAIM
+    email: michael_swaim@fws.gov
+    affiliation:
+      - ref: fws
+  - name: DAVID E. SAFINE
+    email: david_safine@fws.gov
+    affiliation:
+      - ref: fws
+  - name: CHARLES J. FROST
+    email: charles_frost@fws.gov
+    affiliation:
+      - ref: fws
+  - name: T.K. ZELLER
+    email: tamara_zeller@fws.gov
+    affiliation:
+      - ref: fws
+  - name: ERIK E. OSNAS
+    email: erik_osnas@fws.gov
+    affiliation:
+      - ref: fws
+affiliations:
+  - id: fws
+    name: U.S Fish and Wildlife Service
+    department: Migratory Bird Management
+    city: "Anchorage, AK 99503"
 date: ""
 bibliography: "bibliography.bib"
 bibliographystyle: apalike
@@ -130,6 +165,7 @@ For the remainder of the monomorphic species (e.g., swans, snow geese, grebes, l
 
 \end{center}
 ```
+
 ## The Ratio Estimator {.unnumbered}
 UPDATE FOR YKD--post stratification
 Population totals for each index were calculated using a ratio estimator [@Cochran1977] with transects as the sample units. The classical ratio estimator [@Cochran1977] is a straightforward approach that can be used to estimate the population total of observed birds in a survey area given a systematic or random sampling design with large sample size (i.e., number of transects). The ratio estimator is especially good when the response (i.e., number of birds on a transect) is linearly related to the length or area of the transect. We employed a stratified strip-transect design for the majority of our surveys of breeding waterfowl. Study areas are separated into spatial strata based on physiographic features and historical bird densities. Strata were sampled by low-level flights along a series of strip transects, with one or two observers searching 200 meters out from the transect center. Observations and sampled areas are then summed across transects within each stratum to produce strata-specific density estimates. These densities are then multiplied by associated strata areas to produce stratum-specific population indices that are summed to produce the overall population indices, $$E[\hat Y] = \displaystyle\sum_{i}^{S} \frac{\bar y_i}{\bar a_i} A_i = \displaystyle\sum_{i}^{S} \hat D_i A_i$$ where $y_i$ are observations and $a_i$ are sampled areas in strata $i$, and $$A_i = \displaystyle\sum_{j}^{M_i} a_{ij}$$ with estimated variance from Williams et al. (2002), where standard error (SE) is calculated based on inter-transect variance,  $$Var(\hat Y) = \displaystyle\sum_{i}^{S} M_i^2 \frac{(1-m_i / M_i)}{m_i} ( s^2_{iy} + \hat {D^2}_i s^2_{ia} - 2 \hat {D_i} s_{iay} ),$$ where $m_i$ and $M_i$ are the number of sampled and total transects in strata $i$, respectively, and there are $S$ total strata;  $$S^2_{ix} = \displaystyle\sum_{j}^{m_i} (x_{ij} - \bar x )/(m_i -1), $$ and  $$S^2_{ixy} = \displaystyle\sum_{j}^{m_i} (x_{ij} - \bar x )(y_{ij} - \bar y )/(m_i -1).$$ The equations above are observer-specific (i.e., calculated for each observer independently). However, the estimates presented in this report are the arithmetic mean of observer-specific estimates (n=2, in most years). Design transects (@fig-Fig1) were used to calculate survey effort, but flight lines sometimes deviated slightly from the these due to weather avoidance or other factors. Data manuplulation was completed using the R [@R] package `AKaerial` [@r-akaerial].
@@ -160,20 +196,38 @@ Dates of data collection for 2019, and 2022-24 were: 23 May - 5 June, 28 May - 4
 
 
 ```{r table2, include=TRUE, echo=FALSE}
-#| label: tbl-results
+#| label: tbl-results2
 
 #TABLE 2 - Creates a summary table with a row of estimates for each species
 
 cap <- paste0 ("The most recent 3-year (2022-2024) and long-term (",min(YKDHistoric$combined$Year),"-",max(YKDHistoric$combined$Year),") average population indices and associated standard errors (SE), as well as most recent 10-year and long-term annual growth rates (long-term trend), associated 95% credible intervals (CI), and posterior probability that each trend is decreasing (Pr[Trend < 1]) for bird species on the Yukon-Kuskokwim Delta Aerial Breeding Population Survey in Alaska.  Index formulas used are species-specific, with indicated total birds (ITB) used for dimorphic species, dark geese, and sandhill cranes, and total birds (TB) used for the remaining monomorphic species, other than dark geese, sandhill cranes, and scaup. See the Methods section for detailed index definitions and trend calculations. Estimates are not corrected for incomplete detection, but trends do account for observer effects.")
 
-kable(table2, digits = 0, booktabs = TRUE, longtable=TRUE, format.args = list(big.mark = ","), caption=cap, align = "llrrrrcc", col.names = c("Species", "Index", "Average", "SE", "Average", "SE", "Trend (CI)", "Probability"), linesep = "") %>%
+kable(table2, digits = 0, booktabs = TRUE, longtable=TRUE, 
+      format.args = list(big.mark = ","), caption=cap, align = "llrrrr", 
+      col.names = c("Species", "Index", "Average", "SE", "Average", "SE"), 
+      linesep = "") %>%
   kable_styling(font_size=10, position="center") %>%
-  add_header_above(bold = TRUE, c(" "=1, " "=1, "3-Year" = 1, " "=1, "Long-term" = 1, 
-                                  " "=1,"Long-term"=1, "Trend < 1"=1)) %>%
+  add_header_above(bold = TRUE, c(" "=1, " "=1, "3-Year" = 1, " "=1, 
+                                  "Long-term" = 1, " "=1)) %>%
   row_spec(row = 0, bold = TRUE)
 
 ```
 
+```{r table3, include=TRUE}
+#| label: tbl-results3
+
+cap <- paste0 ("The most recent 3-year (2022-2024) and long-term (",min(YKDHistoric$combined$Year),"-",max(YKDHistoric$combined$Year),") average population indices and associated standard errors (SE), as well as most recent 10-year and long-term annual growth rates (long-term trend), associated 95% credible intervals (CI), and posterior probability that each trend is decreasing (Pr[Trend < 1]) for bird species on the Yukon-Kuskokwim Delta Aerial Breeding Population Survey in Alaska.  Index formulas used are species-specific, with indicated total birds (ITB) used for dimorphic species, dark geese, and sandhill cranes, and total birds (TB) used for the remaining monomorphic species, other than dark geese, sandhill cranes, and scaup. See the Methods section for detailed index definitions and trend calculations. Estimates are not corrected for incomplete detection, but trends do account for observer effects.")
+
+kable(table3, digits = 0, booktabs = TRUE, longtable=TRUE, 
+      format.args = list(big.mark = ","), caption=cap, align = "llcccc", 
+      col.names = c("Species", "Index", "Trend (CI)", "Probability", "Trend (CI)",
+                    "Probability"), linesep = "") %>%
+  kable_styling(font_size=10, position="center") %>%
+  add_header_above(bold = TRUE, c(" "=1, " "=1, "10-year"=1, "Trend < 1"=1,
+                                  "Long-term"=1, "Trend < 1"=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
 
 ## Population Indices {.unnumbered}
 
@@ -204,7 +258,7 @@ Species-specific population indices, trends, and spatial distributions of observ
 
 ## *Suggested Citation* {.unnumbered}
 
-Wilson, H.M., Swaim, M. A., Safine, D.E., Frost, C.J., Osnas E.E., and T.K. Zeller. 2025. Population indices, trends, and distribution of breeding waterbirds on the Yukon-Kuskokwim Delta, Alaska, 1985-2024. Anchorage, Alaska: U.S. Fish and Wildlife Service, Migratory Bird Management.**REPLACE ACP DOI WITH YKD <https://doi.org/10.7944/dqf4-2z27>
+Wilson, H.M., Swaim, M. A., Safine, D.E., Frost, C.J., Zeller, T.K., and E.E. Osnas. 2025. Population indices, trends, and distribution of breeding waterbirds on the Yukon-Kuskokwim Delta, Alaska, 1985-2024. Anchorage, Alaska: U.S. Fish and Wildlife Service, Migratory Bird Management.**REPLACE ACP DOI WITH YKD <https://doi.org/10.7944/dqf4-2z27>
 
 # ACKNOWLEDGEMENTS {.unnumbered}
 
@@ -225,3 +279,4 @@ This project would not have been possible without the support of many individual
 
 {{< pagebreak >}}
 
+{{< include _appendices.qmd >}}

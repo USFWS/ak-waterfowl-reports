@@ -1,22 +1,12 @@
----
-title: "test"
-execute:
-  keep-md: true
-  echo: false
-  warning: false
-  message: false
-format: pdf
-tbl-cap-location: top
----
 
 # APPENDICES {.unnumbered}
 
 ```{r}
-library(AKaerial)
-library(tidyverse)
-library(kableExtra)
+#library(AKaerial)
+#library(tidyverse)
+#library(kableExtra)
 
-load("data/YKD_Report.RData")
+#load("data/YKD_Report.RData")
 
 cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + 
               pairs]) and indicated total birds (black circles; 2 x [singles + pairs] 
@@ -73,7 +63,6 @@ kable(EMGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Emperor goose map {.unnumbered}
@@ -115,7 +104,6 @@ kable(GWFG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Greater white-fronted goose map {.unnumbered}
@@ -157,7 +145,6 @@ kable(BRAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Brant map {.unnumbered}
@@ -199,7 +186,6 @@ kable(CCGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Cackling Canada goose map {.unnumbered}
@@ -241,7 +227,6 @@ kable(TAVS, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Taverner's Canada goose map {.unnumbered}
@@ -283,7 +268,6 @@ kable(SWAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Tundra swan map {.unnumbered}
@@ -325,7 +309,6 @@ kable(NSHO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Northern shoveler map {.unnumbered}
@@ -367,7 +350,6 @@ kable(AMWI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### American wigeon map {.unnumbered}
@@ -409,7 +391,6 @@ kable(MALL, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Mallard map {.unnumbered}
@@ -451,7 +432,6 @@ kable(NOPI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Northern pintail map {.unnumbered}
@@ -493,7 +473,6 @@ kable(GWTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### American green-winged teal map {.unnumbered}
@@ -535,7 +514,6 @@ kable(CANV, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Surf scoter map {.unnumbered}
@@ -577,7 +555,6 @@ kable(UNSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Scaup species map {.unnumbered}
@@ -619,7 +596,6 @@ kable(SPEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Spectacled eider map {.unnumbered}
@@ -661,7 +637,6 @@ kable(COEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Common eider map {.unnumbered}
@@ -703,7 +678,6 @@ kable(BLSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Black scoter map {.unnumbered}
@@ -745,7 +719,6 @@ kable(LTDU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Long-tailed duck map {.unnumbered}
@@ -787,7 +760,6 @@ kable(RBME, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Red-breasted merganser map {.unnumbered}
@@ -829,7 +801,6 @@ kable(SACR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Sandhill crane map {.unnumbered}
@@ -871,7 +842,6 @@ kable(JAEG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Jaeger species map {.unnumbered}
@@ -913,7 +883,6 @@ kable(RTLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Red-throated loon map {.unnumbered}
@@ -955,7 +924,6 @@ kable(PALO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
   row_spec(row = 0, bold = TRUE)
 
 ```
-
 {{< pagebreak >}}
 
 ### Pacific loon map {.unnumbered}
