@@ -14,28 +14,28 @@ cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles 
               circles), as well as the long-term trend in indicated total birds (black 
               line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible 
               intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial 
-              Breeding Population Survey, Alaska, 2007–",max(YKGHistoric$combined$Year),
+              Breeding Population Survey, Alaska, 1985–",max(YKGHistoric$combined$Year),
               ". Years with counts of zero were not included in trend estimates 
               (see Methods for details).")
 
 cap3 <- paste0(" indices of breeding birds (singles + [2 x pairs]) and total birds 
                (singles + [2 x pairs] + birds in flocks) with standard errors (SE) 
                from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 
-               2007-",max(YKGHistoric$combined$Year),".")
+               1985-",max(YKGHistoric$combined$Year),".")
 
 cap4 = paste0(" along transects within four physiographic-based strata (high, medium, 
               low, and very high) from the Yukon-Kuskokwim Delta Aerial Breeding 
               Population Survey, Alaska, during the most recent survey year (",
               max(YKGHistoric$combined$Year),")." )
 
-alttext = "A graph of the average index estimate between observers (vertical bars 
-from circles), the posterior mean population growth trajectory 1985-2024 (black line), 
-and the approximate 95% confidence interval for the trajectory (grey band around line)."
+alttext = paste0("A graph of the average index estimate between observers (vertical bars 
+from circles), the posterior mean population growth trajectory 1985-", 
+max(YKGHistoric$combined$Year)," (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).")
 
-altmap = "A map of species-specific observation locations (black dots) along 
+altmap = paste0("A map of species-specific observation locations (black dots) along 
 transects within four physiographic-based strata (high, medium, low, and very high) 
-of the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the 
-most recent survey year (2024)." 
+of the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, during the 
+most recent survey year (", max(YKGHistoric$combined$Year),")." )
 ```
 
 ## Emperor goose {.unnumbered}
@@ -69,6 +69,7 @@ kable(EMGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-EMGOmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Emperor goose", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -110,6 +111,7 @@ kable(GWFG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-GWFGmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Greater white-fronted goose", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -151,6 +153,7 @@ kable(BRAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-BRANmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Brant", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -192,6 +195,7 @@ kable(CCGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-CCGOmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Cackling Canada goose", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -233,6 +237,7 @@ kable(TAVS, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-TAVSmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Taverner's Canada goose", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -274,51 +279,11 @@ kable(SWAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-SWANmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Tundra swan", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area = "YKG", species = "SWAN", 
-                 mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/")
-
-```
-
-{{< pagebreak >}}
-
-## Northern shoveler {.unnumbered}
-
-```{r}
-#| label: fig-NSHO
-#| fig-cap: !expr paste( "Northern shoveler", cap2)
-#| fig-alt: !expr alttext
-
-sppfig(spp = "NSHO", index = "itotal", index2 = "ibb" )
-```
-
-{{< pagebreak >}}
-
-### Northern shoveler data table {.unnumbered}
-
-```{r}
-#| include: true
-#| label: tbl-NSHO
-
-kable(NSHO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Northern shoveler", cap3), align = "lrrrr", 
-  col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
-  kable_styling(font_size=10, position="center")%>%
-  row_spec(row = 0, bold = TRUE)
-
-```
-{{< pagebreak >}}
-
-### Northern shoveler map {.unnumbered}
-
-```{r}
-#| label: fig-NSHOmap
-#| fig-cap: !expr paste0( "Northern shoveler", cap4)
-#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
-
-AKaerial::ObsMap(area = "YKD", species = "NSHO", 
                  mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/")
 
 ```
@@ -356,6 +321,7 @@ kable(AMWI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-AMWImap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "American wigeon", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -397,6 +363,7 @@ kable(MALL, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-MALLmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Mallard", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -438,6 +405,7 @@ kable(NOPI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-NOPImap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Northern pintail", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -448,11 +416,11 @@ AKaerial::ObsMap(area = "YKD", species = "NOPI",
 
 {{< pagebreak >}}
 
-## American green-winged teal {.unnumbered}
+## Green-winged teal {.unnumbered}
 
 ```{r}
 #| label: fig-GWTE
-#| fig-cap: !expr paste( "American green-winged teal", cap2)
+#| fig-cap: !expr paste( "Green-winged teal", cap2)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "GWTE", index = "itotal", index2 = "ibb" )
@@ -460,14 +428,14 @@ sppfig(spp = "GWTE", index = "itotal", index2 = "ibb" )
 
 {{< pagebreak >}}
 
-### American green-winged teal data table {.unnumbered}
+### Green-winged teal data table {.unnumbered}
 
 ```{r}
 #| include: true
 #| label: tbl-GWTE
 
 kable(GWTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "American green-winged teal", cap3), align = "lrrrr", 
+  caption = paste0( "Green-winged teal", cap3), align = "lrrrr", 
   col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center")%>%
   row_spec(row = 0, bold = TRUE)
@@ -475,55 +443,15 @@ kable(GWTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 ```
 {{< pagebreak >}}
 
-### American green-winged teal map {.unnumbered}
+### Green-winged teal map {.unnumbered}
 
 ```{r}
 #| label: fig-GWTEmap
-#| fig-cap: !expr paste0( "American green-winged teal", cap4)
+#| fig.height: 5.5
+#| fig-cap: !expr paste0( "Green-winged teal", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
 AKaerial::ObsMap(area = "YKD", species = "GWTE", 
-                 mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/")
-
-```
-
-{{< pagebreak >}}
-
-## Surf scoter {.unnumbered}
-
-```{r}
-#| label: fig-CANV
-#| fig-cap: !expr paste( "Surf scoter", cap2)
-#| fig-alt: !expr alttext
-
-sppfig(spp = "CANV", index = "itotal", index2 = "ibb" )
-```
-
-{{< pagebreak >}}
-
-### Surf scoter data table {.unnumbered}
-
-```{r}
-#| include: true
-#| label: tbl-CANV
-
-kable(CANV, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Surf scoter", cap3), align = "lrrrr", 
-  col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
-  kable_styling(font_size=10, position="center")%>%
-  row_spec(row = 0, bold = TRUE)
-
-```
-{{< pagebreak >}}
-
-### Surf scoter map {.unnumbered}
-
-```{r}
-#| label: fig-CANVmap
-#| fig-cap: !expr paste0( "Surf scoter", cap4)
-#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
-
-AKaerial::ObsMap(area = "YKD", species = "CANV", 
                  mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/")
 
 ```
@@ -561,6 +489,7 @@ kable(UNSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-UNSCmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Scaup species", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -602,6 +531,7 @@ kable(SPEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-SPEImap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Spectacled eider", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -643,6 +573,7 @@ kable(COEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-COEImap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Common eider", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -684,6 +615,7 @@ kable(BLSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-BLSCmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Black scoter", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -725,6 +657,7 @@ kable(LTDU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-LTDUmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Long-tailed duck", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -766,6 +699,7 @@ kable(RBME, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-RBMEmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Red-breasted merganser", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -807,6 +741,7 @@ kable(SACR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-SACRmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Sandhill crane", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -848,6 +783,7 @@ kable(JAEG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-JAEGmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Jaeger species", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -889,6 +825,7 @@ kable(RTLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-RTLOmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Red-throated loon", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
@@ -930,6 +867,7 @@ kable(PALO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.ar
 
 ```{r}
 #| label: fig-PALOmap
+#| fig.height: 5.5
 #| fig-cap: !expr paste0( "Pacific loon", cap4)
 #| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 

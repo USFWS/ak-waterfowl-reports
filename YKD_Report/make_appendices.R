@@ -16,6 +16,14 @@ sppdf <- data.frame(sppAOU = sppAOU,
     figlab = paste0("fig-", sppAOU), 
     tbllab = paste0("tbl-", sppAOU),
     maplab = paste0("fig-", sppAOU, "map"))
+#put in preferred order
+sppdf <- sppdf[which(sppdf$sppAOU %in% c("EMGO", "GWFG", "BRAN", "CCGO", "TAVS", 
+                                       "SWAN", "NOSH", "AMWI", "MALL", "NOPI", 
+                                       "GWTE", "UNSC", "SPEI", "COEI", "SUSC", 
+                                       "BLSC", "LTDU", "RBME", "SACR", "JAEG", 
+                                       "RTLO", "PALO")),]
+#replace name of green-winged teal
+sppdf$spptext[sppdf$sppAOU=="GWTE"] <- "Green-winged teal"
 
 # Parse the jinja template
 template <- parse_template(
