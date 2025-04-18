@@ -26,7 +26,7 @@ contributes:
         \usepackage{orcidlink}
         \usepackage{amsmath}
         \usepackage[T1]{fontenc}
-      template-partials: ["partials/_authors.tex", "partials/title.tex", "partials/before-body.tex"]
+      template-partials: ["partials/_authors.tex", "partials/title.tex", "partials/before-body.tex", "partials/_affiliations.tex"]
       mathfont: "Latin Modern Math"
       mainfont: "Latin Modern Roman"
       format-resources:
