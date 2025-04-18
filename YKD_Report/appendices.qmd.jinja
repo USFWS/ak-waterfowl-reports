@@ -11,8 +11,7 @@
 cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + 
               pairs]) and indicated total birds (black circles; 2 x [singles + pairs] 
               + birds in flocks) with 95% confidence intervals (vertical bars from 
-              circles), as well as the long-term trend in indicated total birds (black 
-              line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible 
+              circles), as well as the long-term trajectory for indicated total birds                   (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95%                  credible 
               intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial 
               Breeding Population Survey, Alaska, 1985–",max(YKGHistoric$combined$Year),
               ". Years with counts of zero were not included in trend estimates 
@@ -58,9 +57,9 @@ PAGEBREAK
 #| label: {{spp.tbllab}}
 
 kable({{spp.sppAOU}}, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "{{spp.spptext}}", cap3), align = "lrrrr", 
-  col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
-  kable_styling(font_size=10, position="center")%>%
+  caption = paste0( "{{spp.spptext}}", cap3), align = "lcccc", 
+  col.names = c("Year", "{{spp.name11}}", "SE", "{{spp.name22}}", "SE")) %>%
+  kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
 ```
@@ -72,11 +71,11 @@ PAGEBREAK
 #| label: {{spp.maplab}}
 #| fig.height: 5.5
 #| fig-cap: !expr paste0( "{{spp.spptext}}", cap4)
-#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year (2024). 
+#| fig-alt: A map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and very high) of the Yukon-Kuskokwim Delta Breeding Population Survey, Alaska, during the most recent survey year (2024). 
 
-AKaerial::ObsMap(area = "{{spp.sppArea}}", species = "{{spp.sppAOU}}", 
-                 mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/")
-
+ObsMap2(area = "{{spp.sppArea}}", species = "{{spp.sppAOU}}", 
+                 mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/")  + 
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
 ```
 
 PAGEBREAK

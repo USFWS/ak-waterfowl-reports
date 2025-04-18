@@ -24,6 +24,9 @@ sppdf <- sppdf[which(sppdf$sppAOU %in% c("EMGO", "GWFG", "BRAN", "CCGO", "TAVS",
                                        "RTLO", "PALO")),]
 #replace name of green-winged teal
 sppdf$spptext[sppdf$sppAOU=="GWTE"] <- "Green-winged teal"
+#name of index
+sppdf$name11 = ifelse(sppdf$index11 == "itotal", "Indicated Total Birds", "Total Birds")
+sppdf$name22 = ifelse(sppdf$index22 == "ibb", "Indicated Breeding Birds", "Breeding Birds")
 
 # Parse the jinja template
 template <- parse_template(

@@ -76,10 +76,11 @@ ykd_cities = st_as_sf(ykd_cities, coords = c("lon","lat"))
 st_crs(ykd_cities) = 4269
 #Data objects created from YKD survey data in the RDR: x-y coordinates associated with species observations, used to make maps
 ykd.strata = read_sf("data/YKD_DesignStrata.gpkg") |>
-  filter(STRATNAME != "Nonhabitat") |>
+  filter( !STRATNAME %in% c("Nonhabitat", "Mountains", "Water") ) |>
   st_transform(crs=4326)
 ykd.transects=read_sf("data/YKD_DesignTrans.gpkg", this.layer) |>
-  st_transform(crs=4326)
+  st_transform(crs=4326) |>
+  st_intersection(ykd.strata)
 
 
 #Data objects and layers for making Fig. 1 - Study area map of the ACP with strata, most recent year transects, and village names
@@ -338,7 +339,7 @@ CANV3se = sqrt(zoo::rollmean(CANV$itotal.se^2, k=3)[length(CANV3)])
 CANV3 = CANV3[length(CANV3)]
 CANVh = zoo::rollmean(CANV$itotal, k = length(CANV$itotal), na.rm=TRUE)
 CANVhse = sqrt(zoo::rollmean(CANV$itotal.se^2, k=length(CANV$itotal), na.rm=TRUE))
-CANVentry = data.frame(Species="Surf scoter",
+CANVentry = data.frame(Species="Canvasback",
                        Code="CANV",
                        Index="ITB",
                        Y3=round(CANV3,0),
@@ -603,16 +604,18 @@ table3 <- table2 |> select(Species, Index) |>
   cbind(select(sppdf, Trend10 = Trend, P10 = P)) |>
   cbind(select(sppdf2, -Species))
 ################################################################################
-##write files for appendices
+##write map figure for appendices
 #make figures
-# for(i in 1:length(sppAOU)){
-#   s <- sppfig(spp = sppAOU[i])
-#   ggsave(plot = s, filename=paste0("data/plot_trends/figures/",sppAOU[i],"index.png"))
-#   if(sppAOU[i] != "TAVS"){
-#     m <- AKaerial::ObsMap(area="YKG", species=sppAOU[i])
-#     ggsave(plot=m, filename=paste0("data/plot_trends/figures/",sppAOU[i],"map.png"))
-#   }
-# }
+source("ObsMap2.R")
+sppArea = ifelse(sppAOU %in% c("EMGO", "GWFG", "BRAN", "CCGO", "TAVS", "SWAN", "SACR"), 
+                 "YKG", "YKD")
+for(i in 1:length(sppAOU)){
+    m <- ObsMap2(area = sppArea[i], species = sppAOU[i], 
+                mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/") + 
+      theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+    ggsave(plot=m, filename=paste0("data/plot_trends/figures/",sppAOU[i],"_map.png"), 
+           width = 4, height=7)
+  }
 ################################################################################
 #write species-specific output tables to file
 spplist[,1] <- str_remove(spplist[,1], "/") |>
