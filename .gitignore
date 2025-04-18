@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+test_format/*
 ACP_Report/*
 !ACP_Report/ACP_report.qmd
 !ACP_Report/ACP_report_html.qmd
@@ -17,4 +18,5 @@ YKD_Report/*
 !YKD_Report/_appendices.qmd
 !YKD_Report/appendices.qmd.jinja
 !YKD_Report/make_appendices.R
+!YKD_Report/_extensions
 
