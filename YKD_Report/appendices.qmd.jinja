@@ -8,7 +8,7 @@
 
 #load("data/YKD_Report.RData")
 
-cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + 
+cap21 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + 
               pairs]) and indicated total birds (black circles; 2 x [singles + pairs] 
               + birds in flocks) with 95% confidence intervals (vertical bars from 
               circles), as well as the long-term trajectory for indicated total birds                   (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95%                  credible 
@@ -16,8 +16,20 @@ cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles 
               Breeding Population Survey, Alaska, 1985–",max(YKGHistoric$combined$Year),
               ". Years with counts of zero were not included in trend estimates 
               (see Methods for details).")
-
-cap3 <- paste0(" indices of breeding birds (singles + [2 x pairs]) and total birds 
+cap22 = paste0(" indices of breeding birds (grey circles; singles + 
+              [2 x pairs]) and total birds (black circles; singles + [2 x pairs] 
+              + birds in flocks) with 95% confidence intervals (vertical bars from 
+              circles), as well as the long-term trajectory for indicated total birds                   (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95%                  credible 
+              intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial 
+              Breeding Population Survey, Alaska, 1985–",max(YKGHistoric$combined$Year),
+              ". Years with counts of zero were not included in trend estimates 
+              (see Methods for details).")
+cap31 <- paste0(" indices of indicated breeding birds (2 x [singles + 
+              pairs]) and indicated total birds (2 x [singles + pairs] 
+              + birds in flocks) with standard errors (SE) 
+               from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 
+               1985-",max(YKGHistoric$combined$Year),".")
+cap32 <- paste0(" indices of breeding birds (singles + [2 x pairs]) and total birds 
                (singles + [2 x pairs] + birds in flocks) with standard errors (SE) 
                from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 
                1985-",max(YKGHistoric$combined$Year),".")
@@ -42,7 +54,7 @@ most recent survey year (", max(YKGHistoric$combined$Year),")." )
 
 ```{r}
 #| label: {{spp.figlab}}
-#| fig-cap: !expr paste( "{{spp.spptext}}", cap2)
+#| fig-cap: !expr paste( "{{spp.spptext}}", {{spp.figcap}})
 #| fig-alt: !expr alttext
 
 sppfig(spp = "{{spp.sppAOU}}", index = "{{spp.index11}}", index2 = "{{spp.index22}}" )
@@ -57,8 +69,8 @@ PAGEBREAK
 #| label: {{spp.tbllab}}
 
 kable({{spp.sppAOU}}, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "{{spp.spptext}}", cap3), align = "lcccc", 
-  col.names = c("Year", "{{spp.name11}}", "SE", "{{spp.name22}}", "SE")) %>%
+  caption = paste0( "{{spp.spptext}}", {{spp.tabcap}}), align = "lcccc", 
+  col.names = c("Year", "{{spp.name22}}", "SE", "{{spp.name11}}", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 

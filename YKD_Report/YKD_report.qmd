@@ -80,6 +80,7 @@ library(tinytex)
 library(zoo)
 library(tmap)
 load(file="data/YKD_report.Rdata")
+source("ObsMap2.R")
 #IMPORTANT!!!  For first time users and/or to render the most up-to-date info, the user must first go to their R Console and source the YKD_report.r code. To do so, type 'source("YKD_report.R")' at the > prompt.  That will run the code to create all the species indices stats, study area map, table 2 & 3, and appendices.  Sourcing that will need to be done every time a change is made to that YKD_report.r code for rendering from YKD_report.qmd.  Rtools 4.3 may also need to be installed/reinstalled and can be found online or in FWS Apps-to-Go. Also, to insure the most recent version of AKAerial is being used, run the following code: devtools::install_github("USFWS/AKaerial", ref = "master", build_vignettes = TRUE). If you've already run devtools and are simply refreshing, use this code: devtools::install_github("USFWS/AKaerial", ref = "master", build_vignettes = FALSE).
 ```
 

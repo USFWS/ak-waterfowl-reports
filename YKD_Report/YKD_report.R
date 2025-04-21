@@ -109,7 +109,6 @@ fig1 = tm_shape(ykd.strata, bbox = new_bbox) +
 tmap_save(fig1, "data/fig1.png")
 
 #Reading species-level tables here to allow for n-year averaging
-
 EMGO <- YKGHistoric$combined %>%
   filter(Species=="EMGO") %>%
   select(Year, ibb, ibb.se, itotal, itotal.se) %>%
@@ -606,16 +605,16 @@ table3 <- table2 |> select(Species, Index) |>
 ################################################################################
 ##write map figure for appendices
 #make figures
-source("ObsMap2.R")
-sppArea = ifelse(sppAOU %in% c("EMGO", "GWFG", "BRAN", "CCGO", "TAVS", "SWAN", "SACR"), 
-                 "YKG", "YKD")
-for(i in 1:length(sppAOU)){
-    m <- ObsMap2(area = sppArea[i], species = sppAOU[i], 
-                mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/") + 
-      theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
-    ggsave(plot=m, filename=paste0("data/plot_trends/figures/",sppAOU[i],"_map.png"), 
-           width = 4, height=7)
-  }
+# source("ObsMap2.R")
+# sppArea = ifelse(sppAOU %in% c("EMGO", "GWFG", "BRAN", "CCGO", "TAVS", "SWAN", "SACR"), 
+#                  "YKG", "YKD")
+# for(i in 1:length(sppAOU)){
+#     m <- ObsMap2(area = sppArea[i], species = sppAOU[i], 
+#                 mirror = "data/mbmwa_001_YKD_Aerial_Survey/data/") + 
+#       theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+#     ggsave(plot=m, filename=paste0("data/plot_trends/figures/",sppAOU[i],"_map.png"), 
+#            width = 4, height=7)
+#   }
 ################################################################################
 #write species-specific output tables to file
 spplist[,1] <- str_remove(spplist[,1], "/") |>

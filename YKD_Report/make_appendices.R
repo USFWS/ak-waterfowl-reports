@@ -27,6 +27,9 @@ sppdf$spptext[sppdf$sppAOU=="GWTE"] <- "Green-winged teal"
 #name of index
 sppdf$name11 = ifelse(sppdf$index11 == "itotal", "Indicated Total Birds", "Total Birds")
 sppdf$name22 = ifelse(sppdf$index22 == "ibb", "Indicated Breeding Birds", "Breeding Birds")
+sppdf$figcap = ifelse(sppdf$index11 == "itotal", "cap21", "cap22")
+sppdf$tabcap = ifelse(sppdf$index11 == "itotal", "cap31", "cap32")
+
 
 # Parse the jinja template
 template <- parse_template(

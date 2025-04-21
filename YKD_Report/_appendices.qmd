@@ -8,17 +8,28 @@
 
 #load("data/YKD_Report.RData")
 
-cap2 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + 
+cap21 = paste0(" indices of indicated breeding birds (grey circles; 2 x [singles + 
               pairs]) and indicated total birds (black circles; 2 x [singles + pairs] 
               + birds in flocks) with 95% confidence intervals (vertical bars from 
-              circles), as well as the long-term trend in indicated total birds (black 
-              line; 2007–",max(YKGHistoric$combined$Year),") and associated 95% credible 
+              circles), as well as the long-term trajectory for indicated total birds                   (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95%                  credible 
               intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial 
               Breeding Population Survey, Alaska, 1985–",max(YKGHistoric$combined$Year),
               ". Years with counts of zero were not included in trend estimates 
               (see Methods for details).")
-
-cap3 <- paste0(" indices of breeding birds (singles + [2 x pairs]) and total birds 
+cap22 = paste0(" indices of breeding birds (grey circles; singles + 
+              [2 x pairs]) and total birds (black circles; singles + [2 x pairs] 
+              + birds in flocks) with 95% confidence intervals (vertical bars from 
+              circles), as well as the long-term trajectory for indicated total birds                   (black line; 2007–",max(YKGHistoric$combined$Year),") and associated 95%                  credible 
+              intervals (grey band around line) from the Yukon-Kuskokwim Delta Aerial 
+              Breeding Population Survey, Alaska, 1985–",max(YKGHistoric$combined$Year),
+              ". Years with counts of zero were not included in trend estimates 
+              (see Methods for details).")
+cap31 <- paste0(" indices of indicated breeding birds (2 x [singles + 
+              pairs]) and indicated total birds (2 x [singles + pairs] 
+              + birds in flocks) with standard errors (SE) 
+               from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 
+               1985-",max(YKGHistoric$combined$Year),".")
+cap32 <- paste0(" indices of breeding birds (singles + [2 x pairs]) and total birds 
                (singles + [2 x pairs] + birds in flocks) with standard errors (SE) 
                from the Yukon-Kuskokwim Delta Aerial Breeding Population Survey, Alaska, 
                1985-",max(YKGHistoric$combined$Year),".")
@@ -42,7 +53,7 @@ most recent survey year (", max(YKGHistoric$combined$Year),")." )
 
 ```{r}
 #| label: fig-EMGO
-#| fig-cap: !expr paste( "Emperor goose", cap2)
+#| fig-cap: !expr paste( "Emperor goose", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "EMGO", index = "itotal", index2 = "ibb" )
@@ -57,8 +68,8 @@ sppfig(spp = "EMGO", index = "itotal", index2 = "ibb" )
 #| label: tbl-EMGO
 
 kable(EMGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Emperor goose", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Emperor goose", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -84,7 +95,7 @@ ObsMap2(area = "YKG", species = "EMGO",
 
 ```{r}
 #| label: fig-GWFG
-#| fig-cap: !expr paste( "Greater white-fronted goose", cap2)
+#| fig-cap: !expr paste( "Greater white-fronted goose", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "GWFG", index = "itotal", index2 = "ibb" )
@@ -99,8 +110,8 @@ sppfig(spp = "GWFG", index = "itotal", index2 = "ibb" )
 #| label: tbl-GWFG
 
 kable(GWFG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Greater white-fronted goose", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Greater white-fronted goose", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -126,7 +137,7 @@ ObsMap2(area = "YKG", species = "GWFG",
 
 ```{r}
 #| label: fig-BRAN
-#| fig-cap: !expr paste( "Brant", cap2)
+#| fig-cap: !expr paste( "Brant", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "BRAN", index = "itotal", index2 = "ibb" )
@@ -141,8 +152,8 @@ sppfig(spp = "BRAN", index = "itotal", index2 = "ibb" )
 #| label: tbl-BRAN
 
 kable(BRAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Brant", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Brant", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -168,7 +179,7 @@ ObsMap2(area = "YKG", species = "BRAN",
 
 ```{r}
 #| label: fig-CCGO
-#| fig-cap: !expr paste( "Cackling Canada goose", cap2)
+#| fig-cap: !expr paste( "Cackling Canada goose", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "CCGO", index = "itotal", index2 = "ibb" )
@@ -183,8 +194,8 @@ sppfig(spp = "CCGO", index = "itotal", index2 = "ibb" )
 #| label: tbl-CCGO
 
 kable(CCGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Cackling Canada goose", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Cackling Canada goose", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -210,7 +221,7 @@ ObsMap2(area = "YKG", species = "CCGO",
 
 ```{r}
 #| label: fig-TAVS
-#| fig-cap: !expr paste( "Taverner's Canada goose", cap2)
+#| fig-cap: !expr paste( "Taverner's Canada goose", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "TAVS", index = "itotal", index2 = "ibb" )
@@ -225,8 +236,8 @@ sppfig(spp = "TAVS", index = "itotal", index2 = "ibb" )
 #| label: tbl-TAVS
 
 kable(TAVS, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Taverner's Canada goose", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Taverner's Canada goose", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -252,7 +263,7 @@ ObsMap2(area = "YKG", species = "TAVS",
 
 ```{r}
 #| label: fig-SWAN
-#| fig-cap: !expr paste( "Tundra swan", cap2)
+#| fig-cap: !expr paste( "Tundra swan", cap22)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "SWAN", index = "total", index2 = "sing1pair2" )
@@ -267,8 +278,8 @@ sppfig(spp = "SWAN", index = "total", index2 = "sing1pair2" )
 #| label: tbl-SWAN
 
 kable(SWAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Tundra swan", cap3), align = "lcccc", 
-  col.names = c("Year", "Total Birds", "SE", "Breeding Birds", "SE")) %>%
+  caption = paste0( "Tundra swan", cap32), align = "lcccc", 
+  col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -294,7 +305,7 @@ ObsMap2(area = "YKG", species = "SWAN",
 
 ```{r}
 #| label: fig-AMWI
-#| fig-cap: !expr paste( "American wigeon", cap2)
+#| fig-cap: !expr paste( "American wigeon", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "AMWI", index = "itotal", index2 = "ibb" )
@@ -309,8 +320,8 @@ sppfig(spp = "AMWI", index = "itotal", index2 = "ibb" )
 #| label: tbl-AMWI
 
 kable(AMWI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "American wigeon", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "American wigeon", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -336,7 +347,7 @@ ObsMap2(area = "YKD", species = "AMWI",
 
 ```{r}
 #| label: fig-MALL
-#| fig-cap: !expr paste( "Mallard", cap2)
+#| fig-cap: !expr paste( "Mallard", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "MALL", index = "itotal", index2 = "ibb" )
@@ -351,8 +362,8 @@ sppfig(spp = "MALL", index = "itotal", index2 = "ibb" )
 #| label: tbl-MALL
 
 kable(MALL, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Mallard", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Mallard", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -378,7 +389,7 @@ ObsMap2(area = "YKD", species = "MALL",
 
 ```{r}
 #| label: fig-NOPI
-#| fig-cap: !expr paste( "Northern pintail", cap2)
+#| fig-cap: !expr paste( "Northern pintail", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "NOPI", index = "itotal", index2 = "ibb" )
@@ -393,8 +404,8 @@ sppfig(spp = "NOPI", index = "itotal", index2 = "ibb" )
 #| label: tbl-NOPI
 
 kable(NOPI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Northern pintail", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Northern pintail", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -420,7 +431,7 @@ ObsMap2(area = "YKD", species = "NOPI",
 
 ```{r}
 #| label: fig-GWTE
-#| fig-cap: !expr paste( "Green-winged teal", cap2)
+#| fig-cap: !expr paste( "Green-winged teal", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "GWTE", index = "itotal", index2 = "ibb" )
@@ -435,8 +446,8 @@ sppfig(spp = "GWTE", index = "itotal", index2 = "ibb" )
 #| label: tbl-GWTE
 
 kable(GWTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Green-winged teal", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Green-winged teal", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -462,7 +473,7 @@ ObsMap2(area = "YKD", species = "GWTE",
 
 ```{r}
 #| label: fig-UNSC
-#| fig-cap: !expr paste( "Scaup species", cap2)
+#| fig-cap: !expr paste( "Scaup species", cap22)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "UNSC", index = "total", index2 = "sing1pair2" )
@@ -477,8 +488,8 @@ sppfig(spp = "UNSC", index = "total", index2 = "sing1pair2" )
 #| label: tbl-UNSC
 
 kable(UNSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Scaup species", cap3), align = "lcccc", 
-  col.names = c("Year", "Total Birds", "SE", "Breeding Birds", "SE")) %>%
+  caption = paste0( "Scaup species", cap32), align = "lcccc", 
+  col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -504,7 +515,7 @@ ObsMap2(area = "YKD", species = "UNSC",
 
 ```{r}
 #| label: fig-SPEI
-#| fig-cap: !expr paste( "Spectacled eider", cap2)
+#| fig-cap: !expr paste( "Spectacled eider", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "SPEI", index = "itotal", index2 = "ibb" )
@@ -519,8 +530,8 @@ sppfig(spp = "SPEI", index = "itotal", index2 = "ibb" )
 #| label: tbl-SPEI
 
 kable(SPEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Spectacled eider", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Spectacled eider", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -546,7 +557,7 @@ ObsMap2(area = "YKD", species = "SPEI",
 
 ```{r}
 #| label: fig-COEI
-#| fig-cap: !expr paste( "Common eider", cap2)
+#| fig-cap: !expr paste( "Common eider", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "COEI", index = "itotal", index2 = "ibb" )
@@ -561,8 +572,8 @@ sppfig(spp = "COEI", index = "itotal", index2 = "ibb" )
 #| label: tbl-COEI
 
 kable(COEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Common eider", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Common eider", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -588,7 +599,7 @@ ObsMap2(area = "YKD", species = "COEI",
 
 ```{r}
 #| label: fig-BLSC
-#| fig-cap: !expr paste( "Black scoter", cap2)
+#| fig-cap: !expr paste( "Black scoter", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "BLSC", index = "itotal", index2 = "ibb" )
@@ -603,8 +614,8 @@ sppfig(spp = "BLSC", index = "itotal", index2 = "ibb" )
 #| label: tbl-BLSC
 
 kable(BLSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Black scoter", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Black scoter", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -630,7 +641,7 @@ ObsMap2(area = "YKD", species = "BLSC",
 
 ```{r}
 #| label: fig-LTDU
-#| fig-cap: !expr paste( "Long-tailed duck", cap2)
+#| fig-cap: !expr paste( "Long-tailed duck", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "LTDU", index = "itotal", index2 = "ibb" )
@@ -645,8 +656,8 @@ sppfig(spp = "LTDU", index = "itotal", index2 = "ibb" )
 #| label: tbl-LTDU
 
 kable(LTDU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Long-tailed duck", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Long-tailed duck", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -672,7 +683,7 @@ ObsMap2(area = "YKD", species = "LTDU",
 
 ```{r}
 #| label: fig-RBME
-#| fig-cap: !expr paste( "Red-breasted merganser", cap2)
+#| fig-cap: !expr paste( "Red-breasted merganser", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "RBME", index = "itotal", index2 = "ibb" )
@@ -687,8 +698,8 @@ sppfig(spp = "RBME", index = "itotal", index2 = "ibb" )
 #| label: tbl-RBME
 
 kable(RBME, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Red-breasted merganser", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Red-breasted merganser", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -714,7 +725,7 @@ ObsMap2(area = "YKD", species = "RBME",
 
 ```{r}
 #| label: fig-SACR
-#| fig-cap: !expr paste( "Sandhill crane", cap2)
+#| fig-cap: !expr paste( "Sandhill crane", cap21)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "SACR", index = "itotal", index2 = "ibb" )
@@ -729,8 +740,8 @@ sppfig(spp = "SACR", index = "itotal", index2 = "ibb" )
 #| label: tbl-SACR
 
 kable(SACR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Sandhill crane", cap3), align = "lcccc", 
-  col.names = c("Year", "Indicated Total Birds", "SE", "Indicated Breeding Birds", "SE")) %>%
+  caption = paste0( "Sandhill crane", cap31), align = "lcccc", 
+  col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -756,7 +767,7 @@ ObsMap2(area = "YKG", species = "SACR",
 
 ```{r}
 #| label: fig-JAEG
-#| fig-cap: !expr paste( "Jaeger species", cap2)
+#| fig-cap: !expr paste( "Jaeger species", cap22)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "JAEG", index = "total", index2 = "sing1pair2" )
@@ -771,8 +782,8 @@ sppfig(spp = "JAEG", index = "total", index2 = "sing1pair2" )
 #| label: tbl-JAEG
 
 kable(JAEG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Jaeger species", cap3), align = "lcccc", 
-  col.names = c("Year", "Total Birds", "SE", "Breeding Birds", "SE")) %>%
+  caption = paste0( "Jaeger species", cap32), align = "lcccc", 
+  col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -798,7 +809,7 @@ ObsMap2(area = "YKD", species = "JAEG",
 
 ```{r}
 #| label: fig-RTLO
-#| fig-cap: !expr paste( "Red-throated loon", cap2)
+#| fig-cap: !expr paste( "Red-throated loon", cap22)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "RTLO", index = "total", index2 = "sing1pair2" )
@@ -813,8 +824,8 @@ sppfig(spp = "RTLO", index = "total", index2 = "sing1pair2" )
 #| label: tbl-RTLO
 
 kable(RTLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Red-throated loon", cap3), align = "lcccc", 
-  col.names = c("Year", "Total Birds", "SE", "Breeding Birds", "SE")) %>%
+  caption = paste0( "Red-throated loon", cap32), align = "lcccc", 
+  col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
@@ -840,7 +851,7 @@ ObsMap2(area = "YKD", species = "RTLO",
 
 ```{r}
 #| label: fig-PALO
-#| fig-cap: !expr paste( "Pacific loon", cap2)
+#| fig-cap: !expr paste( "Pacific loon", cap22)
 #| fig-alt: !expr alttext
 
 sppfig(spp = "PALO", index = "total", index2 = "sing1pair2" )
@@ -855,8 +866,8 @@ sppfig(spp = "PALO", index = "total", index2 = "sing1pair2" )
 #| label: tbl-PALO
 
 kable(PALO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), 
-  caption = paste0( "Pacific loon", cap3), align = "lcccc", 
-  col.names = c("Year", "Total Birds", "SE", "Breeding Birds", "SE")) %>%
+  caption = paste0( "Pacific loon", cap32), align = "lcccc", 
+  col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
   kable_styling(font_size=10, position="center") %>%
   row_spec(row = 0, bold = TRUE)
 
