@@ -19,4 +19,5 @@ YKD_Report/*
 !YKD_Report/appendices.qmd.jinja
 !YKD_Report/make_appendices.R
 !YKD_Report/_extensions
+!YKD_Report/timing_effects.qmd
 

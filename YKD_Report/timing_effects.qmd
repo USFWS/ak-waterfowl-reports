@@ -1,0 +1,351 @@
+---
+title: "Effects of Survey Timing on Estimates of YKD Species"
+format:
+  html:
+    embed-resources: true
+    toc: true
+---
+
+I used AKaerial estimates, YKD nest plot data, and a GAM/GLMM to estimate and explore timing effects on estimates.
+
+# Wrangle Data
+
+```{r}
+library( tidyverse)
+library(AKaerial)
+library(mgcv)
+
+# read in estimates
+est <- bind_rows(AKaerial::YKGHistoric$output.table, AKaerial::YKDHistoric$output.table) |>
+  select(Year, Observer, Species, itotal.est, SE.i, total.est, SE)
+
+#read in YKD Nest plot timing
+ystats <- read_csv(file = "../../mbmwa_002_YKD_Nest_Plot_Survey/data/yearstats.csv") |>
+  select(Year=YEAR, Species=SPECIES, mInit=M_INITIATION, sdInit=SD_INITIATION) |>
+  mutate(Species = replace(Species, Species == "CACG", "CCGO"), 
+         Species = replace(Species, Species == "BLBR", "BRAN"), 
+         Species = replace(Species, Species == "TUSW", "SWAN")) |>
+  drop_na()
+################################################################################
+#read in 2022 nest distance data
+# This is copied from Nest Plot egg code
+library(lubridate)
+#use raw data because for some reason, I didn't write the date out to final data   
+cards <- read_csv(file="../../YKDNestDistanceSampling/Data/NestCards_20221116.csv") |>
+  filter(!is.na(EGG_CODES)) |> 
+  filter( !SPECIES %in% c("START", "END")) |> 
+  filter(NEST_STATUS == "OK") |>
+  select(YEAR, MONTH, DAY, TRANSECT, NEST_WP, SPECIES, EGG_CODES) %>%
+  mutate(EGGCODE=strsplit(EGG_CODES, ""), .keep="unused") %>%
+  unnest(EGGCODE) 
+#check codes
+table(cards$EGGCODE)
+cards <- cards |> mutate(EGGCODE = toupper(EGGCODE)) |> #change to upper case
+  filter( !(NEST_WP == 385 & SPECIES == "GWFG") ) |> #there is a broken egg "B" in a nest that was marked "OK", remove 
+  filter (EGGCODE != "C") #remove cold eggs
+#recode so that there are two variables: EGGCODE that is only a character for egg status and 
+# FLOAT with the the numeric float score
+cards <- mutate(cards, 
+                   FLOAT=as.numeric(EGGCODE), 
+                   EGGCODE=replace(EGGCODE, !is.na(as.numeric(EGGCODE)), "E"))
+#hatch and initiation model, reference stage is for CACG
+#accepts egg data (tidyeggs), adds incubation time estimate
+egg_inc <- function(eggcode=NA, float=NA, species=NA, 
+                    refstage=c(2, 5, 8, 10, 13, 15, 18, 22, 24)){ 
+  #nest incubation data
+  incdat <- data.frame(
+    SPECIES=c("CACG", "EMGO", "GWFG", "BLBR", "TUSW", "SACR", "SPEI", "COEI", 
+              "LOON", "GLGU", "MEGU", "SAGU", "ARTE", "LTDU", "DUCK", "Shorebird"), 
+    DAYS=c(25, 24, 25, 23, 31, 30, 24, 25, 27, 23, 23, 23, 23, 25, 23, 21), 
+    RATE=c(0.77, 0.77, 0.77, 0.8, 0.5, 0.5, 0.75, 0.75, 0.5, 0.75, 0.75, 0.75, 
+           0.75, 0.67, 1.0, 0.75))
+  inc_days <- NA_character_
+  if(species %in% incdat$SPECIES & eggcode %in% c("E","P", "M", "H")){ #changed from plot function H is hatchling, M is membrane
+    if(eggcode == "P") inc_days <- incdat$DAYS[incdat$SPECIES == species] + 1
+    if(eggcode == "H") inc_days <- incdat$DAYS[incdat$SPECIES == species] + 2
+    if(eggcode == "M") inc_days <- incdat$DAYS[incdat$SPECIES == species] + 3 #check these, for "h" is a censored event time
+    if(eggcode == "E") inc_days <- 
+        incdat$DAYS[incdat$SPECIES == species]*refstage[float]/25
+  }
+  return(inc_days)
+}
+x <- rep(NA_character_, dim(cards)[1])
+for( i in 1:dim(cards)[1]){ #Is there a tidyverse better way using pipes?
+  x[i] <- egg_inc(cards$EGGCODE[i], cards$FLOAT[i], cards$SPECIES[i])
+}
+cards <- bind_cols(cards, data.frame(INCDAYS=as.numeric(x)))
+#now create a data.frame of nest stats
+neststats <- cards %>% 
+  group_by(YEAR, MONTH, DAY, TRANSECT, SPECIES, NEST_WP) %>% 
+  summarise(CLSIZE=n(), M_FLOAT=mean(FLOAT, na.rm = TRUE), M_INC=mean(INCDAYS, na.rm = TRUE))
+neststats <- neststats %>%
+  mutate(yday=yday(as.Date(paste(YEAR,MONTH,DAY, sep='-'))))
+#define function that accepts nest data, and calculates nest initiation time
+initiation <- function(cs=NA, day=NA, incdays = NA, species=NA){
+  #nest incubation data
+  incdat <- data.frame(
+    SPECIES=c("CACG", "EMGO", "GWFG", "BLBR", "TUSW", "SACR", "SPEI", "COEI", 
+              "LOON", "GLGU", "MEGU", "SAGU", "ARTE", "LTDU", "DUCK", "Shorebird"), 
+    DAYS=c(25, 24, 25, 23, 31, 30, 24, 25, 27, 23, 23, 23, 23, 25, 23, 21), 
+    RATE=c(0.77, 0.77, 0.77, 0.8, 0.5, 0.5, 0.75, 0.75, 0.5, 0.75, 0.75, 0.75, 
+           0.75, 0.67, 1.0, 0.75))
+  nest_start <- NA_character_
+  nest_hatch <- NA_character_
+  if(species %in% incdat$SPECIES & !is.na(incdays)){
+    nest_start <- day - incdays - cs/incdat$RATE[which(incdat$SPECIES == species)] + 1
+    nest_hatch <- day + incdat$DAYS[which(incdat$SPECIES == species)] - incdays
+  }
+  return(matrix(c(nest_start, nest_hatch), 1, 2))
+}
+x <- data.frame(INITIATION=numeric(dim(neststats)[1]), 
+                HATCH=numeric(dim(neststats)[1]))
+for( i in 1:dim(neststats)[1]){
+  x[i,] <- initiation(cs=neststats$CLSIZE[i], day=neststats$yday[i], incdays=neststats$M_INC[i], 
+                      species=neststats$SPECIES[i])
+}
+neststats <- bind_cols(neststats, x)
+neststats <- mutate(neststats, INITIATION=as.numeric(INITIATION), HATCH=as.numeric(HATCH))
+#now by year and species
+yearstats <- neststats %>% group_by(YEAR, SPECIES) %>%
+  summarise(N_NESTS=n(), 
+            M_CLSIZE=mean(CLSIZE, na.rm=TRUE), SD_CLSIZE=sd(CLSIZE, na.rm=TRUE), 
+            M_FLOAT=mean(M_FLOAT, na.rm=TRUE), 
+            M_INITIATION=mean(INITIATION, na.rm=TRUE), SD_INITIATION=sd(INITIATION, na.rm=TRUE),
+            M_HATCH=mean(HATCH, na.rm=TRUE), SD_HATCH=sd(HATCH, na.rm=TRUE))
+################################################################################
+#join with estimates
+yearstats <- yearstats |> select(Year = YEAR, Species = SPECIES, mInit=M_INITIATION, 
+                                 sdInit = SD_INITIATION) |>
+    mutate(Species = replace(Species, Species == "CACG", "CCGO"), 
+         Species = replace(Species, Species == "BLBR", "BRAN"), 
+         Species = replace(Species, Species == "TUSW", "SWAN"))
+ystats <- bind_rows(ystats, yearstats) |> drop_na()
+df <- left_join(est, ystats) |>
+  drop_na()
+```
+
+## Load Survey data and make plots
+
+Need mean date of YKD survey, read in Obs data to calculate mean date, for YKG only.
+
+```{r}
+library(lubridate)
+files <- list.files(path = "data/mbmwa_001_YKD_Aerial_Survey/data/final_data", 
+                    pattern = "YKG", full.names = TRUE)
+obs <- map(files, read_csv, col_types = cols(Year = "i", Month = "i",
+          Day = "i", Transect = "i", Lat = "d", Lon = "d", Time = "d", 
+          Num = "i", Code = "c", Seat = "c", Observer = "c", Flight_Dir = "c",
+          Filename = "_", Species = "c", Obs_Type = "c", Stratum = "c",
+          Segment = "_", A_G_Name = "_", Wind_Dir = "_", Wind_Vel = "_",
+          Sky = "_", Delay = "_", Behavior = "_", Distance = "_", Notes = "c"))
+obs <- map_dfr(obs, select, "Year", "Month", "Day", "Time", "Transect", 
+                  "Observer", "Seat", "Species", "Num") |>
+  drop_na()
+obs <- mutate(obs, date = ymd(str_c(Year, Month, Day, sep="-")), 
+              julian = yday(date)) |>
+  group_by(Year) |>
+  summarise(mDay = mean(julian), sdDay = sd(julian), medDay = median(julian), 
+            maxDay = max(julian), minDay = min(julian))
+ggplot(data = obs, aes(x = Year, y = mDay, group = Year < 2020)) + 
+  geom_line() + geom_point() + 
+  geom_pointrange(aes(ymin=minDay, ymax=maxDay)) +
+  labs(x="Year", y="Mean, max, and min day of observations")
+ggsave("data/survey_timing.png")
+#now join to estimate data
+df <- left_join(df, obs)
+#calculate timing relative to initiation
+df <- mutate(df, relTime = mDay - mInit)
+mdf <- df |> group_by(Year, Species) |>
+  summarise(mrel = mean(relTime), mInit = mean(mInit))
+ggplot(data = mdf, aes(x = Year, y = mInit, col = Species, group = Species)) + 
+  geom_line() + geom_point() +
+  labs(x = "Year", y="Mean Initiation")
+ggplot(data = mdf, aes(x = Year, y = mrel, col = Species, group = Species)) + 
+  geom_line() + geom_point() +
+  labs(x = "Year", y="Mean Day of Survey from mean Initiation")
+ggplot(data = mdf, aes(x = Year, y = mrel, col = Species, group = Species)) + 
+  geom_line() + geom_point() +
+  geom_smooth(method = "gam", alpha=0.2) + 
+  labs(x = "Year", y="Mean Day from mean Initiation") +
+  theme_bw()
+ggsave("data/relative_timing.png")
+#look at scatter plot of timing v. estimate, always plot your data!
+ggplot(data = df, aes(x = relTime, y = itotal.est)) + 
+  geom_point() +
+  labs(x = "Relative Timing", y = "Inc. Total") + 
+  facet_grid( ~ Species )
+#separate by species
+ggplot(data = filter(df, Species == "EMGO"), aes(x = relTime, y = itotal.est)) + 
+  geom_point() +
+  labs(x = "Relative Timing", y = "Inc. Total")
+ggplot(data = filter(df, Species == "GWFG"), aes(x = relTime, y = itotal.est)) + 
+  geom_point() +
+  labs(x = "Relative Timing", y = "Inc. Total")
+ggplot(data = filter(df, Species == "CCGO"), aes(x = relTime, y = itotal.est)) + 
+  geom_point() +
+  labs(x = "Relative Timing", y = "Inc. Total")
+ggplot(data = filter(df, Species == "SPEI"), aes(x = relTime, y = itotal.est)) + 
+  geom_point() +
+  labs(x = "Relative Timing", y = "Inc. Total")
+ggplot(data = filter(df, Species == "COEI"), aes(x = relTime, y = itotal.est)) + 
+  geom_point() +
+  labs(x = "Relative Timing", y = "Inc. Total")
+ggplot(data = filter(df, Species == "SACR"), aes(x = relTime, y = itotal.est)) + 
+  geom_point() +
+  labs(x = "Relative Timing", y = "Inc. Total")
+ggplot(data = filter(df, Species == "SWAN"), aes(x = relTime, y = itotal.est)) + 
+  geom_point() +
+  labs(x = "Relative Timing", y = "Inc. Total")
+```
+
+# Fit Models GAMs
+
+```{r}
+#remove zeros and fit GAM
+library(gratia)
+df <- filter(df, itotal.est > 0) |>
+  mutate(Species = factor(Species))
+fit <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+             s(relTime, k = 10) + 
+             s(Year, k = 10, by = Species),
+           data = df, method = "REML", select = TRUE)
+summary(fit)
+appraise(fit)
+draw(fit, select = 2, residuals = TRUE)
+draw(fit, select = 4, residuals = TRUE) #CCGO
+draw(fit, select = 6, residuals = TRUE) #EMGO
+fit2 <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+              s(relTime, k = 10, by = Species) + 
+              s(Year, k = 10, by = Species),
+            data = df, method = "REML", select = TRUE)
+summary(fit2)
+appraise(fit2)
+draw(fit2, select = 3, residuals = TRUE) #CCGO
+draw(fit2, select = 5, residuals = TRUE) #EMGO
+draw(fit2, select = 7, residuals = TRUE) #GWFG
+draw(fit2, select = 12, residuals = TRUE) #SPEI
+#try a random effect model for year and species
+df$fYear <- factor(df$Year)
+fit3 <- gam(log(itotal.est) ~ s(Species, fYear, bs = "re") + 
+              s(relTime, k = 10),
+            data = df, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+#Oh, yeah, ducks only have one observation per species and year
+draw(fit3, select = 2, residuals = TRUE)
+#well, there's an effect, but is it true? Might be due to the ducks. 
+df2 <- filter(df, Species %in% c("BRAN", "CCGO", "EMGO", "GWFG", "SWAN", "SACR"))
+fit3 <- gam(log(itotal.est) ~ s(Species, fYear, bs = "re") + 
+              s(relTime, k = 10),
+            data = df2, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+draw(fit3, select = 2, residuals = TRUE)
+#suspicious!
+```
+
+Duck are problematic because there is only one observer per year. Need to explore the full Year x Species random effect model a bit more. Looks like an identifiability problem. It seem it should work for the geese though. 
+
+## Final Models: Geese only
+
+Simple species random effect, year random effect, average timing effect. 
+
+```{r}
+fit3 <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+              s(fYear, bs = "re") + 
+              s(relTime, k = 10),
+            data = df2, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+draw(fit3, select = 3, residuals = TRUE)
+```
+
+Add a species-specific timing effect. 
+
+```{r}
+#add species-specific timing
+fit3 <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+              s(fYear, bs = "re") + 
+              s(relTime, k = 10, by=Species),
+            data = df2, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+draw(fit3, select = 6, residuals = TRUE)
+```
+
+Add species-specific year smooth instead of the random effect. 
+
+```{r}
+#add species-specific year smooth
+fit3 <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+              s(Year, k=10, by = Species) + 
+              s(relTime, k = 10, by = Species),
+            data = df2, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+draw(fit3, select = 3, residuals = TRUE)
+draw(fit3, select = 4, residuals = TRUE)
+draw(fit3, select = 9, residuals = TRUE)
+draw(fit3, select = 13, residuals = TRUE)
+```
+
+Make a plot for each species in one pannel.
+
+```{r}
+saveRDS(fit3, file="data/goose_timing.RDS")
+draw(fit3, select = 8:13, residuals = TRUE, ncol = 2, scales = "fixed")
+ggsave("data/goose_timing_effect.png")
+```
+
+## Final Models: Ducks
+
+```{r}
+#ducks
+df3 <- filter(df, !Species %in% c("BRAN", "CCGO", "EMGO", "GWFG", "SWAN", "SACR"))
+fit3 <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+              s(fYear, bs = "re") + 
+              s(relTime, k = 10),
+            data = df3, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+draw(fit3, select = 3, residuals = TRUE)
+#duck by species
+fit3 <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+              s(fYear, bs = "re") + 
+              s(relTime, k = 10, by = Species),
+            data = df3, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+draw(fit3, select = 8, residuals = TRUE)
+#add species-specific year smooth
+fit3 <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+              s(Year, k=10, by = Species) + 
+              s(relTime, k = 10, by = Species),
+            data = df3, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+draw(fit3, select = 7, residuals = TRUE)
+draw(fit3, select = 13, residuals = TRUE)
+```
+
+```{r}
+saveRDS(fit3, file="data/duck_timing.RDS")
+draw(fit3, select = 8:13, residuals = TRUE, ncol = 2, scales = "fixed")
+ggsave("data/duck_timing_effect.png")
+```
+Can we fit a model with all species together?
+
+```{r}
+fit3 <- gam(log(itotal.est) ~ s(Species, bs = "re") + 
+              s(Year, k=10, by = Species) + 
+              s(relTime, k = 10, by = Species),
+            data = df, method = "REML", select = TRUE)
+summary(fit3)
+appraise(fit3)
+draw(fit3, select = 12:13, residuals = TRUE)
+draw(fit3, select = c(14, 17, 24, 25), residuals = TRUE, ncol = 2, scales = "fixed", 
+     xlab="Relative timing")
+ggsave("data/combined_timing_effect.png")
+saveRDS(fit3, file = "data/combined_timing.RDS")
+```
+
