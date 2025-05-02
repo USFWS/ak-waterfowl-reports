@@ -318,7 +318,7 @@ GWTE3se = sqrt(zoo::rollmean(GWTE$itotal.se^2, k=3)[length(GWTE3)])
 GWTE3 = GWTE3[length(GWTE3)]
 GWTEh = zoo::rollmean(GWTE$itotal, k = length(GWTE$itotal), na.rm=TRUE)
 GWTEhse = sqrt(zoo::rollmean(GWTE$itotal.se^2, k=length(GWTE$itotal), na.rm=TRUE))
-GWTEentry = data.frame(Species="American green-winged teal",
+GWTEentry = data.frame(Species="Green-winged teal",
                        Code="GWTE",
                        Index="ITB",
                        Y3=round(GWTE3,0),
@@ -490,7 +490,6 @@ JAEG <- YKDHistoric$combined %>%
   select(Year, sing1pair2, sing1pair2.se, total, total.se) %>%
   complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
   mutate(Year=as.character(Year))
-
 JAEG3 = zoo::rollmean(JAEG$total, k = 3)
 JAEG3se = sqrt(zoo::rollmean(JAEG$total.se^2, k=3)[length(JAEG3)])
 JAEG3 = JAEG3[length(JAEG3)]
@@ -556,7 +555,11 @@ PALOentry = data.frame(Species="Pacific loon",
 
 
 #Table 2 rbind calls on all the summary 'entry' data frames for each species to populate the rows of Table 2. the rbind species list does need to be in desired order (in our case taxonomic based on most recent AOS)
-table2 = rbind(EMGOentry, GWFGentry, BRANentry, CCGOentry, TAVSentry, SWANentry, NSHOentry, AMWIentry,  MALLentry, NOPIentry, GWTEentry, CANVentry, UNSCentry, SPEIentry, COEIentry, BLSCentry, LTDUentry, RBMEentry, SACRentry, JAEGentry, RTLOentry, PALOentry) #ADD SEOW? CORA? GADW? RNGR?
+table2 = rbind(EMGOentry, GWFGentry, BRANentry, CCGOentry, TAVSentry, SWANentry, 
+               NSHOentry, AMWIentry,  MALLentry, NOPIentry, GWTEentry, CANVentry, 
+               UNSCentry, SPEIentry, COEIentry, BLSCentry, LTDUentry, RBMEentry, 
+               SACRentry, JAEGentry, RTLOentry, PALOentry) 
+#ADD SEOW? CORA? GADW? RNGR?
 
 spplist <- table2[,1:2]
 spptext <- table2[,1]
