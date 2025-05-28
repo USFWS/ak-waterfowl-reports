@@ -1,0 +1,580 @@
+---
+title: ""
+author: ""
+toc: TRUE
+format: html
+prefer-html: true
+editor: source
+embed-resources: true
+tbl-cap-location: top
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+library(tidyverse)
+library(AKaerial)
+library(kableExtra)
+options(knitr.table.html.attr = "quarto-disable-processing=true")
+dat <- AKaerial::CompositeLong()
+```
+
+```{=tex}
+\begin{center}
+## United States Department of the Interior
+\newline
+U.S. FISH AND WILDLIFE SERVICE
+1011 East Tudor Road
+Anchorage, Alaska 99503
+\end{center}
+```
+In Reply Refer to: \hfill `r Sys.Date()` FWS/R7/SIMBA/MBM
+
+Memorandum
+
+To: Todd Sanders, Pacific Flyway Representative, USFWS, DMBM, HQ
+
+From: David E. Safine, Migratory Bird Coordinator, USFWS-MBM, Alaska Region\
+Charles J. Frost, Biometrician, USFWS-MBM, Alaska Region
+
+Through: Wendy Loya, Assistant Regional Director, USFWS Science Applications, International Affairs, and Migratory Bird Management, Alaska Region\
+Julian B. Fischer, Supervisory Wildlife Biologist, Waterfowl Section, USFWS-MBM, Alaska Region\
+Erik E. Osnas, Supervisory Wildlife Biologist (Biometrician), Quantitative Section, USFWS-MBM, Alaska Region
+
+Subject: `r lubridate::year(Sys.Date())` Alaska Goose, Swan, and Crane Population Indices
+
+This memorandum contains population indices for goose, swan, and crane populations in Alaska through June `r lubridate::year(Sys.Date())`, based on surveys conducted by U.S. Fish and Wildlife Service (USFWS), Migratory Bird Management (MBM), Alaska Region. The Alaska component of the winter brant survey was completed in February `r lubridate::year(Sys.Date())`. In May and June `r lubridate::year(Sys.Date())`, the following surveys were completed: Copper River Delta Breeding Pair Survey, Waterfowl Breeding Population and Habitat Survey, Yukon-Kuskokwim Delta Coastal Zone Survey, and the Arctic Coastal Plain Survey.
+
+The most recent abundance estimates are reported for dusky and lesser Canada geese (*Branta canadensis occidentalis* and *B. c. parvipes*), minima and Taverner's cackling geese (*B. hutchinsii minima* and *B. h. taverneri*), Pacific population of brant (*B. bernicla*), Pacific and midcontinent populations of greater white-fronted geese (*Anser albifrons frontalis*), emperor goose (*A. canagicus*), lesser snow goose (*A. caerulescens*), western and eastern populations of tundra swans (*Cygnus columbianus*), Pacific coast population of trumpeter swan (*C. buccinator*), and midcontinent population of sandhill crane (*Antigone canadensis*). Species nomenclature follows common names recognized by the Pacific Flyway Council and scientific names recognized by the USFWS (50 CFR 10.13 as amended July 31, 2023). Population indices presented here (e.g., indicated total bird index) are defined in table captions.
+
+Estimates presented in this memorandum are based on our knowledge of the underlying legacy data and analysis choices. In some cases, historical estimates (i.e., 2022 and earlier) presented in 2023 and 2024 vary from those reported in 2022 and earlier based on new understanding of the appropriate source data and year-specific data handling. The difference between the current estimates and those reported in 2022 are primarily due to an incorrect geographic projection used previously to calculate transect length and stratum size. A standardized spatial projection was used for the analysis beginning in 2023 that yielded minor changes in length, area, and observation locations. For the Arctic Coastal Plain survey, original design files have been lost and the design was inferred from geo-referenced voice recordings of transect endpoints and bird observations. These corrections affected the historical annual indices for species on the Yukon-Kuskokwim Delta Coastal Zone Survey by up to ±1%, on the Copper River Delta Breeding Pair Survey by approximately -1%, and on the Arctic Coastal Plain Survey by approximately 2-4%. For the Yukon-Kuskokwim Delta Coastal Zone Survey, an incorrect post-stratification biases the annual indices by up to ±1%, but is retained in analysis for historical consistency and will be corrected during redesign. Historical indices presented for the Waterfowl Breeding Population and Habitat Survey are unchanged from those published in 2022.
+
+Population indices can be found in the tables below. Tabular data and a copy of this memo can be found at <https://doi.org/10.7944/mxfs-0y52>. Original data used to produce estimates for each survey can be sourced from the following repositories:
+
+> Swaim, M., Wilson, H., and J. Fischer. 2024. Alaska Arctic Coastal Plain Breeding Waterbird Aerial Survey, 2007-Present. Project. U.S. Fish and Wildlife Service. Migratory Birds Management, Alaska Region. <https://doi.org/10.7944/f6jd-2985>
+
+> Swaim, M., Frost, C.J., Wilson, H. and J. Fischer. 2024. Alaska Copper River Delta Aerial Dusky Canada Goose Breeding Pair Survey. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/7rp4-fy76>
+
+> Swaim, M. and C.J. Frost. 2024. Alaska Yukon-Kuskokwim Delta Aerial Breeding Pair Survey, 1985-Present. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/jknp-jh20>
+
+> Swaim, M., Groves, D. and J. Fischer. 2024. Waterfowl Breeding Population and Habitat Survey Alaska-Yukon. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/9qwc-z113>
+
+Estimates used to produce this memo were sourced from the R package AKaerial available at <https://github.com/USFWS/AKaerial>. Documentation for the calculation of each management index can also be found within the R package AKaerial or within the species-specific management plans available from the Pacific Flyway Council (<https://www.pacificflyway.gov/Management.asp>).
+
+Suggested citation:
+
+> Frost, C. J., D. E. Safine, J. B. Fischer, and E. E. Osnas. 2024. Alaska Goose, Swan, and Crane Population Indices. U.S. Fish and Wildlife Service, Migratory Bird Management, Alaska Region. <https://doi.org/10.7944/mxfs-0y52>
+
+{{< pagebreak >}}
+
+## Dusky Canada Goose
+
+```{r dusky, include=TRUE, echo=FALSE}
+#| label: tbl-1
+#| tbl-cap: Dusky Canada goose indices of indicated breeding birds (2 x [singles + pairs]), birds in flocks, and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Copper River Delta Breeding Pair Survey, Alaska, 1986–2024.
+
+#cap <- paste0("Table 1. Dusky Canada goose indices of indicated breeding birds (2 x [singles + pairs]), birds in flocks, and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Copper River Delta Breeding Pair Survey, Alaska, 1986–",max(dat$Year),".")
+
+
+dusky <- CRDHistoric$combined %>%
+  filter(Species=="DCGO") %>%
+  select(Year, ibb, ibb.se, flock, flock.se, itotal, itotal.se) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kbl(dusky, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), align = "c", col.names = c("Year", "Indicated Breeding Birds", "SE", "Flocks", "SE", "Indicated Total Birds", "SE")) %>%
+  kable_styling(full_width = T, font_size=10, position="left")
+```
+
+{{< pagebreak >}}
+
+## Lesser Canada Goose: Indicated Breeding Birds
+
+```{r lesser, include=TRUE, echo=FALSE}
+#| label: tbl-2
+#| tbl-cap: Lesser Canada goose indices of indicated breeding birds (IBB, 2 x [singles + pairs]) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–2024.
+
+#cap <- paste0("Table 2. Lesser Canada goose indices of indicated breeding birds (IBB, 2 x [singles + pairs]) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–",max(dat$Year), ".")
+
+lesser.ibb = dat %>%
+  filter(Species=="LESSER" & type %in% c("ibb", "ibb.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, Stratum, ibb, ibb.se) %>% 
+  pivot_wider(id_cols=Year, names_from=Stratum, values_from=c("ibb", "ibb.se")) %>%
+  select(Year, ibb_1, ibb.se_1, ibb_2, ibb.se_2, ibb_3, ibb.se_3, ibb_4, ibb.se_4, ibb_12, ibb.se_12) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("ibb_"))),
+           all.se= sqrt(sum(c_across(starts_with("ibb.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(lesser.ibb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE")) %>%
+  add_header_above(c(" "=1, "1" = 2, "2" = 2, "3" = 2, "4"=2, "12"=2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "Kenai-Susitna" = 2, "Nelchina" = 2, "Tanana-Kuskokwim" = 2, "Yukon Flats"=2, "Old Crow Flats"=2, " "=2)) %>%
+  kable_styling(font_size=10)
+
+```
+
+{{< pagebreak >}}
+
+## Lesser Canada Goose: Indicated Total Birds
+
+```{r lesserITOTAL, include=TRUE, echo=FALSE}
+#| label: tbl-3
+#| tbl-cap: Lesser Canada goose indices of indicated total birds (ITB, 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–2024.
+
+#cap = paste0("Table 3. Lesser Canada goose indices of indicated total birds (ITB, 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–",max(dat$Year), ".") 
+
+
+lesser.itb = dat %>%
+  filter(Species=="LESSER" & type %in% c("itotal", "itotal.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, Stratum, itotal, itotal.se) %>% 
+  pivot_wider(id_cols=Year, names_from=Stratum, values_from=c("itotal", "itotal.se")) %>%
+  select(Year, itotal_1, itotal.se_1, itotal_2, itotal.se_2, itotal_3, itotal.se_3, itotal_4, itotal.se_4, itotal_12, itotal.se_12) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("itotal_"))),
+           all.se= sqrt(sum(c_across(starts_with("itotal.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(lesser.itb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE")) %>%
+  add_header_above(c(" "=1, "1" = 2, "2" = 2, "3" = 2, "4"=2, "12"=2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "Kenai-Susitna" = 2, "Nelchina" = 2, "Tanana-Kuskokwim" = 2, "Yukon Flats"=2, "Old Crow Flats"=2, " "=2)) %>%
+  kable_styling(font_size=10)
+
+```
+
+{{< pagebreak >}}
+
+## Minima Cackling Goose
+
+```{r minima, include=TRUE, echo=FALSE}
+#| label: tbl-4
+#| tbl-cap: Minima cackling goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2024.
+
+#cap <- paste0("Table 4. Minima cackling goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
+
+minima <- YKGHistoric$combined %>%
+  filter(Species=="CCGO") %>%
+  select(Year, ibb, ibb.se, itotal, itotal.se) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(minima, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), align = "c", col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
+  kable_styling(font_size=10)
+```
+
+{{< pagebreak >}}
+
+## Taverner's Cackling Goose: Indicated Breeding Birds
+
+```{r tavs, include=TRUE, echo=FALSE}
+#| label: tbl-5
+#| tbl-cap: Taverner’s cackling goose indices of indicated breeding birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–2024.
+
+#cap <- paste0("Table 5. Taverner’s cackling goose indices of indicated breeding birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling Canada geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–",max(dat$Year),".")
+
+tavs.ibb = dat %>%
+  filter(Species=="TAVS" & type %in% c("ibb", "ibb.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, area, Stratum, ibb, ibb.se) %>% 
+  pivot_wider(id_cols=Year, names_from=c(area, Stratum), values_from=c("ibb", "ibb.se")) %>%
+  select(Year, ibb_YKG_all, ibb.se_YKG_all, ibb_WBPHS_99, ibb.se_WBPHS_99, ibb_WBPHS_10, ibb.se_WBPHS_10, ibb_WBPHS_11, ibb.se_WBPHS_11, ibb_ACP_all, ibb.se_ACP_all) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("ibb_"))),
+           all.se= sqrt(sum(c_across(starts_with("ibb.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(tavs.ibb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE")) %>%
+  add_header_above(c(" "=1, "Low and Lat > 63" = 2, "Inland 9" = 2, "10" = 2, "11"=2, "All Strata"=2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "YKDCZS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS"=2, "ACPS"=2, "All Surveys"=2)) %>%
+  kable_styling(font_size=10)
+
+
+```
+
+## Taverner's Cackling Goose: Indicated Total Birds
+
+```{r tavsITB, include=TRUE, echo=FALSE}
+#| label: tbl-6
+#| tbl-cap: Taverner’s cackling goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–2024.
+
+#cap <- paste0("Table 6. Taverner’s cackling goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling Canada geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–",max(dat$Year),".")
+
+tavs.itb = dat %>%
+  filter(Species=="TAVS" & type %in% c("itotal", "itotal.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, area, Stratum, itotal, itotal.se) %>% 
+  pivot_wider(id_cols=Year, names_from=c(area, Stratum), values_from=c("itotal", "itotal.se")) %>%
+  select(Year, itotal_YKG_all, itotal.se_YKG_all, itotal_WBPHS_99, itotal.se_WBPHS_99, itotal_WBPHS_10, itotal.se_WBPHS_10, itotal_WBPHS_11, itotal.se_WBPHS_11, itotal_ACP_all, itotal.se_ACP_all) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("itotal_"))),
+           all.se= sqrt(sum(c_across(starts_with("itotal.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(tavs.itb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE")) %>%
+  add_header_above(c(" "=1, "Low and Lat > 63" = 2, "Inland 9" = 2, "10" = 2, "11"=2, "All Strata"=2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "YKDCZS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS"=2, "ACPS"=2, "All Surveys"=2)) %>%
+  kable_styling(font_size=10)
+
+
+```
+
+## Brant
+
+```{r brant, include=TRUE, echo=FALSE}
+#| label: tbl-7
+#| tbl-cap: Pacific brant total counts from the Alaska component of the Winter Brant Survey at the Izembek Complex and Sanak Islands, 1981-2024, and the Fall Brant Survey at Izembek Complex, Alaska, 1976–2022. Note- The year of the fall survey data is the year the survey was flown. For example, the 2019 fall data shown here is from surveys completed in September-October of 2019. This table also includes brant indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey (YKDCZS), Alaska, 1985–2024.
+
+#cap <- paste0("Table 7. Pacific brant total counts from the Alaska component of the Winter Brant Survey at the Izembek Complex and Sanak Islands, 1981-", max(dat$Year),", and the Fall Brant Survey at Izembek Complex, Alaska, 1976–2022. Note: The year of the fall survey data is the year the survey was flown. For example, the 2019 fall data shown here is from surveys completed in September/October of 2019. This table also includes brant indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey (YKDCZS), Alaska, 1985–",max(dat$Year),".")
+
+brant.x = read.csv("2024_BLBR_DataTable_FlywayMemo.csv", header=TRUE, stringsAsFactors = FALSE)
+
+brant <- YKGHistoric$combined %>%
+  filter(Species=="BRAN") %>%
+  select(Year, ibb, ibb.se, itotal, itotal.se) %>%
+  complete(Year=c(1976:max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+brant$Year=as.character(brant$Year)
+
+brant = cbind(brant, brant.x[,2:3]) %>% 
+  select(Year, TotalCount_WinterBrantSurvey, TotalCount_FallBrantSurvey, 
+         ibb, ibb.se, itotal, itotal.se)
+
+kable(brant, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "Total Count", "Total Count", "IBB", "SE", "ITB", "SE")) %>%
+  add_header_above(c(" "=1, "Winter Brant Survey" = 1, "Fall Brant Survey" = 1, "YKDCZS" = 4)) %>%
+  kable_styling(font_size=10)
+
+
+```
+
+## Pacific Greater White-Fronted Goose: Indicated Breeding Birds
+
+```{r pgwfgIBB, include=TRUE, echo=FALSE}
+#| label: tbl-8
+#| tbl-cap: Pacific population of greater white-fronted goose indices of indicated breeding birds (2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2024.
+
+#cap <- paste0("Table 8. Pacific population of greater white-fronted goose indices of indicated breeding birds (2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year),".")
+
+pgwfg.ibb = dat %>%
+  filter(Species=="PGWFG" & type %in% c("ibb", "ibb.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, area, Stratum, ibb, ibb.se) %>% 
+  pivot_wider(id_cols=Year, names_from=c(area, Stratum), values_from=c("ibb", "ibb.se")) %>%
+  select(Year, ibb_YKG_all, ibb.se_YKG_all, ibb_WBPHS_8, ibb.se_WBPHS_8, ibb_WBPHS_99, ibb.se_WBPHS_99) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("ibb_"))),
+           all.se= sqrt(sum(c_across(starts_with("ibb.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(pgwfg.ibb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE")) %>%
+  add_header_above(c(" "=1, "All Strata" = 2, "8" = 2, "Inland 9" = 2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "YKDCZS" = 2, "WBPHS" = 2, "WBPHS" = 2, "All Surveys"=2)) %>%
+  kable_styling(font_size=10)
+
+
+```
+
+## Pacific Greater White-Fronted Goose: Indicated Total Birds
+
+```{r pgwfgITB, include=TRUE, echo=FALSE}
+#| label: tbl-9
+#| tbl-cap: Pacific population of greater white-fronted goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2024.
+
+#cap <- paste0("Table 9. Pacific population of greater white-fronted goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year),".")
+
+pgwfg.itb = dat %>%
+  filter(Species=="PGWFG" & type %in% c("itotal", "itotal.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, area, Stratum, itotal, itotal.se) %>% 
+  pivot_wider(id_cols=Year, names_from=c(area, Stratum), values_from=c("itotal", "itotal.se")) %>%
+  select(Year, itotal_YKG_all, itotal.se_YKG_all, itotal_WBPHS_8, itotal.se_WBPHS_8, itotal_WBPHS_99, itotal.se_WBPHS_99) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("itotal_"))),
+           all.se= sqrt(sum(c_across(starts_with("itotal.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(pgwfg.itb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE")) %>%
+  add_header_above(c(" "=1, "All Strata" = 2, "8" = 2, "Inland 9" = 2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "YKDCZS" = 2, "WBPHS" = 2, "WBPHS" = 2, "All Surveys"=2)) %>%
+  kable_styling(font_size=10)
+
+
+
+```
+
+## Midcontinent Greater White-Fronted Goose: Indicated Breeding Birds
+
+```{r mcgwfgIBB, include=TRUE, echo=FALSE}
+#| label: tbl-10
+#| tbl-cap: Midcontinent population of greater white-fronted goose indices of indicated breeding birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–2024.
+
+#cap <- paste0("Table 10. Midcontinent population of greater white-fronted goose indices of indicated breeding birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–",max(dat$Year),".")
+
+mcgwfg.ibb = dat %>%
+  filter(Species=="MCGWFG" & type %in% c("ibb", "ibb.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, area, Stratum, ibb, ibb.se) %>% 
+  pivot_wider(id_cols=Year, names_from=c(area, Stratum), values_from=c("ibb", "ibb.se")) %>%
+  select(Year, ibb_WBPHS_3, ibb.se_WBPHS_3, ibb_WBPHS_4, ibb.se_WBPHS_4, ibb_WBPHS_5, ibb.se_WBPHS_5, ibb_WBPHS_6, ibb.se_WBPHS_6, ibb_WBPHS_10, ibb.se_WBPHS_10, ibb_WBPHS_11, ibb.se_WBPHS_11, ibb_ACP_all, ibb.se_ACP_all) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("ibb_WBPHS"))),
+           all.se= sqrt(sum(c_across(starts_with("ibb.se_WBPHS"))^2))) %>%
+  relocate(starts_with("all"), .before=starts_with("ibb_ACP")) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(mcgwfg.ibb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE", "IBB", "SE")) %>%
+  add_header_above(c(" "=1, "3" = 2, "4" = 2, "5" = 2, "6"=2,"10"=2, "11" = 2, "Interior and NW Total" = 2, "All Strata" = 2)) %>%
+  add_header_above(c(" "=1, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2 , "ACPS"=2)) %>%
+  kable_styling(font_size=10)
+
+
+```
+
+## Midcontinent Greater White-Fronted Goose: Indicated Total Birds
+
+```{r mcgwfgITB, include=TRUE, echo=FALSE}
+#| label: tbl-11
+#| tbl-cap: Midcontinent population of greater white-fronted goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–2024.
+
+
+#cap <- paste0("Table 11. Midcontinent population of greater white-fronted goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–",max(dat$Year),".")
+
+mcgwfg.itb = dat %>%
+  filter(Species=="MCGWFG" & type %in% c("itotal", "itotal.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, area, Stratum, itotal, itotal.se) %>% 
+  pivot_wider(id_cols=Year, names_from=c(area, Stratum), values_from=c("itotal", "itotal.se")) %>%
+  select(Year, itotal_WBPHS_3, itotal.se_WBPHS_3, itotal_WBPHS_4, itotal.se_WBPHS_4, itotal_WBPHS_5, itotal.se_WBPHS_5, itotal_WBPHS_6, itotal.se_WBPHS_6, itotal_WBPHS_10, itotal.se_WBPHS_10, itotal_WBPHS_11, itotal.se_WBPHS_11, itotal_ACP_all, itotal.se_ACP_all) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("itotal_WBPHS"))),
+           all.se= sqrt(sum(c_across(starts_with("itotal.se_WBPHS"))^2))) %>%
+  relocate(starts_with("all"), .before=starts_with("itotal_ACP")) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(mcgwfg.itb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE", "ITB", "SE")) %>%
+  add_header_above(c(" "=1, "3" = 2, "4" = 2, "5" = 2, "6"=2,"10"=2, "11" = 2, "Interior and NW Total" = 2, "All Strata" = 2)) %>%
+  add_header_above(c(" "=1, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2 , "ACPS"=2)) %>%
+  kable_styling(font_size=8, full_width = T)
+
+
+
+```
+
+## Emperor Goose
+
+```{r emgo, include=TRUE, echo=FALSE}
+#| label: tbl-12
+#| tbl-cap: Emperor goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2024.
+
+#cap <- paste0("Table 12. Emperor goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
+
+emgo <- YKGHistoric$combined %>%
+  filter(Species=="EMGO") %>%
+  select(Year, ibb, ibb.se, itotal, itotal.se) %>%
+  complete(Year=c(min(Year):max(Year)),    fill=list(NA)) %>%
+  mutate(Year=as.character(Year), itotal=floor(itotal))
+
+kable(emgo, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), align = "c", col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
+  kable_styling(font_size=10)
+```
+
+## Lesser Snow Goose
+
+```{r sngo, include=TRUE, echo=FALSE}
+#| label: tbl-13
+#| tbl-cap: Lesser snow goose indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–2024.
+
+#cap <- paste0("Table 13. Lesser snow goose indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(dat$Year),".")
+
+sngo <- ACPHistoric$combined %>%
+  filter(Species=="SNGO") %>%
+  select(Year, sing1pair2, sing1pair2.se, total, total.se) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(sngo, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), align = "c", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10)
+```
+
+## Western Tundra Swan: Breeding Birds
+
+```{r wtuswSP, include=TRUE, echo=FALSE}
+#| label: tbl-14
+#| tbl-cap: Western population of tundra swan indices of breeding birds (BB; singles + [2 x pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2024.
+
+#cap <- paste0("Table 14. Western population of tundra swan indices of breeding birds (BB; singles + [2 x pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year), ".")
+
+wtusw.sp = dat %>%
+  filter(Species=="WTUSW" & type %in% c("sing1pair2", "sing1pair2.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, area, Stratum, sing1pair2, sing1pair2.se) %>% 
+  pivot_wider(id_cols=Year, names_from=c(area, Stratum), values_from=c("sing1pair2", "sing1pair2.se")) %>%
+  select(Year, sing1pair2_YKG_all, sing1pair2.se_YKG_all, sing1pair2_WBPHS_8, sing1pair2.se_WBPHS_8, sing1pair2_WBPHS_99, sing1pair2.se_WBPHS_99, sing1pair2_WBPHS_10, sing1pair2.se_WBPHS_10, sing1pair2_WBPHS_11, sing1pair2.se_WBPHS_11) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("sing1pair2_"))),
+           all.se= sqrt(sum(c_across(starts_with("sing1pair2.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+
+kable(wtusw.sp, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "BB", "SE", "BB", "SE", "BB", "SE", "BB", "SE", "BB", "SE", "BB", "SE")) %>%
+  add_header_above(c(" "=1, "All Strata" = 2, "8" = 2, "Inland 9" = 2, "10"=2, "11"=2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "YKDCZS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS"=2, "WBPHS"=2, "All Surveys"=2)) %>%
+  kable_styling(font_size=10)
+
+```
+
+## Western Tundra Swan: Total Birds
+
+```{r wtuswTB, include=TRUE, echo=FALSE}
+#| label: tbl-15
+#| tbl-cap: Western population of tundra swan indices of total birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2024.
+
+#cap <- paste0("Table 15. Western population of tundra swan indices of total birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year), ".")
+
+wtusw.t = dat %>%
+  filter(Species=="WTUSW" & type %in% c("total", "total.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, area, Stratum, total, total.se) %>% 
+  pivot_wider(id_cols=Year, names_from=c(area, Stratum), values_from=c("total", "total.se")) %>%
+  select(Year, total_YKG_all, total.se_YKG_all, total_WBPHS_8, total.se_WBPHS_8, total_WBPHS_99, total.se_WBPHS_99, total_WBPHS_10, total.se_WBPHS_10, total_WBPHS_11, total.se_WBPHS_11) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("total_"))),
+           all.se= sqrt(sum(c_across(starts_with("total.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+
+kable(wtusw.t, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "TB", "SE", "TB", "SE", "TB", "SE", "TB", "SE", "TB", "SE", "TB", "SE")) %>%
+  add_header_above(c(" "=1, "All Strata" = 2, "8" = 2, "Inland 9" = 2, "10"=2, "11"=2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "YKDCZS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS"=2, "WBPHS"=2, "All Surveys"=2)) %>%
+  kable_styling(font_size=10)
+
+```
+
+## Eastern Tundra Swan
+
+```{r etusw, include=TRUE, echo=FALSE}
+#| label: tbl-16
+#| tbl-cap: Eastern population of tundra swan indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–2024.
+
+#cap <- paste0("Table 16. Eastern population of tundra swan indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(dat$Year),".")
+
+etusw <- ACPHistoric$combined %>%
+  filter(Species=="SWAN") %>%
+  select(Year, sing1pair2, sing1pair2.se, total, total.se) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+kable(etusw, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), align = "c", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10)
+```
+
+## Pacific Trumpeter Swan: Breeding Birds
+
+```{r pctrswSP, include=TRUE, echo=FALSE}
+#| label: tbl-17
+#| tbl-cap: Pacific coast population of trumpeter swan indices of breeding birds (BB; singles + [2 x pairs]) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–2024.
+
+#cap <- paste0("Table 17. Pacific coast population of trumpeter swan indices of breeding birds (BB; singles + [2 x pairs]) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–",max(dat$Year), ".")
+
+pctrsw.sp = dat %>%
+  filter(Species=="PCTRSW" & type %in% c("sing1pair2", "sing1pair2.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, Stratum, sing1pair2, sing1pair2.se) %>% 
+  pivot_wider(id_cols=Year, names_from=Stratum, values_from=c("sing1pair2", "sing1pair2.se")) %>%
+  select(Year, sing1pair2_1, sing1pair2.se_1, sing1pair2_2, sing1pair2.se_2, sing1pair2_3, sing1pair2.se_3, sing1pair2_4, sing1pair2.se_4, sing1pair2_6, sing1pair2.se_6, sing1pair2_7, sing1pair2.se_7) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("sing1pair2_"))),
+           all.se= sqrt(sum(c_across(starts_with("sing1pair2.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+
+kable(pctrsw.sp, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "BB", "SE", "BB", "SE", "BB", "SE", "BB", "SE", "BB", "SE", "BB", "SE", "BB", "SE")) %>%
+  add_header_above(c(" "=1, "1" = 2, "2" = 2, "3" = 2, "4"=2, "6"=2, "7"=2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS"=2, "WBPHS"=2, "WBPHS"=2, "WBPHS"=2)) %>%
+  kable_styling(font_size=10)
+
+```
+
+## Pacific Trumpeter Swan: Total Birds
+
+```{r pctrswTB, include=TRUE, echo=FALSE}
+#| label: tbl-18
+#| tbl-cap: Pacific coast population of trumpeter swan indices of total birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–2024.
+
+#cap <- paste0("Table 18. Pacific coast population of trumpeter swan indices of total birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–",max(dat$Year), ".")
+
+pctrsw.tb = dat %>%
+  filter(Species=="PCTRSW" & type %in% c("total", "total.se")) %>%
+  spread(type, estimate) %>% 
+  select(Year, Stratum, total, total.se) %>% 
+  pivot_wider(id_cols=Year, names_from=Stratum, values_from=c("total", "total.se")) %>%
+  select(Year, total_1, total.se_1, total_2, total.se_2, total_3, total.se_3, total_4, total.se_4, total_6, total.se_6, total_7, total.se_7) %>%
+  rowwise() %>% 
+    mutate(all = sum(c_across(starts_with("total_"))),
+           all.se= sqrt(sum(c_across(starts_with("total.se"))^2))) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+
+kable(pctrsw.tb, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "TB", "SE", "TB", "SE", "TB", "SE", "TB", "SE", "TB", "SE", "TB", "SE", "TB", "SE")) %>%
+  add_header_above(c(" "=1, "1" = 2, "2" = 2, "3" = 2, "4"=2, "6"=2, "7"=2, "All Areas"=2)) %>%
+  add_header_above(c(" "=1, "WBPHS" = 2, "WBPHS" = 2, "WBPHS" = 2, "WBPHS"=2, "WBPHS"=2, "WBPHS"=2, "WBPHS"=2)) %>%
+  kable_styling(font_size=10)
+
+```
+
+## Midcontinent Sandhill Crane
+
+```{r sacr, include=TRUE, echo=FALSE}
+#| label: tbl-19
+#| tbl-cap: Midcontinent population of sandhill crane indices of indicated breeding birds (IBB; 2 x [singles + pairs]) and indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2024.
+
+#cap <- paste0("Table 19. Midcontinent population of sandhill crane indices of indicated breeding birds (IBB; 2 x [singles + pairs]) and indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
+
+sacr <- YKGHistoric$combined %>%
+  filter(Species=="SACR") %>%
+  select(Year, ibb, ibb.se, itotal, itotal.se) %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>%
+  mutate(Year=as.character(Year))
+
+sacr[1:2,2:5]=NA
+
+kable(sacr, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), align = "c", col.names = c("Year", "Indicated Breeding Birds", "SE", "Indicated Total Birds", "SE")) %>%
+  kable_styling(font_size=10)
+```
+
+```{r output, include=TRUE, echo=FALSE}
+
+write.csv(dusky, "Table1_DuskyCANG.csv", quote = FALSE, row.names=FALSE)
+write.csv(lesser.ibb, "Table2_LesserCANG_IBB.csv", quote = FALSE, row.names=FALSE)
+write.csv(lesser.itb, "Table3_LesserCANG_ITB.csv", quote = FALSE, row.names=FALSE)
+write.csv(minima, "Table4_MinimaCACG.csv", quote = FALSE, row.names=FALSE)
+write.csv(tavs.ibb, "Table5_TavernersCACG_IBB.csv", quote = FALSE, row.names=FALSE)
+write.csv(tavs.itb, "Table6_TavernersCACG_ITB.csv", quote = FALSE, row.names=FALSE)
+write.csv(brant, "Table7_BRAN.csv", quote=FALSE, row.names=FALSE)
+write.csv(pgwfg.ibb, "Table8_PacificGWFG_IBB.csv", quote = FALSE, row.names=FALSE)
+write.csv(pgwfg.itb, "Table9_PacificGWFG_ITB.csv", quote = FALSE, row.names=FALSE)
+write.csv(mcgwfg.ibb, "Table10_MidcontinentGWFG_IBB.csv", quote = FALSE, row.names=FALSE)
+write.csv(mcgwfg.itb, "Table11_MidcontinentGWFG_ITB.csv", quote = FALSE, row.names=FALSE)
+write.csv(emgo, "Table12_EMGO.csv", quote = FALSE, row.names=FALSE)
+write.csv(sngo, "Table13_SNGO.csv", quote = FALSE, row.names=FALSE)
+write.csv(wtusw.sp, "Table14_WesternTUSW_BB.csv", quote = FALSE, row.names=FALSE)
+write.csv(wtusw.t, "Table15_WesternTUSW_TB.csv", quote = FALSE, row.names=FALSE)
+write.csv(etusw, "Table16_EasternTUSW.csv", quote = FALSE, row.names=FALSE)
+write.csv(pctrsw.sp, "Table17_PacificTRUS_BB.csv", quote = FALSE, row.names=FALSE)
+write.csv(pctrsw.tb, "Table18_PacificTRUS_TB.csv", quote = FALSE, row.names=FALSE)
+write.csv(sacr, "Table19_MidcontinentSACR.csv", quote = FALSE, row.names=FALSE)
+
+
+
+```
