@@ -1,0 +1,80 @@
+---
+title: "Emperor Goose Population Index Update"
+date: "July 2025"
+output: pdf_document
+geometry: "left=3cm,right=3cm,top=2cm,bottom=2cm"
+header-includes:
+  - \pagenumbering{gobble}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
+library(ggplot2)
+library(AKaerial)
+library(tidyverse)
+
+emgo=filter(AKaerial::YKGHistoric$combined, Species=="EMGO") %>%
+  complete(Year=c(min(Year):max(Year)), fill=list(NA)) %>% 
+  as.data.frame()
+
+emgo$Species="EMGO"
+
+decision=function(data){
+  
+  if(emgo$itotal[length(emgo$itotal)]>28000){return("an open season")}
+  if(emgo$itotal[length(emgo$itotal)]<23000){return("a closed season")}
+  return("a discussion of conservation alternatives within an open spring/summer harvest")
+  
+}
+
+result=decision(emgo)
+
+rect=data.frame(x1=c(min(emgo$Year-1),min(emgo$Year-1),min(emgo$Year-1)),
+                x2=c(max(emgo$Year+1),max(emgo$Year+1),max(emgo$Year+1)),
+                y1=c(0,23000,28000), y2=c(23000,28000,40000), Status=c('Closed', 'Discussion', 'Open'))
+
+emgo.plot = ggplot() + 
+ggtitle("Emperor Goose Population Index (95% CI), 1985-2025") +
+scale_x_continuous(name="Year", limits=c(min(emgo$Year-1), max(emgo$Year+1)), breaks=seq(min(emgo$Year),max(emgo$Year),5), , expand = c(0, 0)) + 
+scale_y_continuous(label=scales::comma, name="Population Index", expand = c(0, 0)) +
+geom_rect(data=rect, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, group=Status, fill=Status), color="black", alpha=0.5) +
+  scale_fill_manual(values=c("Closed"="#D55E00", "Open"="#009E73", "Discussion"="#F0E442"),labels=c("Open", "Consider Conservation Measures", "Closed"), breaks=c("Open", "Discussion", "Closed")) + theme_bw() +
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+axis.text.x = element_text(angle = 80, vjust = 0.5)) +
+geom_point(data=emgo, aes(Year, itotal, shape=Species), color="black", fill="black") +
+geom_point(data=emgo, aes(Year, itotal)) +
+  
+  geom_pointrange(aes(x=Year, y=itotal, ymin=itotal-1.96*itotal.se, ymax=itotal+1.96*itotal.se),data = emgo) +
+
+
+ 
+#geom_ribbon(data=emgo, aes(x=Year,ymin=itotal-1.96*itotal.se, ymax=itotal+1.96*itotal.se), alpha=0.5) +
+  theme(text=element_text(size=18), legend.position=c(.72,.23), legend.background = element_rect(fill = "white", color = "black"), plot.title = element_text(hjust = 0.5)) +
+  scale_shape_manual(values=c("Population Index (95% CI)"=16)) +
+  labs(shape=NULL, fill=NULL) +
+  theme(legend.title = element_text(size = 10), 
+               legend.text = element_text(size = 10),
+        legend.spacing.y = unit(0.01, "cm")) +
+  
+  guides(shape = guide_legend(order = 1),fill = guide_legend(order = 2))
+```
+
+
+A customary and traditional harvest of emperor geese opened in April, 2017 for the first time in 30 years.  Harvest opportunities were open to rural Alaskans living in areas eligible for spring/summer subsistence harvest consistent with the Migratory Bird Treaty Act.  A fall/winter hunt followed, regulated through a registration permit system managed by the Alaska Department of Fish and Game.  In order for either hunt to remain open, the annual indicated total bird index from the Yukon-Kuskokwim Delta (YKD) Coastal Zone Survey must remain above 23,000 emperor geese, as specified in the Alaska Migratory Bird Co-Management plan for emperor geese (<https://doi.org/10.7944/P961TUQN>).  The YKD Coastal Zone Survey is flown annually during the early nesting period from late May to early June.  An index greater than 28,000 results in an open spring/summer harvest, while  23,000-28,000 will trigger a discussion of potential conservation measures within an open spring/summer harvest. In 2024, the index dropped below 23,000 resulting in a closed season in 2025, the first harvest closure since 2017.
+
+The `r max(emgo$Year)` survey estimated an indicated total bird index of `r formatC(emgo$itotal[length(emgo$itotal)], big.mark=",", format="d")` (95% CI `r formatC(emgo$itotal[length(emgo$itotal)]-1.96*emgo$itotal.se[length(emgo$itotal)], big.mark=",", format="d")` - `r formatC(emgo$itotal[length(emgo$itotal)]+1.96*emgo$itotal.se[length(emgo$itotal)], big.mark=",", format="d")`) emperor geese on the breeding grounds, which is consistent with `r result` for `r (max(emgo$Year)+1)`.  Note that no survey was conducted in 2020 due to the emergence and spread of COVID-19 in Alaska.
+
+$~$
+$~$
+
+$~$
+$~$
+```{r plot, echo=FALSE, fig.height=5, fig.width=9}
+print(emgo.plot)
+```
+
+A copy of this report can be found at <https://doi.org/10.7944/p5ae-3e22>. Estimates used to produce this report were sourced from the R package AKaerial available at <https://github.com/USFWS/AKaerial>. Documentation for the calculation of the management index can also be found within the R package AKaerial. Suggested citation:
+
+> Frost, C. J., D. E. Safine, J. B. Fischer, and E. E. Osnas. 2025. Emperor Goose Population Index Update. U.S. Fish and Wildlife Service, Migratory Bird Management, Alaska Region. https://doi.org/10.7944/p5ae-3e22

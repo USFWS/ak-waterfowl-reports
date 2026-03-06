@@ -4,6 +4,7 @@ format:
   html:
     embed-resources: true
     toc: true
+    keep-md: true
 ---
 
 I used AKaerial estimates, YKD nest plot data, and a GAM/GLMM to estimate and explore timing effects on estimates.

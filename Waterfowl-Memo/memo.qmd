@@ -41,27 +41,27 @@ Erik E. Osnas, Supervisory Wildlife Biologist (Biometrician), Quantitative Secti
 
 Subject: `r lubridate::year(Sys.Date())` Alaska Goose, Swan, and Crane Population Indices
 
-This memorandum contains population indices for goose, swan, and crane populations in Alaska through June `r lubridate::year(Sys.Date())`, based on surveys conducted by U.S. Fish and Wildlife Service (USFWS), Migratory Bird Management (MBM), Alaska Region. The Alaska component of the winter brant survey was completed in February `r lubridate::year(Sys.Date())`. In May and June `r lubridate::year(Sys.Date())`, the following surveys were completed: Copper River Delta Breeding Pair Survey, Waterfowl Breeding Population and Habitat Survey, Yukon-Kuskokwim Delta Coastal Zone Survey, and the Arctic Coastal Plain Survey.
+This memorandum contains population indices for goose, swan, and crane populations in Alaska through June `r lubridate::year(Sys.Date())`, based on surveys conducted by U.S. Fish and Wildlife Service (USFWS), Migratory Bird Management (MBM), Alaska Region. The Fall Brant Photographic Survey was completed in October `r (lubridate::year(Sys.Date()) - 1)`. In May and June `r lubridate::year(Sys.Date())`, the following surveys were completed: Copper River Delta Breeding Pair Survey, Waterfowl Breeding Population and Habitat Survey, Yukon-Kuskokwim Delta Coastal Zone Survey, and the Arctic Coastal Plain Survey.
 
 The most recent abundance estimates are reported for dusky and lesser Canada geese (*Branta canadensis occidentalis* and *B. c. parvipes*), minima and Taverner's cackling geese (*B. hutchinsii minima* and *B. h. taverneri*), Pacific population of brant (*B. bernicla*), Pacific and midcontinent populations of greater white-fronted geese (*Anser albifrons frontalis*), emperor goose (*A. canagicus*), lesser snow goose (*A. caerulescens*), western and eastern populations of tundra swans (*Cygnus columbianus*), Pacific coast population of trumpeter swan (*C. buccinator*), and midcontinent population of sandhill crane (*Antigone canadensis*). Species nomenclature follows common names recognized by the Pacific Flyway Council and scientific names recognized by the USFWS (50 CFR 10.13 as amended July 31, 2023). Population indices presented here (e.g., indicated total bird index) are defined in table captions.
 
-Estimates presented in this memorandum are based on our knowledge of the underlying legacy data and analysis choices. In some cases, historical estimates (i.e., 2022 and earlier) presented in 2023 and 2024 vary from those reported in 2022 and earlier based on new understanding of the appropriate source data and year-specific data handling. The difference between the current estimates and those reported in 2022 are primarily due to an incorrect geographic projection used previously to calculate transect length and stratum size. A standardized spatial projection was used for the analysis beginning in 2023 that yielded minor changes in length, area, and observation locations. For the Arctic Coastal Plain survey, original design files have been lost and the design was inferred from geo-referenced voice recordings of transect endpoints and bird observations. These corrections affected the historical annual indices for species on the Yukon-Kuskokwim Delta Coastal Zone Survey by up to ±1%, on the Copper River Delta Breeding Pair Survey by approximately -1%, and on the Arctic Coastal Plain Survey by approximately 2-4%. For the Yukon-Kuskokwim Delta Coastal Zone Survey, an incorrect post-stratification biases the annual indices by up to ±1%, but is retained in analysis for historical consistency and will be corrected during redesign. Historical indices presented for the Waterfowl Breeding Population and Habitat Survey are unchanged from those published in 2022.
+Estimates presented in this memorandum are based on our knowledge of the underlying legacy data and analysis choices. Historical estimates (i.e., 2024 and earlier) for the Yukon-Kuskokwim Delta Coastal Zone Survey (YKDCZS) presented here vary from those reported in 2024 and earlier based on new understanding of the appropriate source data and year-specific data handling. The differences between the current estimates and those reported in 2024 are primarily due to the discovery and correction of errors in the early (1985-1998) design transect and design stratification layers for the YKDCZS that resulted in attribution of a generally small number of ducks, geese, swans, and cranes to incorrect stratification groups. A typographical error in the recent (1999-current) design stratification was also corrected here and the corrected design files will be used going forward. Correcting these errors (mismatches in the design transect effort and design stratification boundaries) resulted in an average bias of approximately -3% when the current estimates are compared to those reported previously. The magnitude of change varied by species and year in annual estimates for all surveyed species, but in general species that nested in higher densities in the central coast area (like brant) were more effected by this correction than species which were more evenly distributed in the survey area (like greater white-fronted geese). Small corrections to the projection of the design stratification and design transects on the Copper River Delta Breeding Pair Survey resulted in small (less than 1%) increases in estimates for that survey. Historical indices presented for the Arctic Coastal Plain Survey and the Waterfowl Breeding Population and Habitat Survey are unchanged from those published in 2024.
 
 Population indices can be found in the tables below. Tabular data and a copy of this memo can be found at <https://doi.org/10.7944/mxfs-0y52>. Original data used to produce estimates for each survey can be sourced from the following repositories:
 
-> Swaim, M., Wilson, H., and J. Fischer. 2024. Alaska Arctic Coastal Plain Breeding Waterbird Aerial Survey, 2007-Present. Project. U.S. Fish and Wildlife Service. Migratory Birds Management, Alaska Region. <https://doi.org/10.7944/f6jd-2985>
+> Swaim, M., Wilson, H., and J. Fischer. 2025. Alaska Arctic Coastal Plain Breeding Waterbird Aerial Survey, 2007-Present. Project. U.S. Fish and Wildlife Service. Migratory Birds Management, Alaska Region. <https://doi.org/10.7944/f6jd-2985>
 
-> Swaim, M., Frost, C.J., Wilson, H. and J. Fischer. 2024. Alaska Copper River Delta Aerial Dusky Canada Goose Breeding Pair Survey. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/7rp4-fy76>
+> Swaim, M., Frost, C.J., Wilson, H. and J. Fischer. 2025. Alaska Copper River Delta Aerial Dusky Canada Goose Breeding Pair Survey. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/7rp4-fy76>
 
-> Swaim, M. and C.J. Frost. 2024. Alaska Yukon-Kuskokwim Delta Aerial Breeding Pair Survey, 1985-Present. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/jknp-jh20>
+> Swaim, M. and C.J. Frost. 2025. Alaska Yukon-Kuskokwim Delta Aerial Breeding Pair Survey, 1985-Present. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/jknp-jh20>
 
-> Swaim, M., Groves, D. and J. Fischer. 2024. Waterfowl Breeding Population and Habitat Survey Alaska-Yukon. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/9qwc-z113>
+> Swaim, M., Groves, D. and J. Fischer. 2025. Waterfowl Breeding Population and Habitat Survey Alaska-Yukon. Project. U.S. Fish and Wildlife Service, Alaska Region, Migratory Bird Management. <https://doi.org/10.7944/9qwc-z113>
 
 Estimates used to produce this memo were sourced from the R package AKaerial available at <https://github.com/USFWS/AKaerial>. Documentation for the calculation of each management index can also be found within the R package AKaerial or within the species-specific management plans available from the Pacific Flyway Council (<https://www.pacificflyway.gov/Management.asp>).
 
 Suggested citation:
 
-> Frost, C. J., D. E. Safine, J. B. Fischer, and E. E. Osnas. 2024. Alaska Goose, Swan, and Crane Population Indices. U.S. Fish and Wildlife Service, Migratory Bird Management, Alaska Region. <https://doi.org/10.7944/mxfs-0y52>
+> Frost, C. J., D. E. Safine, J. B. Fischer, and E. E. Osnas. 2025. Alaska Goose, Swan, and Crane Population Indices. U.S. Fish and Wildlife Service, Migratory Bird Management, Alaska Region. <https://doi.org/10.7944/mxfs-0y52>
 
 {{< pagebreak >}}
 
@@ -69,9 +69,9 @@ Suggested citation:
 
 ```{r dusky, include=TRUE, echo=FALSE}
 #| label: tbl-1
-#| tbl-cap: Dusky Canada goose indices of indicated breeding birds (2 x [singles + pairs]), birds in flocks, and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Copper River Delta Breeding Pair Survey, Alaska, 1986–2024.
+#| tbl-cap: Dusky Canada goose indices of Indicated Breeding Birds (2 x [singles + pairs]), birds in flocks, and Indicated Total Birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Copper River Delta Breeding Pair Survey, Alaska, 1986–2025.
 
-#cap <- paste0("Table 1. Dusky Canada goose indices of indicated breeding birds (2 x [singles + pairs]), birds in flocks, and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Copper River Delta Breeding Pair Survey, Alaska, 1986–",max(dat$Year),".")
+#cap <- paste0("Table 1. Dusky Canada goose indices of Indicated Breeding Birds (2 x [singles + pairs]), birds in flocks, and Indicated Total Birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Copper River Delta Breeding Pair Survey, Alaska, 1986–",max(dat$Year),".")
 
 
 dusky <- CRDHistoric$combined %>%
@@ -90,9 +90,9 @@ kbl(dusky, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), align
 
 ```{r lesser, include=TRUE, echo=FALSE}
 #| label: tbl-2
-#| tbl-cap: Lesser Canada goose indices of indicated breeding birds (IBB, 2 x [singles + pairs]) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–2024.
+#| tbl-cap: Lesser Canada goose indices of Indicated Breeding Birds (IBB, 2 x [singles + pairs]) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–2025.
 
-#cap <- paste0("Table 2. Lesser Canada goose indices of indicated breeding birds (IBB, 2 x [singles + pairs]) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–",max(dat$Year), ".")
+#cap <- paste0("Table 2. Lesser Canada goose indices of Indicated Breeding Birds (IBB, 2 x [singles + pairs]) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–",max(dat$Year), ".")
 
 lesser.ibb = dat %>%
   filter(Species=="LESSER" & type %in% c("ibb", "ibb.se")) %>%
@@ -119,9 +119,9 @@ kable(lesser.ibb, format.args = list(big.mark = ","), digits = 0, align = "c", l
 
 ```{r lesserITOTAL, include=TRUE, echo=FALSE}
 #| label: tbl-3
-#| tbl-cap: Lesser Canada goose indices of indicated total birds (ITB, 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–2024.
+#| tbl-cap: Lesser Canada goose indices of Indicated Total Birds (ITB, 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–2025.
 
-#cap = paste0("Table 3. Lesser Canada goose indices of indicated total birds (ITB, 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–",max(dat$Year), ".") 
+#cap = paste0("Table 3. Lesser Canada goose indices of Indicated Total Birds (ITB, 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from five strata within the Alaska-Yukon portion of the North American Waterfowl Breeding Population and Habitat Survey, 1964–",max(dat$Year), ".") 
 
 
 lesser.itb = dat %>%
@@ -149,9 +149,9 @@ kable(lesser.itb, format.args = list(big.mark = ","), digits = 0, align = "c", l
 
 ```{r minima, include=TRUE, echo=FALSE}
 #| label: tbl-4
-#| tbl-cap: Minima cackling goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2024.
+#| tbl-cap: Minima cackling goose indices of Indicated Breeding Birds (2 x [singles + pairs]) and Indicated Total Birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2025.
 
-#cap <- paste0("Table 4. Minima cackling goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
+#cap <- paste0("Table 4. Minima cackling goose indices of Indicated Breeding Birds (2 x [singles + pairs]) and Indicated Total Birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
 
 minima <- YKGHistoric$combined %>%
   filter(Species=="CCGO") %>%
@@ -169,9 +169,9 @@ kable(minima, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), al
 
 ```{r tavs, include=TRUE, echo=FALSE}
 #| label: tbl-5
-#| tbl-cap: Taverner’s cackling goose indices of indicated breeding birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–2024.
+#| tbl-cap: Taverner’s cackling goose indices of Indicated Breeding Birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–2025.
 
-#cap <- paste0("Table 5. Taverner’s cackling goose indices of indicated breeding birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling Canada geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–",max(dat$Year),".")
+#cap <- paste0("Table 5. Taverner’s cackling goose indices of Indicated Breeding Birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling Canada geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–",max(dat$Year),".")
 
 tavs.ibb = dat %>%
   filter(Species=="TAVS" & type %in% c("ibb", "ibb.se")) %>%
@@ -197,9 +197,9 @@ kable(tavs.ibb, format.args = list(big.mark = ","), digits = 0, align = "c", lon
 
 ```{r tavsITB, include=TRUE, echo=FALSE}
 #| label: tbl-6
-#| tbl-cap: Taverner’s cackling goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–2024.
+#| tbl-cap: Taverner’s cackling goose indices of Indicated Total Birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–2025.
 
-#cap <- paste0("Table 6. Taverner’s cackling goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling Canada geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–",max(dat$Year),".")
+#cap <- paste0("Table 6. Taverner’s cackling goose indices of Indicated Total Birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from three breeding pair surveys (Low stratum and cackling Canada geese at latitudes over 63 degrees on the Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS], portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS], and Arctic Coastal Plain Survey [ACPS]) Alaska, 1985–",max(dat$Year),".")
 
 tavs.itb = dat %>%
   filter(Species=="TAVS" & type %in% c("itotal", "itotal.se")) %>%
@@ -225,26 +225,33 @@ kable(tavs.itb, format.args = list(big.mark = ","), digits = 0, align = "c", lon
 
 ```{r brant, include=TRUE, echo=FALSE}
 #| label: tbl-7
-#| tbl-cap: Pacific brant total counts from the Alaska component of the Winter Brant Survey at the Izembek Complex and Sanak Islands, 1981-2024, and the Fall Brant Survey at Izembek Complex, Alaska, 1976–2022. Note- The year of the fall survey data is the year the survey was flown. For example, the 2019 fall data shown here is from surveys completed in September-October of 2019. This table also includes brant indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey (YKDCZS), Alaska, 1985–2024.
+#| tbl-cap: Pacific brant indices of Indicated Breeding Birds (IBB, 2 x [singles + pairs]) and Indicated Total Birds (ITB, 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey (YKDCZS), Alaska, 1985–2025, and mean population estimates from the Fall Brant Photographic Survey at Izembek Complex, Alaska, 2017–2024. Note- The year of the fall survey data is the year the survey was flown. For example, the 2024 fall data shown here is from surveys completed in October of 2024.
 
-#cap <- paste0("Table 7. Pacific brant total counts from the Alaska component of the Winter Brant Survey at the Izembek Complex and Sanak Islands, 1981-", max(dat$Year),", and the Fall Brant Survey at Izembek Complex, Alaska, 1976–2022. Note: The year of the fall survey data is the year the survey was flown. For example, the 2019 fall data shown here is from surveys completed in September/October of 2019. This table also includes brant indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey (YKDCZS), Alaska, 1985–",max(dat$Year),".")
+#cap <- paste0("Table 7. Pacific brant total counts from the Alaska component of the Winter Brant Survey at the Izembek Complex and Sanak Islands, 1981-", max(dat$Year),", and the Fall Brant Survey at Izembek Complex, Alaska, 1976–2022. Note: The year of the fall survey data is the year the survey was flown. For example, the 2019 fall data shown here is from surveys completed in September/October of 2019. This table also includes brant indices of Indicated Breeding Birds (2 x [singles + pairs]) and Indicated Total Birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey (YKDCZS), Alaska, 1985–",max(dat$Year),".")
 
-brant.x = read.csv("2024_BLBR_DataTable_FlywayMemo.csv", header=TRUE, stringsAsFactors = FALSE)
+brant.x = read.csv("//ifw7ro-file.fws.doi.net/datamgt/mbm/mbmwa_015_Izembek_Fall_Brant_Photographic_Survey/data/final_data/merged_estimates24.csv", header=TRUE, stringsAsFactors = FALSE)
+
+means = brant.x %>%
+  group_by(Year) %>%
+  summarize(n = n(), 
+    mean_est = round(mean(est), 0), 
+    se_est = round(sqrt(sum(se^2)/n))) %>%
+  ungroup() %>%
+  select(-n)
 
 brant <- YKGHistoric$combined %>%
   filter(Species=="BRAN") %>%
   select(Year, ibb, ibb.se, itotal, itotal.se) %>%
-  complete(Year=c(1976:max(Year)), fill=list(NA)) %>%
+  complete(Year=c(1985:max(Year)), fill=list(NA)) %>%
   mutate(Year=as.character(Year))
 
 brant$Year=as.character(brant$Year)
+means$Year=as.character(means$Year)
 
-brant = cbind(brant, brant.x[,2:3]) %>% 
-  select(Year, TotalCount_WinterBrantSurvey, TotalCount_FallBrantSurvey, 
-         ibb, ibb.se, itotal, itotal.se)
+brant=suppressMessages(left_join(brant, means))
 
-kable(brant, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "Total Count", "Total Count", "IBB", "SE", "ITB", "SE")) %>%
-  add_header_above(c(" "=1, "Winter Brant Survey" = 1, "Fall Brant Survey" = 1, "YKDCZS" = 4)) %>%
+kable(brant, format.args = list(big.mark = ","), digits = 0, align = "c", longtable=TRUE, col.names = c("Year", "IBB", "SE", "ITB", "SE", "Mean Estimate", "SE")) %>%
+  add_header_above(c(" "=1, "YKDCZS" = 4, "Fall Photographic Survey"=2)) %>%
   kable_styling(font_size=10)
 
 
@@ -254,9 +261,9 @@ kable(brant, format.args = list(big.mark = ","), digits = 0, align = "c", longta
 
 ```{r pgwfgIBB, include=TRUE, echo=FALSE}
 #| label: tbl-8
-#| tbl-cap: Pacific population of greater white-fronted goose indices of indicated breeding birds (2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2024.
+#| tbl-cap: Pacific population of greater white-fronted goose indices of Indicated Breeding Birds (IBB, 2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2025.
 
-#cap <- paste0("Table 8. Pacific population of greater white-fronted goose indices of indicated breeding birds (2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year),".")
+#cap <- paste0("Table 8. Pacific population of greater white-fronted goose indices of Indicated Breeding Birds (2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year),".")
 
 pgwfg.ibb = dat %>%
   filter(Species=="PGWFG" & type %in% c("ibb", "ibb.se")) %>%
@@ -282,9 +289,9 @@ kable(pgwfg.ibb, format.args = list(big.mark = ","), digits = 0, align = "c", lo
 
 ```{r pgwfgITB, include=TRUE, echo=FALSE}
 #| label: tbl-9
-#| tbl-cap: Pacific population of greater white-fronted goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2024.
+#| tbl-cap: Pacific population of greater white-fronted goose indices of Indicated Total Birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2025.
 
-#cap <- paste0("Table 9. Pacific population of greater white-fronted goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year),".")
+#cap <- paste0("Table 9. Pacific population of greater white-fronted goose indices of Indicated Total Birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year),".")
 
 pgwfg.itb = dat %>%
   filter(Species=="PGWFG" & type %in% c("itotal", "itotal.se")) %>%
@@ -311,9 +318,9 @@ kable(pgwfg.itb, format.args = list(big.mark = ","), digits = 0, align = "c", lo
 
 ```{r mcgwfgIBB, include=TRUE, echo=FALSE}
 #| label: tbl-10
-#| tbl-cap: Midcontinent population of greater white-fronted goose indices of indicated breeding birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–2024.
+#| tbl-cap: Midcontinent population of greater white-fronted goose indices of Indicated Breeding Birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–2025.
 
-#cap <- paste0("Table 10. Midcontinent population of greater white-fronted goose indices of indicated breeding birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–",max(dat$Year),".")
+#cap <- paste0("Table 10. Midcontinent population of greater white-fronted goose indices of Indicated Breeding Birds (IBB; 2 x [singles + pairs]) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–",max(dat$Year),".")
 
 mcgwfg.ibb = dat %>%
   filter(Species=="MCGWFG" & type %in% c("ibb", "ibb.se")) %>%
@@ -340,10 +347,10 @@ kable(mcgwfg.ibb, format.args = list(big.mark = ","), digits = 0, align = "c", l
 
 ```{r mcgwfgITB, include=TRUE, echo=FALSE}
 #| label: tbl-11
-#| tbl-cap: Midcontinent population of greater white-fronted goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–2024.
+#| tbl-cap: Midcontinent population of greater white-fronted goose indices of Indicated Total Birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–2025.
 
 
-#cap <- paste0("Table 11. Midcontinent population of greater white-fronted goose indices of indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–",max(dat$Year),".")
+#cap <- paste0("Table 11. Midcontinent population of greater white-fronted goose indices of Indicated Total Birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (six strata of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS] and Arctic Coastal Plain Survey [ACPS]) Alaska, 1964–",max(dat$Year),".")
 
 mcgwfg.itb = dat %>%
   filter(Species=="MCGWFG" & type %in% c("itotal", "itotal.se")) %>%
@@ -371,9 +378,9 @@ kable(mcgwfg.itb, format.args = list(big.mark = ","), digits = 0, align = "c", l
 
 ```{r emgo, include=TRUE, echo=FALSE}
 #| label: tbl-12
-#| tbl-cap: Emperor goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2024.
+#| tbl-cap: Emperor goose indices of Indicated Breeding Birds (2 x [singles + pairs]) and Indicated Total Birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2025.
 
-#cap <- paste0("Table 12. Emperor goose indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
+#cap <- paste0("Table 12. Emperor goose indices of Indicated Breeding Birds (2 x [singles + pairs]) and Indicated Total Birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
 
 emgo <- YKGHistoric$combined %>%
   filter(Species=="EMGO") %>%
@@ -389,7 +396,7 @@ kable(emgo, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), alig
 
 ```{r sngo, include=TRUE, echo=FALSE}
 #| label: tbl-13
-#| tbl-cap: Lesser snow goose indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–2024.
+#| tbl-cap: Lesser snow goose indices of Breeding Birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–2025.
 
 #cap <- paste0("Table 13. Lesser snow goose indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(dat$Year),".")
 
@@ -407,7 +414,7 @@ kable(sngo, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), alig
 
 ```{r wtuswSP, include=TRUE, echo=FALSE}
 #| label: tbl-14
-#| tbl-cap: Western population of tundra swan indices of breeding birds (BB; singles + [2 x pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2024.
+#| tbl-cap: Western population of tundra swan indices of Breeding Birds (BB; singles + [2 x pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2025.
 
 #cap <- paste0("Table 14. Western population of tundra swan indices of breeding birds (BB; singles + [2 x pairs]) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year), ".")
 
@@ -435,7 +442,7 @@ kable(wtusw.sp, format.args = list(big.mark = ","), digits = 0, align = "c", lon
 
 ```{r wtuswTB, include=TRUE, echo=FALSE}
 #| label: tbl-15
-#| tbl-cap: Western population of tundra swan indices of total birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2024.
+#| tbl-cap: Western population of tundra swan indices of Total Birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–2025.
 
 #cap <- paste0("Table 15. Western population of tundra swan indices of total birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from two breeding pair surveys (Yukon-Kuskokwim Delta Coastal Zone Survey [YKDCZS] and portions of the North American Waterfowl Breeding Population and Habitat Survey [WBPHS]) Alaska, 1985–",max(dat$Year), ".")
 
@@ -463,7 +470,7 @@ kable(wtusw.t, format.args = list(big.mark = ","), digits = 0, align = "c", long
 
 ```{r etusw, include=TRUE, echo=FALSE}
 #| label: tbl-16
-#| tbl-cap: Eastern population of tundra swan indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–2024.
+#| tbl-cap: Eastern population of tundra swan indices of Breeding Birds (singles + [2 x pairs]) and Total Birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–2025.
 
 #cap <- paste0("Table 16. Eastern population of tundra swan indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Survey, Alaska, 2007–",max(dat$Year),".")
 
@@ -481,7 +488,7 @@ kable(etusw, digits = 0, longtable=TRUE, format.args = list(big.mark = ","), ali
 
 ```{r pctrswSP, include=TRUE, echo=FALSE}
 #| label: tbl-17
-#| tbl-cap: Pacific coast population of trumpeter swan indices of breeding birds (BB; singles + [2 x pairs]) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–2024.
+#| tbl-cap: Pacific coast population of trumpeter swan indices of Breeding Birds (BB; singles + [2 x pairs]) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–2025.
 
 #cap <- paste0("Table 17. Pacific coast population of trumpeter swan indices of breeding birds (BB; singles + [2 x pairs]) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–",max(dat$Year), ".")
 
@@ -509,7 +516,7 @@ kable(pctrsw.sp, format.args = list(big.mark = ","), digits = 0, align = "c", lo
 
 ```{r pctrswTB, include=TRUE, echo=FALSE}
 #| label: tbl-18
-#| tbl-cap: Pacific coast population of trumpeter swan indices of total birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–2024.
+#| tbl-cap: Pacific coast population of trumpeter swan indices of Total Birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–2025.
 
 #cap <- paste0("Table 18. Pacific coast population of trumpeter swan indices of total birds (TB; singles + [2 x pairs] + birds in flocks) with standard errors (SE) from six strata within the Alaska portion of the North American Waterfowl Breeding Population and Habitat Survey, Alaska, 1964–",max(dat$Year), ".")
 
@@ -537,9 +544,9 @@ kable(pctrsw.tb, format.args = list(big.mark = ","), digits = 0, align = "c", lo
 
 ```{r sacr, include=TRUE, echo=FALSE}
 #| label: tbl-19
-#| tbl-cap: Midcontinent population of sandhill crane indices of indicated breeding birds (IBB; 2 x [singles + pairs]) and indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2024.
+#| tbl-cap: Midcontinent population of sandhill crane indices of Indicated Breeding Birds (IBB; 2 x [singles + pairs]) and Indicated Total Birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–2025.
 
-#cap <- paste0("Table 19. Midcontinent population of sandhill crane indices of indicated breeding birds (IBB; 2 x [singles + pairs]) and indicated total birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
+#cap <- paste0("Table 19. Midcontinent population of sandhill crane indices of Indicated Breeding Birds (IBB; 2 x [singles + pairs]) and Indicated Total Birds (ITB; 2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Yukon-Kuskokwim Delta Coastal Zone Survey, Alaska, 1985–",max(dat$Year),".")
 
 sacr <- YKGHistoric$combined %>%
   filter(Species=="SACR") %>%
