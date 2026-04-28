@@ -9,7 +9,7 @@ library(mgcv)
 
 exclude.spp = c("SWANN", "UNGR", "UNME", "UNEI", "BAEA", "COME", "EUWI", "GOLD", 
                 "HOGR", "SCOT", "BUFF")
-area = "YKD"
+area = "ACP"
 if(area == "ACP"){
   path = "ACP_Report/data/"
   data <- ACPHistoric$output.table
