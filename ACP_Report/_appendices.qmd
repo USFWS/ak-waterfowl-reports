@@ -1,0 +1,2646 @@
+# APPENDICES {.unnumbered}
+
+```{r}
+library(patchwork)
+plot_raster <- function(x = NULL, lyr = "Average", what = "tmap", log = FALSE){
+  library(terra)
+  library(tmap)
+  library(ggplot2)
+  library(tidyterra)
+  r <- rast(x=x, lyrs = lyr)
+  l.title <- "Density"
+  if (log == TRUE){ 
+    r <- log(r)
+    l.title <- "Density"
+  }
+  if(what == "tmap"){
+  p <- tm_shape(r) + 
+    tm_raster(col = lyr, 
+              col.scale = tm_scale_continuous(values = "magma"),
+              col.legend = tm_legend(title = l.title)) +
+    tm_layout(
+      legend.outside = TRUE,         # Move legend outside plot
+      legend.outside.position = "top", # Place outside at top
+      legend.orientation = "landscape")
+  }
+  if(what == "gg"){
+    #rescale raster for plotting
+    r <- ifel(r < -8, -8, r)
+    mybreaks <- seq(from =max(-8, minmax(r)[1]), to = minmax(r)[2], length.out = 5)
+    p <- ggplot() +
+      geom_spatraster(data = r) +
+      geom_spatraster_contour(data = r, color = "lightgray") +
+      # scale_fill_whitebox_c() + 
+      # geom_spatraster_contour_filled(data = r) + 
+      scale_fill_viridis_c(option = "magma", na.value = "transparent", 
+                           name = l.title, 
+                           breaks = mybreaks,
+                           #n.breaks = 5,
+                           labels = function(b) round(exp(b), 3)) + 
+      # geom_spatraster_contour(data = r, color = "white") +
+      coord_sf(crs = 3338) + 
+      #guides(fill=guide_legend(title="Density")) +
+      theme(legend.position = "top", 
+            legend.key.width = unit(1, "cm"),
+            legend.key.justification = "center",
+            panel.grid.major = element_blank(), 
+            panel.grid.minor = element_blank(), 
+            panel.background = element_blank(), 
+            panel.border = element_rect(colour = "black", 
+                                        fill = NA, linewidth = 1))
+  }
+  return(p)
+}
+```
+
+## Snow Goose {.unnumbered}
+
+```{r SNGOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Snow goose (*Anser caerulescens*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")  
+```
+
+```{r SNGOfig, echo=FALSE, warning=FALSE}
+#| label: fig-SNGO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line). 
+ 
+spp = "SNGO"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Snow Goose {.unnumbered}
+
+```{r SNGO, include=TRUE, echo=FALSE}
+#| label: tbl-SNGO
+cap <- paste0("Snow goose (*Anser caerulescens*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(SNGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Snow Goose {.unnumbered}
+
+```{r SNGOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of snow geese (*Anser caerulescens*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r SNGOmap, echo=FALSE, warning=FALSE}
+#| label: fig-SNGOmap 
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Greater White-fronted Goose {.unnumbered}
+
+```{r GWFGcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Greater white-fronted goose (*Anser albifrons*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r GWFGfig, echo=FALSE, warning=FALSE}
+#| label: fig-GWFG
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "GWFG"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+```
+
+{{< pagebreak >}}
+
+## Greater White-fronted Goose {.unnumbered}
+
+```{r GWFG, include=TRUE, echo=FALSE}
+#| label: tbl-GWFG
+cap <- paste0("Greater white-fronted goose (*Anser albifrons*) indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(GWFG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  #add_header adds a to tiered column header 'top' (e.g., instead of just 'Breeding Birds', the column header reads 'Indicated Breeding Birds'. This is not necessary for non-indicated species)
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Greater White-fronted Goose {.unnumbered}
+
+```{r GWFGmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of greater white-fronted geese (*Anser albifrons*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r GWFGmap, echo=FALSE, warning=FALSE}
+#| label: fig-GWFGmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Brant {.unnumbered}
+
+```{r BRANcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Brant (*Branta bernicla nigricans*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r BRANfig, echo=FALSE, warning=FALSE}
+#| label: fig-BRAN
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "BRAN"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+```
+
+{{< pagebreak >}}
+
+## Brant {.unnumbered}
+
+```{r BRAN, include=TRUE, echo=FALSE}
+#| label: tbl-BRAN
+cap <- paste0("Brant (*Branta bernicla nigricans*) indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(BRAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Brant {.unnumbered}
+
+```{r BRANmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of brant (*Branta bernicla nigricans*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r BRANmap, echo=FALSE, warning=FALSE}
+#| label: fig-BRANmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Cackling/Canada Goose {.unnumbered}
+
+```{r CCGOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Cackling/Canada goose (*Branta hutchinsii* and *B. canadensis*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r CCGOfig, echo=FALSE, warning=FALSE}
+#| label: fig-CCGO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "CCGO"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+```
+
+{{< pagebreak >}}
+
+## Cackling/Canada Goose {.unnumbered}
+
+```{r CCGO, include=TRUE, echo=FALSE}
+#| label: tbl-CCGO
+cap <- paste0("Cackling/Canada goose (*Branta hutchinsii* and *B. canadensis*) indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(CCGO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Cackling/Canada Goose {.unnumbered}
+
+```{r CCGOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of cackling/Canada geese (*Branta hutchinsii* and *B. canadensis*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r CCGOmap, echo=FALSE, warning=FALSE}
+#| label: fig-CCGOmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Tundra Swan {.unnumbered}
+
+```{r SWANcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Tundra swan (*Cygnus columbianus*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")  
+```
+
+```{r SWANfig, echo=FALSE, warning=FALSE}
+#| label: fig-SWAN
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "SWAN"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Tundra Swan {.unnumbered}
+
+```{r SWAN, include=TRUE, echo=FALSE}
+#| label: tbl-SWAN
+cap <- paste0("Tundra swan (*Cygnus columbianus*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(SWAN, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Tundra Swan {.unnumbered}
+
+```{r SWANmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of tundra swans (*Cygnus columbianus*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r SWANmap, echo=FALSE, warning=FALSE}
+#| label: fig-SWANmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Northern Shoveler {.unnumbered}
+
+```{r NSHOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Northern shoveler (*Spatula clypeata*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r NSHOfig, echo=FALSE, warning=FALSE}
+#| label: fig-NSHO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "NSHO"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Northern Shoveler {.unnumbered}
+
+```{r NSHO, include=TRUE, echo=FALSE}
+#| label: tbl-NSHO
+cap <- paste0("Northern shoveler (*Spatula clypeata*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(NSHO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Northern Shoveler {.unnumbered}
+
+```{r NSHOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of northern shovelers (*Spatula clypeata*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r NSHOmap, echo=FALSE, warning=FALSE}
+#| label: fig-NSHOmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## American Wigeon {.unnumbered}
+
+```{r AMWIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("American wigeon (*Mareca americana*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r AMWIfig, echo=FALSE, warning=FALSE}
+#| label: fig-AMWI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "AMWI"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## American Wigeon {.unnumbered}
+
+```{r AMWI, include=TRUE, echo=FALSE}
+#| label: tbl-AMWI
+cap <- paste0("American wigeon (*Mareca americana*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(AMWI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## American Wigeon {.unnumbered}
+
+```{r AMWImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of American wigeon (*Mareca americana*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r AMWImap, echo=FALSE, warning=FALSE}
+#| label: fig-AMWImap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Mallard {.unnumbered}
+
+```{r MALLcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Mallard (*Anas platyrhynchos*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r MALLfig, echo=FALSE, warning=FALSE}
+#| label: fig-MALL
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "MALL"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Mallard {.unnumbered}
+
+```{r MALL, include=TRUE, echo=FALSE}
+#| label: tbl-MALL
+cap <- paste0("Mallard (*Anas platyrhynchos*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(MALL, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Mallard {.unnumbered}
+
+```{r MALLmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of mallards (*Anas platyrhynchos*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r MALLmap, echo=FALSE, warning=FALSE}
+#| label: fig-MALLmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Northern Pintail {.unnumbered}
+
+```{r NOPIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Northern pintail (*Anas acuta*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r NOPIfig, echo=FALSE, warning=FALSE}
+#| label: fig-NOPI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "NOPI"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Northern Pintail {.unnumbered}
+
+```{r NOPI, include=TRUE, echo=FALSE}
+#| label: tbl-NOPI
+cap <- paste0("Northern pintail (*Anas acuta*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(NOPI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Northern Pintail {.unnumbered}
+
+```{r NOPImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of northern pintails (*Anas acuta*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r NOPImap, echo=FALSE, warning=FALSE}
+#| label: fig-NOPImap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## American Green-winged Teal {.unnumbered}
+
+```{r GWTEcap, echo=FALSE, warning=FALSE}
+ cap = paste0("American green-winged teal (*Anas crecca*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r GWTEfig, echo=FALSE, warning=FALSE}
+#| label: fig-GWTE
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "GWTE"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## American Green-winged Teal {.unnumbered}
+
+```{r GWTE, include=TRUE, echo=FALSE}
+#| label: tbl-GWTE
+cap <- paste0("American green-winged teal (*Anas crecca*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(GWTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "ccccc", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## American Green-winged Teal {.unnumbered}
+
+```{r GWTEmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of American green-winged teal (*Anas crecca*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r GWTEmap, echo=FALSE, warning=FALSE}
+#| label: fig-GWTEmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Scaup species {.unnumbered}
+
+```{r UNSCcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Scaup species (*Aythya marila* and *A. affinis*) indices of breeding birds (grey circles; singles + [2 x pairs] + flocked drakes <5) and total birds (black circles; singles + [2 x pairs] + flocked drakes <5 + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r UNSCfig, echo=FALSE, warning=FALSE}
+#| label: fig-UNSC
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "UNSC"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Scaup species {.unnumbered}
+
+```{r UNSC, include=TRUE, echo=FALSE}
+#| label: tbl-UNSC
+cap <- paste0("Scaup species (*Aythya marila* and *A. affinis*) indices of breeding birds (singles + [2 x pairs] + flocked drakes <5) and total birds (singles + [2 x pairs] + flocked drakes <5 + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(UNSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Scaup species {.unnumbered}
+
+```{r UNSCmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of scaup species (*Aythya marila* and *A. affinis*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r UNSCmap, echo=FALSE, warning=FALSE}
+#| label: fig-UNSCmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Steller's Eider {.unnumbered}
+
+```{r STEIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Steller’s eider (*Polysticta stelleri*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r STEIfig, echo=FALSE, warning=FALSE}
+#| label: fig-STEI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "STEI"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Steller's Eider {.unnumbered}
+
+```{r STEI, include=TRUE, echo=FALSE}
+#| label: tbl-STEI
+cap <- paste0("Steller’s eider (*Polysticta stelleri*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(STEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Steller's Eider {.unnumbered}
+
+```{r STEImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of Steller’s eiders (*Polysticta stelleri*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r STEImap, echo=FALSE, warning=FALSE}
+#| label: fig-STEImap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Spectacled Eider {.unnumbered}
+
+```{r SPEIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Spectacled eider (*Somateria fischeri*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r SPEIfig, echo=FALSE, warning=FALSE}
+#| label: fig-SPEI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "SPEI"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Spectacled Eider {.unnumbered}
+
+```{r SPEI, include=TRUE, echo=FALSE}
+#| label: tbl-SPEI
+cap <- paste0("Spectacled eider (*Somateria fischeri*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(SPEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Spectacled Eider {.unnumbered}
+
+```{r SPEImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of spectacled eiders (*Somateria fischeri*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r SPEImap, echo=FALSE, warning=FALSE}
+#| label: fig-SPEImap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## King Eider {.unnumbered}
+
+```{r KIEIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("King eider (*Somateria spectabilis*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r KIEIfig, echo=FALSE, warning=FALSE}
+#| label: fig-KIEI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "KIEI"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## King Eider {.unnumbered}
+
+```{r KIEI, include=TRUE, echo=FALSE}
+#| label: tbl-KIEI
+cap <- paste0("King eider (*Somateria spectabilis*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(KIEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## King Eider {.unnumbered}
+
+```{r KIEImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of king eiders (*Somateria spectabilis*) geese along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r KIEImap, echo=FALSE, warning=FALSE}
+#| label: fig-KIEImap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Common Eider {.unnumbered}
+
+```{r COEIcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Common eider (*Somateria mollissima*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r COEIfig, echo=FALSE, warning=FALSE}
+#| label: fig-COEI
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "COEI"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Common Eider {.unnumbered}
+
+```{r COEI, include=TRUE, echo=FALSE}
+#| label: tbl-COEI
+cap <- paste0("Common eider (*Somateria mollissima*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(COEI, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Common Eider {.unnumbered}
+
+```{r COEImcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of common eiders (*Somateria mollissima*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r COEImap, echo=FALSE, warning=FALSE}
+#| label: fig-COEImap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species. 
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Surf Scoter {.unnumbered}
+
+```{r SUSCcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Surf scoter (*Melanitta perspicillata*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r SUSCfig, echo=FALSE, warning=FALSE}
+#| label: fig-SUSC
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "SUSC"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Surf Scoter {.unnumbered}
+
+```{r SUSC, include=TRUE, echo=FALSE}
+#| label: tbl-SUSC
+cap <- paste0("Surf scoter (*Melanitta perspicillata*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(SUSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Surf Scoter {.unnumbered}
+
+```{r SUSCmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of surf scoters (*Melanitta perspicillata*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r SUSCmap, echo=FALSE, warning=FALSE}
+#| label: fig-SUSCmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## White-winged Scoter {.unnumbered}
+
+```{r WWSCcap, echo=FALSE, warning=FALSE}
+ cap = paste0("White-winged scoter (*Melanitta deglandi*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r WWSCfig, echo=FALSE, warning=FALSE}
+#| label: fig-WWSC
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "WWSC"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## White-winged Scoter {.unnumbered}
+
+```{r WWSC, include=TRUE, echo=FALSE}
+#| label: tbl-WWSC
+cap <- paste0("White-winged scoter (*Melanitta deglandi*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(WWSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## White-winged Scoter {.unnumbered}
+
+```{r WWSCmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of white-winged scoters (*Melanitta deglandi*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r WWSCmap, echo=FALSE, warning=FALSE}
+#| label: fig-WWSCmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Black Scoter {.unnumbered}
+
+```{r BLSCcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Black scoter (*Melanitta americana*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r BLSCfig, echo=FALSE, warning=FALSE}
+#| label: fig-BLSC
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "BLSC"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Black Scoter {.unnumbered}
+
+```{r BLSC, include=TRUE, echo=FALSE}
+#| label: tbl-BLSC
+cap <- paste0("Black scoter (*Melanitta americana*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(BLSC, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Black Scoter {.unnumbered}
+
+```{r BLSCmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of black scoters (*Melanitta americana*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r BLSCmap, echo=FALSE, warning=FALSE}
+#| label: fig-BLSCmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Long-tailed Duck {.unnumbered}
+
+```{r LTDUcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Long-tailed duck (*Clangula hyemalis*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r LTDUfig, echo=FALSE, warning=FALSE}
+#| label: fig-LTDU
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "LTDU"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Long-tailed Duck {.unnumbered}
+
+```{r LTDU, include=TRUE, echo=FALSE}
+#| label: tbl-LTDU
+cap <- paste0("Long-tailed duck (*Clangula hyemalis*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(LTDU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Long-tailed Duck {.unnumbered}
+
+```{r LTDUmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of long-tailed ducks (*Clangula hyemalis*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r LTDUmap, echo=FALSE, warning=FALSE}
+#| label: fig-LTDUmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Red-breasted Merganser {.unnumbered}
+
+```{r RBMEcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Red-breasted merganser (*Mergus serrator*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs + flocked drakes <5]) and indicated total birds (black circles; 2 x [singles + pairs + flocked drakes <5] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r RBMEfig, echo=FALSE, warning=FALSE}
+#| label: fig-RBME
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "RBME"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) + 
+#scale_y_continuous discontinuous use of scientific notation to abbreviate large-numbered axis labels  
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank()) +
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Red-breasted Merganser {.unnumbered}
+
+```{r RBME, include=TRUE, echo=FALSE}
+#| label: tbl-RBME
+cap <- paste0("Red-breasted merganser (*Mergus serrator*) indices of indicated breeding birds (2 x [singles + pairs + flocked drakes <5]) and indicated total birds (2 x [singles + pairs + flocked drakes <5] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(RBME, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Red-breasted Merganser {.unnumbered}
+
+```{r RBMEmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of red-breasted mergansers (*Mergus serrator*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r RBMEmap, echo=FALSE, warning=FALSE}
+#| label: fig-RBMEmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Red-necked Grebe {.unnumbered}
+
+```{r RNGRcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Red-necked grebe (*Podiceps grisegena*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r RNGRfig, echo=FALSE, warning=FALSE}
+#| label: fig-RNGR
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "RNGR"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Red-necked Grebe {.unnumbered}
+
+```{r RNGR, include=TRUE, echo=FALSE}
+#| label: tbl-RNGR
+cap <- paste0("Red-necked grebe (*Podiceps grisegena*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(RNGR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Red-necked Grebe {.unnumbered}
+
+```{r RNGRmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of red-necked grebes (*Podiceps grisegena*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r RNGRmap, echo=FALSE, warning=FALSE}
+#| label: fig-RNGRmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Sandhill Crane {.unnumbered}
+
+```{r SACRcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Sandhill crane (*Antigone canadensis*) indices of indicated breeding birds (grey circles; 2 x [singles + pairs]) and indicated total birds (black circles; 2 x [singles + pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in indicated total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r SACRfig, echo=FALSE, warning=FALSE}
+#| label: fig-SACR
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "SACR"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = itotal, se = itotal.se, index2 = ibb, se2 = ibb.se)  |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Indicated Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Indicated Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Indicated Total"= "black", "Indicated Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Sandhill Crane {.unnumbered}
+
+```{r SACR, include=TRUE, echo=FALSE}
+#| label: tbl-SACR
+cap <- paste0("Sandhill crane (*Antigone canadensis*) indices of indicated breeding birds (2 x [singles + pairs]) and indicated total birds (2 x [singles + pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(SACR, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  add_header_above(bold = TRUE, c(" "=1, "Indicated"=1, " "=1, "Indicated" = 1, " "=1)) %>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Sandhill Crane {.unnumbered}
+
+```{r SACRmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of sandhill cranes (*Antigone canadensis*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r SACRmap, echo=FALSE, warning=FALSE}
+#| label: fig-SACRmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Jaeger species {.unnumbered}
+
+```{r JAEGcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Jaeger species (*Stercorarius sp.*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r JAEGfig, echo=FALSE, warning=FALSE}
+#| label: fig-JAEG
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "JAEG"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Jaeger species {.unnumbered}
+
+```{r JAEG, include=TRUE, echo=FALSE}
+#| label: tbl-JAEG
+cap <- paste0("Jaeger species (*Stercorarius sp.*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(JAEG, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Jaeger species {.unnumbered}
+
+```{r JAEGmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of jaeger species (*Stercorarius sp.*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r JAEGmap, echo=FALSE, warning=FALSE}
+#| label: fig-JAEGmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Sabine's Gull {.unnumbered}
+
+```{r SAGUcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Sabine's gull (*Xema sabini*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r SAGUfig, echo=FALSE, warning=FALSE}
+#| label: fig-SAGU
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "SAGU"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Sabine's Gull {.unnumbered}
+
+```{r SAGU, include=TRUE, echo=FALSE}
+#| label: tbl-SAGU
+cap <- paste0("Sabine's gull (*Xema sabini*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(SAGU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Sabine's Gull {.unnumbered}
+
+```{r SAGUmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of Sabine's gulls (*Xema sabini*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r SAGUmap, echo=FALSE, warning=FALSE}
+#| label: fig-SAGUmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Glaucous Gull {.unnumbered}
+
+```{r GLGUcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Glaucous gull (*Larus hyperboreus*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r GLGUfig, echo=FALSE, warning=FALSE}
+#| label: fig-GLGU
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "GLGU"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Glaucous Gull {.unnumbered}
+
+```{r GLGU, include=TRUE, echo=FALSE}
+#| label: tbl-GLGU
+cap <- paste0("Glaucous gull (*Larus hyperboreus*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(GLGU, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Glaucous Gull {.unnumbered}
+
+```{r GLGUmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of glaucous gulls (*Larus hyperboreus*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r GLGUmap, echo=FALSE, warning=FALSE}
+#| label: fig-GLGUmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Arctic Tern {.unnumbered}
+
+```{r ARTEcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Arctic tern (*Sterna paradisaea*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r ARTEfig, echo=FALSE, warning=FALSE}
+#| label: fig-ARTE
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "ARTE"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Arctic Tern {.unnumbered}
+
+```{r ARTE, include=TRUE, echo=FALSE}
+#| label: tbl-ARTE
+cap <- paste0("Arctic tern (*Sterna paradisaea*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(ARTE, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Arctic Tern {.unnumbered}
+
+```{r ARTEmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of Arctic terns (*Sterna paradisaea*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r ARTEmap, echo=FALSE, warning=FALSE}
+#| label: fig-ARTEmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Red-throated Loon {.unnumbered}
+
+```{r RTLOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Red-throated loon (*Gavia stellata*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r RTLOfig, echo=FALSE, warning=FALSE}
+#| label: fig-RTLO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "RTLO"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Red-throated Loon {.unnumbered}
+
+```{r RTLO, include=TRUE, echo=FALSE}
+#| label: tbl-RTLO
+cap <- paste0("Red-throated loon (*Gavia stellata*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(RTLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Red-throated Loon {.unnumbered}
+
+```{r RTLOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of red-throated loons (*Gavia stellata*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r RTLOmap, echo=FALSE, warning=FALSE}
+#| label: fig-RTLOmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Pacific Loon {.unnumbered}
+
+```{r PALOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Pacific loon (*Gavia pacifica*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r PALOfig, echo=FALSE, warning=FALSE}
+#| label: fig-PALO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "PALO"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Pacific Loon {.unnumbered}
+
+```{r PALO, include=TRUE, echo=FALSE}
+#| label: tbl-PALO
+cap <- paste0("Pacific loon (*Gavia pacifica*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(PALO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Pacific Loon {.unnumbered}
+
+```{r PALOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of Pacific loons (*Gavia pacifica*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r PALOmap, echo=FALSE, warning=FALSE}
+#| label: fig-PALOmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Yellow-billed Loon {.unnumbered}
+
+```{r YBLOcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Yellow-billed loon (*Gavia adamsii*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r YBLOfig, echo=FALSE, warning=FALSE}
+#| label: fig-YBLO
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "YBLO"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Yellow-billed Loon {.unnumbered}
+
+```{r YBLO, include=TRUE, echo=FALSE}
+#| label: tbl-YBLO
+cap <- paste0("Yellow-billed loon (*Gavia adamsii*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(YBLO, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Yellow-billed Loon {.unnumbered}
+
+```{r YBLOmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of yellow-billed loons (*Gavia adamsii*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r YBLOmap, echo=FALSE, warning=FALSE}
+#| label: fig-YBLOmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Golden Eagle {.unnumbered}
+
+```{r GOEAcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Golden eagle (*Aquila chrysaetos*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r GOEAfig, echo=FALSE, warning=FALSE}
+#| label: fig-GOEA
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "GOEA"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Golden Eagle {.unnumbered}
+
+```{r GOEA, include=TRUE, echo=FALSE}
+#| label: tbl-GOEA
+cap <- paste0("Golden eagle (*Aquila chrysaetos*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(GOEA, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Golden Eagle {.unnumbered}
+
+```{r GOEAmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of golden eagles (*Aquila chrysaetos*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r GOEAmap, echo=FALSE, warning=FALSE}
+#| label: fig-GOEAmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Short-eared Owl {.unnumbered}
+
+```{r SEOWcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Short-eared owl (*Asio flammeus*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r SEOWfig, echo=FALSE, warning=FALSE}
+#| label: fig-SEOW
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "SEOW"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Short-eared Owl {.unnumbered}
+
+```{r SEOW, include=TRUE, echo=FALSE}
+#| label: tbl-SEOW
+cap <- paste0("Short-eared owl (*Asio flammeus*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(SEOW, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Short-eared Owl {.unnumbered}
+
+```{r SEOWmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of short-eared owls (*Asio flammeus*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r SEOWmap, echo=FALSE, warning=FALSE}
+#| label: fig-SEOWmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Snowy Owl {.unnumbered}
+
+```{r SNOWcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Snowy owl (*Bubo scandiacus*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r SNOWfig, echo=FALSE, warning=FALSE}
+#| label: fig-SNOW
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "SNOW"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Snowy Owl {.unnumbered}
+
+```{r SNOW, include=TRUE, echo=FALSE}
+#| label: tbl-SNOW
+cap <- paste0("Snowy owl (*Bubo scandiacus*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(SNOW, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Snowy Owl {.unnumbered}
+
+```{r SNOWmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of snowy owls (*Bubo scandiacus*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r SNOWmap, echo=FALSE, warning=FALSE}
+#| label: fig-SNOWmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+
+## Common Raven {.unnumbered}
+
+```{r CORAcap, echo=FALSE, warning=FALSE}
+ cap = paste0("Common raven (*Corvus corax*) indices of breeding birds (grey circles; singles + [2 x pairs]) and total birds (black circles; singles + [2 x pairs] + birds in flocks) with 95% confidence intervals (vertical bars from circles), as well as the long-term trend in total birds (black line; 2007–",max(ACPHistoric$combined$Year),") and associated 95% credible intervals (grey band around line) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007–",max(ACPHistoric$combined$Year),". Years with counts of zero were not included in trend estimates (see Methods for details).")
+```
+
+```{r CORAfig, echo=FALSE, warning=FALSE}
+#| label: fig-CORA
+#| fig-cap: !expr cap
+#| fig-alt: A graph of the average index estimate between observers (vertical bars from circles), the posterior mean population growth trajectory 2007-2025 (black line), and the approximate 95% confidence interval for the trajectory (grey band around line).
+ 
+spp = "CORA"
+df <- AKaerial::ACPHistoric$combined |>
+  filter(Species == spp) |>
+  select(Year, index = total, se = total.se, index2 = sing1pair2, se2 = sing1pair2.se) |> 
+  mutate(upper = index +1.96*se, lower = index - 1.96*se, upper2 = index2+1.96*se2, 
+         lower2 = index2 - 1.96*se2)
+df2 <- read_csv(file = paste0("data/plot_trends/data/",spp,"_bootfit.csv"))
+ggplot(data = df2) + 
+  geom_ribbon(aes(x=Year, ymin=pmax(0, lower), ymax = upper), fill = "lightgray", 
+              alpha = 0.5) + 
+  geom_line(aes(x=Year, y=mean), lwd = 1) + 
+  geom_pointrange(data = df, aes(x=Year-0.1, y=index, ymin=pmax(0,lower), ymax = upper, 
+                  col = "Total")) + 
+  geom_pointrange(data = df, aes(x=Year+0.1, y=index2, ymin=pmax(0,lower2), ymax = upper2, 
+                  col = "Breeding")) +
+  labs(x = "Year", y = "Population Index") +
+  scale_x_continuous(breaks = seq(2007, 2025, by = 2)) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_colour_manual(values=c("Total"= "black", "Breeding" = "darkgray")) +  
+  theme_bw() + 
+  theme(legend.position = "top", legend.title=element_blank(), legend.text=element_text(size=11)) +
+  theme(text=element_text(family="Times")) +
+  theme(axis.title=element_text(size=13,face="bold")) +
+  theme(axis.text.x = element_text(size=11), axis.text.y = element_text(size=11))
+
+```
+
+{{< pagebreak >}}
+
+## Common Raven {.unnumbered}
+
+```{r CORA, include=TRUE, echo=FALSE}
+#| label: tbl-CORA
+cap <- paste0("Common raven (*Corvus corax*) indices of breeding birds (singles + [2 x pairs]) and total birds (singles + [2 x pairs] + birds in flocks) with standard errors (SE) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, 2007-",max(ACPHistoric$combined$Year),".")
+
+kable(CORA, digits = 0, booktabs = TRUE, linesep = "", longtable=TRUE, format.args = list(big.mark = ","), caption = cap, align = "lrrrr", col.names = c("Year", "Breeding Birds", "SE", "Total Birds", "SE")) %>%
+  kable_styling(font_size=10, position="center")%>%
+  row_spec(row = 0, bold = TRUE)
+
+```
+
+{{< pagebreak >}}
+
+## Common Raven {.unnumbered}
+
+```{r CORAmcap, echo=FALSE, warning=FALSE}
+ cap = paste0("(A) Observations of common ravens (*Corvus corax*) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) from the Arctic Coastal Plain Aerial Breeding Population Survey, Alaska, during the most recent survey year (",max(ACPHistoric$combined$Year),"). (B) Expected density (2007–",max(ACPHistoric$combined$Year),") of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species." )
+```
+
+```{r CORAmap, echo=FALSE, warning=FALSE}
+#| label: fig-CORAmap
+#| fig-width: 7
+#| fig-height: 7
+#| fig-cap: !expr cap
+#| fig-alt: In (A) is a map of species-specific observation locations (black dots) along transects within four physiographic-based strata (high, medium, low, and Teshekpuk high) of the Arctic Coastal Aerial Plain Breeding Population Survey, Alaska, during the most recent survey year. In (B) is a map of expected density (all survey years) of indicated breeding pairs (number of single birds + number of bird pairs) on the natural log scale across the survey area predicted from a generalized additive model after removing observer, year, and spatio-temporal effects. The scale bar shows density of indicated breeding pairs per square kilometer from the minimum to maximum value for this species.  
+
+p1 <- AKaerial::ObsMap(area="ACP", species=spp) + coord_sf(crs = 3338)
+
+p2 <- plot_raster(x = paste0("data/gam/ACP-", spp, "-2026-04-06.tif"), 
+                  what = "gg", log = TRUE)
+
+p1/p2 + plot_annotation(tag_levels = 'A')
+```
+
+{{< pagebreak >}}
+

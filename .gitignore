@@ -5,6 +5,7 @@
 test_format/*
 ACP_Report/*
 !ACP_Report/ACP_report.qmd
+!ACP_Report/_appendices.qmd
 !ACP_Report/ACP_report_html.qmd
 !ACP_Report/ACP_report_html.html
 !ACP_Report/ACP_report.tex
